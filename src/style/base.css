@@ -1,0 +1,39 @@
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+button {
+    outline: none;
+}
+
+.v-modal{
+    opacity: .2 !important;
+}
+
+:root {
+    --grey-1-a1: rgba(0,0,0,0.1);
+    --grey-1-a2: rgba(0,0,0,0.2);
+    --pink-1: #ed6ea0;
+    --pink-2: #ec8c69;
+    --clr: #112434;
+    --bgc-clr1: skyblue;
+    --bgc-clr2: #1e80ff;
+    --bgc-clr3: #c2c8d1;
+    --bgc-clr4: #999999;
+    --bgc-clr5: #eeeeee;
+    --border-clr1: rgb(183, 140, 247);
+    --border-clr2: rgb(255,124,148);
+    --box-bg-shadow: var(--grey-1-a1);
+    --box-bg-shadow-hover: var(--grey-1-a2);
+}
