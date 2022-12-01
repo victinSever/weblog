@@ -32,6 +32,7 @@ button {
     --bgc-clr3: #c2c8d1;
     --bgc-clr4: #999999;
     --bgc-clr5: #eeeeee;
+    --bgc-clr6: #cfcfcf;
     --border-clr1: rgb(183, 140, 247);
     --border-clr2: rgb(255,124,148);
     --box-bg-shadow: var(--grey-1-a1);

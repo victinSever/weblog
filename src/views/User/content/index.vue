@@ -1,13 +1,20 @@
 <template>
   <div>
+    <el-divider content-position="center">
+      <span
+        class="session-title"
+        style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
+        >文章管理</span
+      >
+    </el-divider>
     <div class="header">
       <div class="left">
         <div class="menu-list">
-          <div 
-          :class="'menu-item' + (item.id === activeIndex ? ' active' : '')" 
-          v-for="item in tag" 
-          :key="item.id"
-          @click="handleChange(item)"
+          <div
+            :class="'menu-item' + (item.id === activeIndex ? ' active' : '')"
+            v-for="item in tag"
+            :key="item.id"
+            @click="handleChange(item)"
           >
             <span v-text="item.label"></span>
           </div>
@@ -24,24 +31,24 @@
 export default {
   data() {
     const tag = [
-      { label: '文章', id: 0, urlName: 'essays'},
-      { label: '草稿箱', id: 1, urlName: 'drafts'}
-    ]
+      { label: "文章", id: 0, urlName: "essays" },
+      { label: "草稿箱", id: 1, urlName: "drafts" },
+    ];
     return {
       tag,
-      activeIndex: 0
-    }
+      activeIndex: 0,
+    };
   },
   methods: {
     handleChange(item) {
-      this.activeIndex = item.id
-      if(this.$route.name !== item.urlName)
+      this.activeIndex = item.id;
+      if (this.$route.name !== item.urlName)
         this.$router.push({
-          name: item.urlName
-      })
-    }
-  }
-}
+          name: item.urlName,
+        });
+    },
+  },
+};
 </script>
 
 <style scoped lang='scss'>
@@ -50,10 +57,10 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 3rem;
-  border-bottom: 1px solid rgb(204, 201, 201);
+  
   box-sizing: border-box;
 
-  .left{
+  .left {
     height: 100%;
     box-sizing: border-box;
   }
@@ -62,13 +69,12 @@ export default {
     display: flex;
     height: 100%;
     box-sizing: border-box;
-    
 
     .menu-item {
       margin: 0 1rem;
       display: flex;
       align-items: center;
-      height: 100%;  
+      height: 100%;
       box-sizing: border-box;
       cursor: pointer;
       font-size: 1.2rem;
@@ -83,12 +89,10 @@ export default {
     .active {
       border-bottom: 3px solid #1e80ff;
     }
-
-
   }
 }
 
-.main{
+.main {
   padding: 1rem 0;
 }
 </style>

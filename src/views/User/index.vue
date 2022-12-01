@@ -10,12 +10,15 @@
               @click="$router.push({ name: 'passage' })"
               >&nbsp;博客大厅</span
             >
-            <span class="menu-item iconfont icon-home">&nbsp;首页</span>
+            <span class="menu-item iconfont icon-home" @click="gotoUserHome"
+              >&nbsp;首页</span
+            >
             <span class="menu-item iconfont icon-aboutshare">&nbsp;关于</span>
           </div>
         </div>
         <div class="center-right">
-          <span class="search iconfont icon-search"></span>
+          <span class="icon iconfont icon-search"></span>
+          <span class="icon iconfont icon-setting" @click="gotoSetting"></span>
         </div>
       </div>
     </div>
@@ -37,14 +40,23 @@
     <div class="main">
       <div class="model">
         <div class="main-box">
-
           <!-- 左侧内容区 -->
           <div class="left-box">
-
             <!-- 首页文章显示 -->
-            <div class="session" v-if="passageList.length !== 0 && showPassageList">
+            <div
+              class="session"
+              v-if="passageList.length !== 0 && showPassageList"
+            >
               <el-divider content-position="center">
-                <span class="session-title">文章列表</span>
+                <span
+                  class="session-title"
+                  style="
+                    color: var(--bgc-clr6);
+                    font-size: 2em;
+                    font-weight: bold;
+                  "
+                  >文章列表</span
+                >
               </el-divider>
               <UserPassageItem :passageList="passageList" />
             </div>
@@ -53,10 +65,10 @@
           </div>
 
           <!-- 右侧信息和按钮区 -->
-          <div class="right-box">
+          <div class="right-box" v-if="showUserInfo">
             <div class="userInfo">
               <!-- 头像 -->
-              <div class="userImage">
+              <div class="userImage" @click="gotoChangeInfo">
                 <el-image
                   v-if="user.userImage"
                   :src="user.userImage"
@@ -67,7 +79,9 @@
                   src="https://tva2.sinaimg.cn/large/008cs7isly8h88i9ec08sj30u00u379u.jpg"
                   alt=""
                 ></el-image>
+                <span class="icon person-change iconfont icon-setting"></span>
               </div>
+
               <div class="username">
                 <span v-text="user.username || '☺'"></span>
               </div>
@@ -95,7 +109,7 @@
 <script>
 import UserPassageItem from "@/components/user/user-passage-list.vue";
 import UserMenu from "@/components/user/user-menu.vue";
-import {getUUID} from '@/utils/index';
+import { getUUID } from "@/utils/index";
 
 export default {
   name: "userPage",
@@ -186,19 +200,34 @@ export default {
       return JSON.parse(sessionStorage.getItem("userInfo")) || {};
     },
     showPassageList() {
-      return this.$route.name === 'user'
-    }
+      return this.$route.name === "user";
+    },
+    showUserInfo() {
+      return this.$route.name !== "setting";
+    },
   },
   methods: {
     // 前往写作页面
     gotoEdit() {
       let routeData = this.$router.resolve({
         name: "editor",
-        params: {id: getUUID()}
+        params: { id: getUUID() },
       });
-      window.open(routeData.href, '_blank');
+      window.open(routeData.href, "_blank");
     },
-  }
+    gotoSetting() {
+      if (this.$route.name === "setting") return;
+      this.$router.push({ name: "setting" });
+    },
+    gotoUserHome() {
+      if (this.$route.name === "user") return;
+      this.$router.push({ name: "user" });
+    },
+    gotoChangeInfo() {
+      if (this.$route.name === "change") return;
+      this.$router.push({ name: "change" });
+    },
+  },
 };
 </script>
 
@@ -256,9 +285,15 @@ export default {
     .center-right {
       display: flex;
       align-items: center;
-      .search {
+
+      .icon {
         font-size: 1.6rem;
         cursor: pointer;
+        margin-left: 1rem;
+      }
+
+      .icon-setting {
+        font-size: 2rem;
       }
     }
   }
@@ -368,13 +403,6 @@ export default {
 
       .left-box {
         width: 75%;
-
-        .session-title {
-          text-align: center;
-          color: #cfcfcf;
-          font-size: 2em;
-          font-weight: bold;
-        }
       }
 
       .right-box {
@@ -404,6 +432,7 @@ export default {
           border-radius: 50%;
           overflow: hidden;
           cursor: pointer;
+          position: relative;
 
           .el-image {
             width: 100%;
@@ -417,6 +446,15 @@ export default {
           .el-image {
             transform: scale(120%) rotate(360deg);
             filter: blur(5px);
+          }
+
+          .person-change {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #fff;
           }
         }
 
@@ -441,7 +479,11 @@ export default {
               display: block;
               width: calc(100% - 4px);
               height: calc(100% - 4px);
-              background: linear-gradient(90deg, var(--bgc-clr2), var(--bgc-clr1));
+              background: linear-gradient(
+                90deg,
+                var(--bgc-clr2),
+                var(--bgc-clr1)
+              );
               z-index: 21;
               border: none;
               color: #fff;

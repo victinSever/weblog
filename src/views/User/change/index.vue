@@ -4,7 +4,7 @@
       <span
         class="session-title"
         style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
-        >个人动态</span
+        >修改个人信息</span
       >
     </el-divider>
   </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    name: 'activePage'
+    name: 'changePage'
 }
 </script>
 

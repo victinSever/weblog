@@ -1,10 +1,12 @@
 <template>
-  <div>active</div>
+  <div>
+    setting
+  </div>
 </template>
 
 <script>
 export default {
-
+  name: 'settingPage'
 }
 </script>
 

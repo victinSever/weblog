@@ -25,21 +25,27 @@ const router = new Router({
 })
 
 // 拦截器
-router.beforeEach((to, from, next) => { 
-    if(to.meta.title){
-        document.title = to.meta.title; //设置标题
-    }
-        
-        // 设置文章标题内容
-    if(to.name === 'post') {
-        if(to.params.title) document.title += ' - ' + to.params.title
+router.beforeEach((to, from, next) => {
+    const baseTitle = ' - weblog'
+
+    if (to.meta.title) {
+        document.title = to.meta.title + baseTitle; //设置标题
     }
 
+    // 设置文章标题内容
+    if (to.name === 'post') {
+        if (to.params.title) document.title = to.params.title + ' - ' + document.title
+    }
+
+
+
+
+
     NProgress.start()   // 开启进度条
-   
+
     // 拦截
-    if(to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
-        if(sessionStorage.getItem('token'))  
+    if (to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
+        if (sessionStorage.getItem('token'))
             next() //放行
     } else {
         next()

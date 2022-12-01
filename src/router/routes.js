@@ -3,7 +3,6 @@
  */
 
 //引入二级路由
-import creator from './creator'
 import user from './user'
 import signup from './signup'
 
@@ -16,44 +15,42 @@ export default [
     },
     {
         path: '/signup',
-        meta: { title: 'weblog - 用户登录', hiddenHeader: true},
+        meta: { title: '用户登录', hiddenHeader: true},
         component: () => import('@/views/signup'),
         redirect: '/signup/login',
         children: signup
     },
     {
         path: '/userAgreement',
-        meta: { title: 'weblog - 用户协议'},
+        meta: { title: '用户协议'},
         component: () => import('@/views/UserAgreement'),
     },
     {
         path: '/editor/:id',
         name: 'editor',
-        meta: { title: 'weblog - 创作文章', hiddenHeader: true},
+        meta: { title: '创作文章', hiddenHeader: true},
         component: () => import('@/views/Editor'),
     },
     {
         path: '/creator',
-        meta: { title: 'weblog - 创作者中心'},
+        meta: { title: '创作者中心'},
         component: () => import('@/views/Creator'),
-        redirect: '/creator/content',
-        // children: creator
     },
     {
         path: '/search',
-        meta: { title: 'weblog - 搜索'},
+        meta: { title: '搜索'},
         component: () => import('@/views/Search'),
     },
     {
         path: '/post/:id',
         name: 'post',
-        meta: { title: 'weblog'},
+        meta: { title: '文章详情'},
         component: () => import('@/views/Post'),
     },
     {
         path: '/user',
         name: 'user',
-        meta: { title: 'weblog - 个人中心', hiddenHeader: true},
+        meta: { title: '个人中心', hiddenHeader: true},
         component: () => import('@/views/User'),
         children: user
     },
