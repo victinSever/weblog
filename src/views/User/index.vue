@@ -432,13 +432,21 @@ export default {
           border-radius: 50%;
           overflow: hidden;
           cursor: pointer;
-          position: relative;
+          position: relative;       
 
           .el-image {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             transition: 0.8s;
+          }
+
+          .person-change {
+            transition: all 0.8s ease-in-out 0s;
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translate(-50%, -50%);
           }
         }
 
@@ -449,11 +457,8 @@ export default {
           }
 
           .person-change {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translate(-50%, -50%);
             font-size: 3rem;
+            bottom: 0;
             color: #fff;
           }
         }
