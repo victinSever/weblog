@@ -31,16 +31,20 @@ Vue.directive('highlight', function (el) {
   })
 })
 
-
 // 引入npgrogress
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 Vue.prototype.$nprogress = nprogress
 
+// 关闭生产提示
 Vue.config.productionTip = false
 
 // 绑定一个bus，实现全局总线通信
 Vue.prototype.$bus = new Vue()
+
+// 绑定图片上传路径
+import {imageSeverUrl} from '@/api/manage/config';
+Vue.prototype.$upload_path = imageSeverUrl
 
 import VueParticles from 'vue-particles'
 Vue.use(VueParticles)

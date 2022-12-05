@@ -26,15 +26,26 @@ export default {
     ];
     return {
       menuList,
-      active: menuList[0].id || 0
+      active: '0'
     };
   },
+  created() {
+    const menu = this.menuList.find(item => {
+      return this.$route.name.includes(item.routername)
+    })
+    this.active = menu ? menu.id : '1'
+  },
   methods: {
+    // 更改菜单路由
     handleChange(menu) {
       this.active = menu.id
       if(this.$route.name.includes(menu.routername)) return
       this.$router.push({ name: menu.routername })
     },
+    // 父组件改变菜单显示的回调
+    changeMenuByParent(id) {
+      this.active = id
+    }
   },
 };
 </script>

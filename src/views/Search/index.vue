@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import PassageItem from "@/components/passage/passage-item.vue";
+import PassageItem from "@/components/passage/passage-list.vue";
 export default {
   name: "SearchPages",
   components: { PassageItem },

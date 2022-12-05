@@ -5,20 +5,32 @@
         <div class="center-left">
           <span class="username" v-text="user.username || '☺'"></span>
           <div class="menu">
-            <span
+            <div
               class="menu-item iconfont icon-coursera"
               @click="$router.push({ name: 'passage' })"
-              >&nbsp;博客大厅</span
             >
-            <span class="menu-item iconfont icon-home" @click="gotoUserHome"
-              >&nbsp;首页</span
-            >
-            <span class="menu-item iconfont icon-aboutshare">&nbsp;关于</span>
+              <span>&nbsp;博客大厅</span>
+            </div>
+            <div class="menu-item iconfont icon-home no-underline">
+              <span  @click="gotoUserHome">&nbsp;首页</span>
+              <div class="menu-list-children">
+                <div class="menu-item iconfont icon-Category" @click="goToPage('cate')">
+                  <span>&nbsp;分类</span>
+                </div>
+                <div class="menu-item iconfont icon-tag" @click="goToPage('tag')">
+                  <span>&nbsp;标签</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="menu-item iconfont icon-aboutshare">
+              <span>&nbsp;关于</span>
+            </div>
           </div>
         </div>
         <div class="center-right">
           <span class="icon iconfont icon-search"></span>
-          <span class="icon iconfont icon-setting" @click="gotoSetting"></span>
+          <span class="icon iconfont icon-setting" @click="goToPage('setting')"></span>
         </div>
       </div>
     </div>
@@ -97,7 +109,7 @@
 
             <!-- 菜单 -->
             <div class="userMenu">
-              <UserMenu />
+              <UserMenu ref="userMenu" />
             </div>
           </div>
         </div>
@@ -207,6 +219,10 @@ export default {
     },
   },
   methods: {
+    goToPage(urlName) {
+      if(this.$route.name.includes(urlName)) return
+      this.$router.push({name: urlName})
+    },
     // 前往写作页面
     gotoEdit() {
       let routeData = this.$router.resolve({
@@ -215,17 +231,15 @@ export default {
       });
       window.open(routeData.href, "_blank");
     },
-    gotoSetting() {
-      if (this.$route.name === "setting") return;
-      this.$router.push({ name: "setting" });
-    },
+    // 进入主页
     gotoUserHome() {
-      if (this.$route.name === "user") return;
-      this.$router.push({ name: "user" });
+      this.goToPage('user')
+      this.$refs.userMenu.changeMenuByParent("0");
     },
+    // 进入用户信息修改
     gotoChangeInfo() {
-      if (this.$route.name === "change") return;
-      this.$router.push({ name: "change" });
+      this.goToPage('change')
+      this.$refs.userMenu.changeMenuByParent("-1");
     },
   },
 };
@@ -266,6 +280,8 @@ export default {
       }
 
       .menu {
+        display: flex;
+
         .menu-item {
           font-size: 1.2rem;
           margin-right: 1.5rem;
@@ -278,6 +294,50 @@ export default {
 
         .menu-item:hover {
           border-bottom: 1px solid #fff;
+
+          .menu-list-children {
+            visibility: visible;
+          }
+        }
+
+        .no-underline:hover {
+          border-bottom: 1px solid transparent;
+        }
+
+        .menu-list-children {
+          position: absolute;
+          top: 4rem;
+          visibility: hidden;
+          transition: 0.4s ease-in;
+          background-color: var(--grey-1-a6);
+          border-top-left-radius: 1.5rem;
+          border-bottom-right-radius: 1.5rem;
+          transform: translateX(-1rem);
+
+          .menu-item {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0;
+            font-size: 1.1rem;
+            border-bottom: 1px solid transparent;
+          }
+
+          .menu-item:first-child {
+            border-top-left-radius: 1.5rem;
+          }
+
+          .menu-item:last-child {
+            border-bottom-right-radius: 1.5rem;
+          }
+
+          .menu-item:hover {
+            background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
+            font-size: 1.2rem;
+
+            span {
+              transform: translateX(1rem);
+            }
+          }
         }
       }
     }
@@ -396,17 +456,20 @@ export default {
     width: 100%;
     background-color: #fff;
     .main-box {
-      width: 70%;
+      width: 93rem;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
+      position: relative;
 
       .left-box {
-        width: 75%;
+        width: calc(100% - 20rem);
       }
 
       .right-box {
-        width: 20%;
+        // position: fixed;
+        // top: 0rem;
+        width: 20rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -432,7 +495,7 @@ export default {
           border-radius: 50%;
           overflow: hidden;
           cursor: pointer;
-          position: relative;       
+          position: relative;
 
           .el-image {
             width: 100%;

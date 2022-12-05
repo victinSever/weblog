@@ -37,10 +37,6 @@ router.beforeEach((to, from, next) => {
         if (to.params.title) document.title = to.params.title + ' - ' + document.title
     }
 
-
-
-
-
     NProgress.start()   // 开启进度条
 
     // 拦截

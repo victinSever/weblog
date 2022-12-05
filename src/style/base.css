@@ -24,6 +24,7 @@ button {
 :root {
     --grey-1-a1: rgba(0,0,0,0.1);
     --grey-1-a2: rgba(0,0,0,0.2);
+    --grey-1-a6: rgba(0,0,0,0.6);
     --pink-1: #ed6ea0;
     --pink-2: #ec8c69;
     --clr: #112434;
@@ -37,4 +38,8 @@ button {
     --border-clr2: rgb(255,124,148);
     --box-bg-shadow: var(--grey-1-a1);
     --box-bg-shadow-hover: var(--grey-1-a2);
+
+    /* 标签颜色 */
+    --tag-clr: #8dd7d8; 
+    --tag-clr-h: #e9546b; 
 }

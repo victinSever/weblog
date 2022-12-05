@@ -55,6 +55,7 @@ export default {
         margin-bottom: 20px;
         position: relative;
         transition: .4s;
+        border: 1px solid var(--bgc-clr5);
 
         .iconfont{
             color: rgb(175, 170, 170);

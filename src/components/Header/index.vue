@@ -37,8 +37,8 @@
                 type="primary"
                 size="medium"
                 icon="el-icon-user-solid"
-                @click="gotoCreator"
-                >创作者中心</el-button
+                @click="gotoEditor"
+                >去创作</el-button
               >
             </transition>
             <el-button
@@ -76,29 +76,6 @@
       </el-row>
     </el-row>
 
-    <!-- 登录 -->
-    <el-dialog
-      :visible.sync="dialogVisible"
-      width="300px"
-      :top="(loginWay === 1 ? 25 : 26) + 'vh'"
-    >
-      <template slot="title">
-        <h3>
-          {{
-            loginWay === 1
-              ? "账密登录"
-              : loginWay === 2
-              ? "手机登录"
-              : "手机重置密码"
-          }}
-        </h3>
-      </template>
-      <Login
-        :loginWay="loginWay"
-        @closeDialog="closeDialog"
-        @changeLoginWay="changeLoginWay"
-      />
-    </el-dialog>
   </div>
 </template>
 
@@ -113,21 +90,8 @@ export default {
       url: "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
       messageNum: 1,
       keyword: "",
-      dialogVisible: false, //是否显示登录组件
-      loginWay: 1, //登录方式，1账密登录，2手机号登录,3重置密码
-      isInputFocus: false,
+      isInputFocus: false
     };
-  },
-  created() {
-    // 挂载一个bus，触发登录组件的出现
-    let that = this
-    this.$bus.$on('handleLogin',function(type = true) {
-      console.log(that.dialogVisible);
-      that.dialogVisible = type;
-    }) 
-  },
-    beforeDestroy() {
-   this.$bus.$off('handleLogin');
   },
   computed: {
     //是否登录
@@ -160,21 +124,19 @@ export default {
       })
     },
 
-    gotoCreator: function() {
+    gotoEditor: function() {
         if(!this.isLogin) {
           this.handleLogin()
           return
         }
-        if (this.$route.path.includes('/creator')) return
-        this.$router.push('/creator/home')
+        this.$router.push({ name: 'drafts' })
     },
     // 点击登录按钮
     handleLogin() {
-      this.dialogVisible = true;
-    },
-
-    closeDialog() {
-      this.dialogVisible = false;
+      let routeData = this.$router.resolve({
+        name: "login",
+      });
+      window.open(routeData.href, "_blank");
     },
 
     //改变登录方式时，调整dialog的高度

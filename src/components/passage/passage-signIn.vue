@@ -24,17 +24,16 @@ export default {
     computed: {
       welcome() {
         let hour = new Date().getHours()
-        if(hour <= 3 || hour >= 22) return '夜深了'
+        if(hour <= 3 || hour >= 23) return '夜深了'
         else if(hour > 3 && hour < 8) return '早上好!'
         else if(hour >= 8 && hour < 11) return '上午好!'
         else if(hour >= 11 && hour < 13) return '中午好!'
         else if(hour >= 13 && hour < 18) return '下午好!'
-        else if(hour >= 18 && hour < 22) return '晚上好!'
+        else if(hour >= 18 && hour < 23) return '晚上好!'
         else return ''
       },
       isLogin() {
-        let token = this.$store.state.user.token
-        return token !== ''
+        return JSON.parse(sessionStorage.getItem('token')) || false
       }
     },
     methods: {

@@ -32,11 +32,6 @@ export default [
         component: () => import('@/views/Editor'),
     },
     {
-        path: '/creator',
-        meta: { title: '创作者中心'},
-        component: () => import('@/views/Creator'),
-    },
-    {
         path: '/search',
         meta: { title: '搜索'},
         component: () => import('@/views/Search'),

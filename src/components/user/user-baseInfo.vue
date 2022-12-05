@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="user-title">
-      <el-image :src="data.userImage" class="title-image"></el-image>
+      <el-image :src="data.userImage" class="title-image" @click="$router.push({name: 'user'})"></el-image>
       <div class="title-box">
         <span class="title">{{ data.username }}</span>
         <p>
@@ -39,8 +39,8 @@
       </div>
     </div>
     <div class="user-signOut">
-      <span class="setting">个人设置</span>
-      <span class="signOut" @click="signOut">退出登录</span>
+      <span class="setting" v-text="'个人信息'"></span>
+      <span class="signOut" @click="signOut" v-text="'退出登录'"></span>
     </div>
   </div>
 </template>
@@ -54,55 +54,42 @@ export default {
       {
         icon: "icon-person",
         title: "我的主页",
-        url: "/user",
         urlname: 'user',
         id: 1,
         message: 0,
       },
       {
-        icon: "icon-gift",
-        title: "成长福利",
-        url: "/group",
+        icon: "icon-activity",
+        title: "我的动态",
+        urlname: "active",
         id: 2,
         message: 0,
       },
       {
-        icon: "icon-bijiben",
-        title: "话题笔记",
-        url: "/notebook",
+        icon: "icon-coursera",
+        title: "创作管理",
+        urlname: "essays",
         id: 3,
         message: 2,
       },
       {
-        icon: "icon-VIP",
-        title: "会员中心",
-        url: "/vip",
+        icon: "icon-columns",
+        title: "我的专栏",
+        urlname: "column",
         id: 4,
         message: 0,
       },
       {
-        icon: "icon-coursera",
-        title: "课程中心",
-        url: "/courseLearn",
+        icon: "icon-3501shuju",
+        title: "成长中心",
+        url: "data",
         id: 5,
         message: 0,
       },
       {
-        icon: "icon-vipcard",
-        title: "我的优惠",
+        icon: "icon-setting",
+        title: "主题配置",
         id: 6,
-        message: 0,
-      },
-      {
-        icon: "icon-flag",
-        title: "我的报名",
-        id: 7,
-        message: 0,
-      },
-      {
-        icon: "icon-track",
-        title: "我的足迹",
-        id: 8,
         message: 0,
       },
     ];

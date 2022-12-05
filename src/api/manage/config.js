@@ -8,7 +8,7 @@
 const ipBaseUrl = "http://pv.sohu.com"
 
 // 图片服务器地址
-const imageSeverUrl = 'http://222.177.66.230:9898'
+const imageSeverUrl = 'http://192.168.2.24:8011/upload/'
 
 //项目部署地址
 const baseUrl = "https://53r23232p6.goho.co"

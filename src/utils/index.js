@@ -23,7 +23,7 @@ const getNumberOfDays = function (date1, date2 = new Date()) {
     let a2 = Date.parse(new Date(date2));
     let day = parseInt((a2 - a1) / (1000 * 60 * 60 * 24)); //核心：时间戳相减，然后除以天数
     if (day > 356) return (day % 356) + '年前'
-    else if (day > 30) return (day % 30) + '月前'
+    else if (day > 30) return (day % 12) + '个月前'
     else if (day > 7) return (day % 7) + '周前'
     else if (day > 1) return day + '天前'
     else {

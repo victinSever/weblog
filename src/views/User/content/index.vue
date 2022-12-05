@@ -31,21 +31,22 @@
 export default {
   data() {
     const tag = [
-      { label: "文章", id: 0, urlName: "essays" },
-      { label: "草稿箱", id: 1, urlName: "drafts" },
+      { label: "文章", id: 0, value: "essays" },
+      { label: "草稿箱", id: 1, value: "drafts" },
     ];
     return {
       tag,
       activeIndex: 0,
     };
   },
+  created() {
+    this.activeIndex = this.$route.name.includes('drafts') ? 1 : 0
+  },
   methods: {
     handleChange(item) {
       this.activeIndex = item.id;
-      if (this.$route.name !== item.urlName)
-        this.$router.push({
-          name: item.urlName,
-        });
+      if (this.$route.name !== item.value)
+        this.$router.push({name: item.value})
     },
   },
 };

@@ -46,4 +46,16 @@ export default [
         meta: { title: '修改信息' },
         component: () => import('@/views/User/change')
     },
+    {
+        path: 'cate',
+        name: 'cate',
+        meta: { title: '分类' },
+        component: () => import('@/views/User/cate')
+    },
+    {
+        path: 'tag',
+        name: 'tag',
+        meta: { title: '标签' },
+        component: () => import('@/views/User/tag')
+    },
 ]

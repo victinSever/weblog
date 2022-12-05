@@ -30,12 +30,8 @@
                 >{{ item.label }}</span
               >
             </div>
-            <div class="passage-list" v-if="passage.length !== 0">
-              <PassageItem
-                v-for="item in passage"
-                :key="item.id"
-                :item="item"
-              />
+            <div class="passage-list" v-if="passageList.length !== 0">
+              <PassageList :passageList="passageList"/>
             </div>
             <el-skeleton style="margin-top: 15px" v-else-if="isLoading" />
             <el-empty v-else></el-empty>
@@ -54,12 +50,12 @@
 
 <script>
 import Header from '@/components/Header';
-import PassageItem from "@/components/passage/passage-item.vue";
+import PassageList from "@/components/passage/passage-list.vue";
 import PassageSignIn from "@/components/passage/passage-signIn.vue";
 import PassageRecom from "@/components/passage/passage-recom.vue";
 export default {
   name: "passagePage",
-  components: { Header,PassageItem, PassageSignIn, PassageRecom },
+  components: { Header,PassageList, PassageSignIn, PassageRecom },
   data() {
     const tags = [
       { label: "全部", value: 1 },
@@ -80,7 +76,7 @@ export default {
     return {
       tags,
       order,
-      passage: [],
+      passageList: [],
       tagActive: 1,
       orderActive: 1,
       loadTimes: 0,
@@ -93,7 +89,7 @@ export default {
   },
   methods: {
     async getData() {
-      const passage = [
+      const passageList = [
         {
           id: "12312",
           username: "法盲张三",
@@ -174,6 +170,8 @@ export default {
 
 
 ## 技术架构
+### haha
+#### hhahah
 前端技术架构主要为Vue2项目，具体技术栈如下：
 
 - Vue2（框架）
@@ -301,9 +299,9 @@ https://victinsever.github.io/MIPT/dist/index.html
         },
       ];
       this.isLoading = true;
-      this.passage = [];
+      this.passageList = [];
       setTimeout(() => {
-        this.passage = passage;
+        this.passageList = passageList;
         this.isLoading = false;
       }, 500);
     },
@@ -346,7 +344,7 @@ https://victinsever.github.io/MIPT/dist/index.html
   background-color: #fff;
 
   .tag-list {
-    width: 55%;
+    width: 65%;
     margin: 0 auto;
     height: 100%;
     display: flex;
@@ -377,7 +375,7 @@ https://victinsever.github.io/MIPT/dist/index.html
   min-height: calc(100vh - 100px);
 
   .main-inner {
-    width: 55%;
+    width: 65%;
     margin: 0 auto;
 
     .message-left {

@@ -63,7 +63,9 @@
           <PostComment />
         </div>
       </div>
-      <div class="post-right card"></div>
+      <div class="post-right card">
+        <PostDir :article="data.content"/>
+      </div>
 
       <div class="article-suspended-panel">
         <PostBtns />
@@ -73,12 +75,13 @@
 </template>
 
 <script>
+import PostDir from '@/components/post/post-dir.vue';
 import PostBtns from "@/components/post/post-btns.vue";
 import PostComment from "@/components/post/post-comment.vue";
 import VueMarkdown from "vue-markdown";
 export default {
   name: "postPage",
-  components: { PostBtns, PostComment, VueMarkdown },
+  components: { PostDir, PostBtns, PostComment, VueMarkdown },
   computed: {
     data() {
       return this.$route.params.id ? this.$route.params : {};
@@ -110,6 +113,7 @@ export default {
     .post-left {
       width: 75%;
       overflow: hidden;
+      box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow-hover);
 
       .article {
         padding: 2.67rem;
