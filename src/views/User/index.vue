@@ -1,7 +1,7 @@
 <template>
   <div class="userPage">
     <!-- 头部 -->
-    <UserHeader :username="user.username" @handleSearch="handleSearch"/>
+    <UserHeader :username="user.username" @handleSearch="handleSearch" />
 
     <!-- 轮播图 -->
     <div class="top-bgc">
@@ -18,36 +18,34 @@
     </div>
 
     <div class="main">
-      <div class="model">
-        <div class="main-box">
-          <!-- 左侧内容区 -->
-          <div class="left-box">
-            <!-- 首页文章显示 -->
-            <div
-              class="session"
-              v-show="passageList.length !== 0 && showPassageList"
-            >
-              <el-divider content-position="center">
-                <span
-                  class="session-title"
-                  style="
-                    color: var(--bgc-clr6);
-                    font-size: 2em;
-                    font-weight: bold;
-                  "
-                  >文章列表</span
-                >
-              </el-divider>
-              <UserPassageList :passageList="passageList" :keyword="keyword"/>
-            </div>
-
-            <router-view></router-view>
+      <div class="main-box">
+        <!-- 左侧内容区 -->
+        <div class="left-box">
+          <!-- 首页文章显示 -->
+          <div
+            class="session"
+            v-show="passageList.length !== 0 && showPassageList"
+          >
+            <el-divider content-position="center">
+              <span
+                class="session-title"
+                style="
+                  color: var(--bgc-clr6);
+                  font-size: 2em;
+                  font-weight: bold;
+                "
+                >文章列表</span
+              >
+            </el-divider>
+            <UserPassageList :passageList="passageList" :keyword="keyword" />
           </div>
 
-          <!-- 右侧信息和按钮区 -->
-          <div class="right-box">
-            <UserControl  v-if="showUserInfo" :user="user"/>
-          </div>
+          <router-view></router-view>
+        </div>
+
+        <!-- 右侧信息和按钮区 -->
+        <div class="right-box">
+          <UserControl v-if="showUserInfo" :user="user" />
         </div>
       </div>
     </div>
@@ -55,10 +53,9 @@
 </template>
 
 <script>
-import UserHeader from '@/components/user/user-header.vue'
+import UserHeader from "@/components/user/user-header.vue";
 import UserPassageList from "@/components/user/user-passage-list.vue";
 import UserControl from "@/components/user/user-control.vue";
-
 
 export default {
   name: "userPage",
@@ -142,7 +139,7 @@ export default {
     return {
       bgcList,
       passageList,
-      keyword: ''
+      keyword: "",
     };
   },
   computed: {
@@ -159,10 +156,10 @@ export default {
   methods: {
     // 搜索文章(此处传值给两个组件)
     handleSearch(keyword) {
-      this.keyword = keyword
-      if(this.$route.name.includes('user')) return
-      this.$router.push({name: 'user'})
-    }
+      this.keyword = keyword;
+      if (this.$route.name.includes("user")) return;
+      this.$router.push({ name: "user" });
+    },
   },
 };
 </script>
@@ -204,7 +201,6 @@ export default {
   }
 }
 
-
 .top-bgc::after {
   content: "";
   width: 150vw;
@@ -218,8 +214,6 @@ export default {
   animation: move1 18s linear infinite;
 }
 
-
-
 .main {
   position: relative;
   margin-top: calc(600px - 4rem);
@@ -229,25 +223,25 @@ export default {
   z-index: 5;
   padding-top: 3rem;
 
-  .model {
-    width: 100%;
-    background-color: #fff;
+  .main-box {
+    width: 93rem;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 
-    .main-box {
-      width: 93rem;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      position: relative;
+    .left-box {
+      float: left;
+      width: calc(100% - 24rem);
+      box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
+      padding: 0 2rem;
+    }
 
-      .left-box {
-        width: calc(100% - 20rem);
-      }
-
-      .right-box {
-        width: 20rem;
-      }
-     
+    .right-box {
+      float: right;
+      position: sticky;
+      top: 0rem;
+      width: 20rem;
+      z-index: 30;
     }
   }
 }
@@ -278,4 +272,22 @@ export default {
   animation: move1 15s linear infinite;
 }
 
+@media screen and (max-width: 1500px) {
+  .main .main-box {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .main .main-box {
+    .left-box {
+      width: 100%;
+      float: none;
+    }
+
+    .right-box {
+      display: none;
+    }
+  }
+}
 </style>

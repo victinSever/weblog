@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div :class="'header' + (hiddenHeader ? ' hidden' : ' show')">
     <div class="header-center">
       <div class="center-left">
         <span class="username" v-text="username || '☺'"></span>
@@ -62,10 +62,31 @@ export default {
   data() {
     return {
       inputOpen: false,
-      keyword: ''
+      keyword: '',
+      oldScrollTop: 0,
+      hiddenHeader: false
     };
   },
+  mounted() {
+    // 添加头部监听和销毁监听
+    this.lister =  window.addEventListener("scroll", this.handleScroll, true);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.handleScroll)
+  },
   methods: {
+    // 监听鼠标事件：用来控制头部的隐藏或显示
+    handleScroll() {
+      let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+      if(scrollTop > this.oldScrollTop) {
+        if(scrollTop > 300 && !this.hiddenHeader) this.hiddenHeader = true
+      } else {
+        if(this.hiddenHeader) this.hiddenHeader = false
+      }
+      this.oldScrollTop = scrollTop
+    },
+
     // 搜索文章事件
     handleSearch() {
       if(!this.keyword.trim()) return
@@ -96,14 +117,19 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+
+
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 4;
+  z-index: 20;
   height: 4rem;
   width: 100%;
   background-color: transparent;
+  min-width: 780px;
+  animation: hiddenHeaderAnimate 1s ease-in-out 0s;
 
   .header-center {
     width: 70%;
@@ -216,6 +242,35 @@ export default {
         font-size: 2rem;
       }
     }
+  }
+}
+
+.header:hover {
+  background-color: var(--white-a4);
+}
+
+.hidden {
+  visibility: hidden;
+  background-color: var(--white-a2);
+  color: #000;
+}
+
+.show {
+  visibility: visible;
+}
+
+@keyframes hiddenHeaderAnimate {
+  100% {
+    opacity: 100;
+    transform: translate(0);   
+    background-color: var(--white-a2);
+    color: #000;
+  }
+
+  0% {
+    opacity: 0;
+    
+    transform: translateY(-4rem); 
   }
 }
 

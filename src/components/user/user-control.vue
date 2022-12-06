@@ -65,8 +65,7 @@ export default {
 <style scoped lang='scss'>
 .control {
   // position: fixed;
-  // top: 0rem;
-  
+  // top: 0rem; 
   display: flex;
   flex-direction: column;
   align-items: center;

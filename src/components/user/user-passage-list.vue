@@ -69,8 +69,10 @@ export default {
 
 .passage-item {
   padding: 20px 0;
+  min-width: 780px;
   cursor: pointer;
   display: flex;
+  align-items: center;
   border-radius: 1rem;
   box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
 
@@ -170,4 +172,6 @@ export default {
 .passage-item:hover {
   box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow-hover);
 }
+
+
 </style>
