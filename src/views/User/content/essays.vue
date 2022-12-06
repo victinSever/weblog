@@ -27,10 +27,10 @@
             <h2 class="title" v-text="item.title"></h2>
             <p class="info">
               <span class="publishTime" v-text="item.publishTime"></span>
-              <span class="view" v-text="item.view + '浏览'"></span>
-              <span class="comment" v-text="item.comment + '评论'"></span>
-              <span class="dianzan" v-text="item.dianzan + '点赞'"></span>
-              <span class="colloct" v-text="item.colloct + '收藏'"></span>
+              <span class="view" v-text="item.view || 0 + '浏览'"></span>
+              <span class="comment" v-text="item.comment || 0 + '评论'"></span>
+              <span class="dianzan" v-text="item.dianzan || 0 + '点赞'"></span>
+              <span class="colloct" v-text="item.colloct || 0 + '收藏'"></span>
             </p>
           </div>
           <div class="right">

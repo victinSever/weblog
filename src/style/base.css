@@ -1,8 +1,11 @@
-
 * {
     margin: 0;
     padding: 0;
 }
+
+/* html {
+    filter: grayscale(100%);
+} */
 
 li {
     list-style: none;
@@ -17,14 +20,19 @@ button {
     outline: none;
 }
 
-.v-modal{
+.v-modal {
     opacity: .2 !important;
 }
 
+
+
 :root {
-    --grey-1-a1: rgba(0,0,0,0.1);
-    --grey-1-a2: rgba(0,0,0,0.2);
-    --grey-1-a6: rgba(0,0,0,0.6);
+    --grey-1-a1: rgba(0, 0, 0, 0.1);
+    --grey-1-a2: rgba(0, 0, 0, 0.2);
+    --grey-1-a6: rgba(0, 0, 0, 0.6);
+    --white-a1: rgba(255, 255, 255, 1);
+    --white-a2: rgba(255, 255, 255, .7);
+    --white-a3: rgba(255, 255, 255, .3);
     --pink-1: #ed6ea0;
     --pink-2: #ec8c69;
     --clr: #112434;
@@ -35,11 +43,16 @@ button {
     --bgc-clr5: #eeeeee;
     --bgc-clr6: #cfcfcf;
     --border-clr1: rgb(183, 140, 247);
-    --border-clr2: rgb(255,124,148);
+    --border-clr2: rgb(255, 124, 148);
     --box-bg-shadow: var(--grey-1-a1);
     --box-bg-shadow-hover: var(--grey-1-a2);
 
     /* 标签颜色 */
-    --tag-clr: #8dd7d8; 
-    --tag-clr-h: #e9546b; 
+    --tag-clr: #8dd7d8;
+    --tag-clr-h: #e9546b;
+}
+
+/* 高亮显示 */
+.highlight {
+    color: var(--pink-1) !important;
 }

@@ -1,0 +1,60 @@
+/* 个人文章输入框展开动画 */
+@keyframes extend {
+    0% {
+        width: 2em;
+    }
+
+    100% {
+        width: 20rem;
+    }
+}
+
+/* 个人头像旋转360度 */
+@keyframes rotate360 {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+/* 个人主页背景放大缩小 */
+  @keyframes skewBgc {
+    0% {
+      transform: scale(100%);
+    }
+  
+    100% {
+      transform: scale(130%);
+    }
+  }
+  
+  /* 波浪移动 */
+  @keyframes move1 {
+    0% {
+      transform: translateX(0vw);
+    }
+    100% {
+      transform: translateX(50vw);
+    }
+  }
+
+/* 博客主页输入框聚焦扩展 */
+@keyframes inputFocusExtend {
+  0% {
+    width: 18rem;
+  }
+  100% {
+    width: 30rem;
+  }
+}
+
+@keyframes inputBlurExtend {
+  0% {
+    width: 30rem;
+  }
+  100% {
+    width: 18rem;
+  }
+}

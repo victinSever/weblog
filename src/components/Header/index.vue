@@ -1,37 +1,31 @@
 <template>
   <div>
     <!-- 头部 -->
-    <el-row
-      class="header"
-      v-if="isHidden"
-    >
+    <el-row class="header" v-if="isHidden">
       <el-row class="header-top">
         <el-col :span="18" :offset="3" class="header-top-in">
           <div class="header-top-left">
             <div class="header-logo">
-              <el-image :src="require('@/assets/image/logo_weblog.png')" alt=""></el-image>
+              <el-image
+                :src="require('@/assets/image/logo_weblog.png')"
+                alt=""
+              ></el-image>
             </div>
-            <transition name="el-fade-in-linear">
               <el-input
-                :class="'user-input' + (isInputFocus ? ' focus' : '')"
-                v-model="keyword"
+                class="user-input"
                 size="medium"
-                placeholder="检索法律信息"
-                @focus="isInputFocus = true"
-                @blur="isInputFocus = false"
-                @keyup.enter.native="searchHandler"
+                placeholder="输入博客标题、描述的关键词"
+                v-model="keyword"
+                @keyup.enter.native="handleSearch"
               >
                 <div
-                  slot="suffix"
-                  class="user-input-suffix el-icon-search"
-                  @click="searchHandler"
+                  slot="prefix"
+                  class="iconfont icon-search"
+                  @click="handleSearch"
                 ></div
               ></el-input>
-            </transition>
           </div>
           <div class="header-top-right">
-            
-            <transition name="el-fade-in-linear">
               <el-button
                 class="user-create"
                 type="primary"
@@ -40,7 +34,6 @@
                 @click="gotoEditor"
                 >去创作</el-button
               >
-            </transition>
             <el-button
               class="user-message"
               icon="el-icon-bell"
@@ -64,7 +57,7 @@
               plain
               size="medium"
               class="user-login-register"
-              @click="$router.push({name: 'login'})"
+              @click="$router.push({ name: 'login' })"
               v-else
             >
               <span>登录</span>
@@ -75,7 +68,6 @@
         </el-col>
       </el-row>
     </el-row>
-
   </div>
 </template>
 
@@ -90,46 +82,53 @@ export default {
       url: "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
       messageNum: 1,
       keyword: "",
-      isInputFocus: false
+      inputOpen: false,
     };
   },
   computed: {
     //是否登录
     isLogin() {
-      return JSON.parse(sessionStorage.getItem('token')) || false;
+      return JSON.parse(sessionStorage.getItem("token")) || false;
     },
     user() {
-      return JSON.parse(sessionStorage.getItem('userInfo')) || {};
+      return JSON.parse(sessionStorage.getItem("userInfo")) || {};
     },
     // 是否隐藏头部
     isHidden() {
-      return !this.$route.meta.hiddenHeader
-    }
+      return !this.$route.meta.hiddenHeader;
+    },
   },
   methods: {
-    // 搜索事件- 
+    // 搜索事件-
     searchHandler() {
-      const keyword = this.keyword.trim()
-      const { query } = this.$route
-      if(query.query === keyword) return //节流
+      const keyword = this.keyword.trim();
+      const { query } = this.$route;
+      if (query.query === keyword) return; //节流
 
-      if(!keyword) return
+      if (!keyword) return;
 
       this.$router.push({
-        path: '/search',
+        path: "/search",
         query: {
           query: keyword,
-          type: 0
-        }
-      })
+          type: 0,
+        },
+      });
     },
 
-    gotoEditor: function() {
-        if(!this.isLogin) {
-          this.handleLogin()
-          return
-        }
-        this.$router.push({ name: 'drafts' })
+        // 搜索文章事件
+    handleSearch() {
+      if(!this.keyword.trim()) return
+      this.$emit('handleSearch', this.keyword)
+      this.keyword = ''
+    },
+
+    gotoEditor: function () {
+      if (!this.isLogin) {
+        this.handleLogin();
+        return;
+      }
+      this.$router.push({ name: "drafts" });
     },
     // 点击登录按钮
     handleLogin() {
@@ -144,14 +143,13 @@ export default {
       this.loginWay = type;
     },
   },
-
 };
 </script>
 
 <style scoped lang='scss'>
 .header {
   width: 100%;
-  height: 60px; 
+  height: 4rem;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -183,6 +181,8 @@ export default {
       font-size: 40px;
       cursor: pointer;
       transition: 0.4s;
+      display: flex;
+      align-items: center;
 
       .el-image {
         height: 3rem;
@@ -193,31 +193,37 @@ export default {
       transform: translateX(5px);
     }
 
-        .user-input {
-      border: 1px solid #dcdfe6;
-      border-radius: 0.5rem;
-      transition: 0.4s;
-      width: 40rem;
+    .icon-search {
+      font-size: 1.5rem;
+    }
 
-      .el-icon-search {
-        font-size: 25px;
+    .user-input {
+      transition: 0.4s;
+      width: 18rem;
+
+      /deep/input {
+        border-radius: 1rem;
+        padding-left: 3rem;
+      }
+
+      /deep/input:focus {
+        animation: inputFocusExtend 1s ease-in-out;
+      }
+
+       /deep/input:blur {
+        animation: inputFocusExtend 1s ease-in-out;
+      }
+
+      .icon-search {
+        font-size: 1.5rem;
+        padding: 0 0.25rem;
         height: 100%;
         text-align: center;
-        transform: translateY(5px);
+        transform: translateY(0.33rem);
         cursor: pointer;
       }
-    }
 
-    .user-input input:focus {
-      width: 500px;
-      background-color: #000;
-      animation: inputFocusAnimate 1s linear 0s;
-    }
-
-    .user-input:hover {
-      border: 1px solid #409eff;
-
-      .el-icon-search {
+      .icon-search:hover {
         color: #a1a1a7;
       }
     }
@@ -231,8 +237,6 @@ export default {
     .user-message {
       margin-right: 20px;
     }
-
-
 
     .user-message {
       height: 30px;
@@ -272,15 +276,7 @@ export default {
   }
 }
 
-// 聚焦的动画
-@keyframes inputFocusAnimate {
-  from {
-    background-color: #ccc;
-  }
-  to {
-    background-color: #777;
-  }
-}
+
 
 @media screen and (max-width: 1500px) {
   .header .header-top-right .user-create {
@@ -304,7 +300,6 @@ export default {
     }
 
     .user-login-register {
-
     }
   }
 }
@@ -316,15 +311,14 @@ export default {
     }
   }
   .header .header-top-right {
-    .user-input{
+    .user-input {
       width: 80%;
       // height: 25px;
     }
-    
-    .user-message{
+
+    .user-message {
       display: none;
     }
   }
 }
-
 </style>

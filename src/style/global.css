@@ -3,3 +3,12 @@
 @import './ttf.css';
 
 @import './base.css';
+
+@import './animation.css';
+
+/* 灰度颜色 */
+.grayscale {
+    filter: grayscale(100%);
+}
+
+

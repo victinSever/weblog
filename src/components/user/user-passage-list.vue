@@ -38,18 +38,17 @@ export default {
       type: Array,
       default: [],
     },
-  },
-  computed: {
-    keyword() {
-      return this.$route.query.query || "";
-    },
+    keyword: {
+      type: String,
+      default: ''
+    }
   },
   methods: {
     // 添加高亮
     highlight(str) {
       if (!this.keyword) return str;
       const arr = str.split(this.keyword);
-      return arr.join(`<span style="color: red;">${this.keyword}</span>`);
+      return arr.join(`<span class="highlight">${this.keyword}</span>`);
     },
 
     // 跳转到文章详情

@@ -1,39 +1,7 @@
 <template>
   <div class="userPage">
-    <div class="header">
-      <div class="header-center">
-        <div class="center-left">
-          <span class="username" v-text="user.username || '☺'"></span>
-          <div class="menu">
-            <div
-              class="menu-item iconfont icon-coursera"
-              @click="$router.push({ name: 'passage' })"
-            >
-              <span>&nbsp;博客大厅</span>
-            </div>
-            <div class="menu-item iconfont icon-home no-underline">
-              <span  @click="gotoUserHome">&nbsp;首页</span>
-              <div class="menu-list-children">
-                <div class="menu-item iconfont icon-Category" @click="goToPage('cate')">
-                  <span>&nbsp;分类</span>
-                </div>
-                <div class="menu-item iconfont icon-tag" @click="goToPage('tag')">
-                  <span>&nbsp;标签</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="menu-item iconfont icon-aboutshare">
-              <span>&nbsp;关于</span>
-            </div>
-          </div>
-        </div>
-        <div class="center-right">
-          <span class="icon iconfont icon-search"></span>
-          <span class="icon iconfont icon-setting" @click="goToPage('setting')"></span>
-        </div>
-      </div>
-    </div>
+    <!-- 头部 -->
+    <UserHeader :username="user.username" @handleSearch="handleSearch"/>
 
     <!-- 轮播图 -->
     <div class="top-bgc">
@@ -57,7 +25,7 @@
             <!-- 首页文章显示 -->
             <div
               class="session"
-              v-if="passageList.length !== 0 && showPassageList"
+              v-show="passageList.length !== 0 && showPassageList"
             >
               <el-divider content-position="center">
                 <span
@@ -70,47 +38,15 @@
                   >文章列表</span
                 >
               </el-divider>
-              <UserPassageItem :passageList="passageList" />
+              <UserPassageList :passageList="passageList" :keyword="keyword"/>
             </div>
 
             <router-view></router-view>
           </div>
 
           <!-- 右侧信息和按钮区 -->
-          <div class="right-box" v-if="showUserInfo">
-            <div class="userInfo">
-              <!-- 头像 -->
-              <div class="userImage" @click="gotoChangeInfo">
-                <el-image
-                  v-if="user.userImage"
-                  :src="user.userImage"
-                  alt=""
-                ></el-image>
-                <el-image
-                  v-else
-                  src="https://tva2.sinaimg.cn/large/008cs7isly8h88i9ec08sj30u00u379u.jpg"
-                  alt=""
-                ></el-image>
-                <span class="icon person-change iconfont icon-setting"></span>
-              </div>
-
-              <div class="username">
-                <span v-text="user.username || '☺'"></span>
-              </div>
-            </div>
-
-            <!-- 链接 -->
-            <div class="userLink"></div>
-
-            <!-- 创作按钮 -->
-            <div class="btn-edit" @click="gotoEdit">
-              <div class="btn-box"><button v-text="'写文章'"></button></div>
-            </div>
-
-            <!-- 菜单 -->
-            <div class="userMenu">
-              <UserMenu ref="userMenu" />
-            </div>
+          <div class="right-box">
+            <UserControl  v-if="showUserInfo" :user="user"/>
           </div>
         </div>
       </div>
@@ -119,13 +55,14 @@
 </template>
 
 <script>
-import UserPassageItem from "@/components/user/user-passage-list.vue";
-import UserMenu from "@/components/user/user-menu.vue";
-import { getUUID } from "@/utils/index";
+import UserHeader from '@/components/user/user-header.vue'
+import UserPassageList from "@/components/user/user-passage-list.vue";
+import UserControl from "@/components/user/user-control.vue";
+
 
 export default {
   name: "userPage",
-  components: { UserPassageItem, UserMenu },
+  components: { UserHeader, UserPassageList, UserControl },
   data() {
     const bgcList = [
       {
@@ -205,6 +142,7 @@ export default {
     return {
       bgcList,
       passageList,
+      keyword: ''
     };
   },
   computed: {
@@ -219,28 +157,12 @@ export default {
     },
   },
   methods: {
-    goToPage(urlName) {
-      if(this.$route.name.includes(urlName)) return
-      this.$router.push({name: urlName})
-    },
-    // 前往写作页面
-    gotoEdit() {
-      let routeData = this.$router.resolve({
-        name: "editor",
-        params: { id: getUUID() },
-      });
-      window.open(routeData.href, "_blank");
-    },
-    // 进入主页
-    gotoUserHome() {
-      this.goToPage('user')
-      this.$refs.userMenu.changeMenuByParent("0");
-    },
-    // 进入用户信息修改
-    gotoChangeInfo() {
-      this.goToPage('change')
-      this.$refs.userMenu.changeMenuByParent("-1");
-    },
+    // 搜索文章(此处传值给两个组件)
+    handleSearch(keyword) {
+      this.keyword = keyword
+      if(this.$route.name.includes('user')) return
+      this.$router.push({name: 'user'})
+    }
   },
 };
 </script>
@@ -251,119 +173,12 @@ export default {
   overflow: hidden;
 }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 4;
-  height: 4rem;
-  width: 100%;
-  background-color: transparent;
-
-  .header-center {
-    width: 70%;
-    height: 100%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #fff;
-
-    .center-left {
-      display: flex;
-      align-items: center;
-
-      .username {
-        font-size: 1.5rem;
-        margin-right: 2rem;
-        cursor: pointer;
-      }
-
-      .menu {
-        display: flex;
-
-        .menu-item {
-          font-size: 1.2rem;
-          margin-right: 1.5rem;
-          padding-left: 0.2rem;
-          padding-bottom: 0.4rem;
-          border-bottom: 1px solid transparent;
-          transition: 0.4s;
-          cursor: pointer;
-        }
-
-        .menu-item:hover {
-          border-bottom: 1px solid #fff;
-
-          .menu-list-children {
-            visibility: visible;
-          }
-        }
-
-        .no-underline:hover {
-          border-bottom: 1px solid transparent;
-        }
-
-        .menu-list-children {
-          position: absolute;
-          top: 4rem;
-          visibility: hidden;
-          transition: 0.4s ease-in;
-          background-color: var(--grey-1-a6);
-          border-top-left-radius: 1.5rem;
-          border-bottom-right-radius: 1.5rem;
-          transform: translateX(-1rem);
-
-          .menu-item {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.25rem;
-            margin-right: 0;
-            font-size: 1.1rem;
-            border-bottom: 1px solid transparent;
-          }
-
-          .menu-item:first-child {
-            border-top-left-radius: 1.5rem;
-          }
-
-          .menu-item:last-child {
-            border-bottom-right-radius: 1.5rem;
-          }
-
-          .menu-item:hover {
-            background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
-            font-size: 1.2rem;
-
-            span {
-              transform: translateX(1rem);
-            }
-          }
-        }
-      }
-    }
-
-    .center-right {
-      display: flex;
-      align-items: center;
-
-      .icon {
-        font-size: 1.6rem;
-        cursor: pointer;
-        margin-left: 1rem;
-      }
-
-      .icon-setting {
-        font-size: 2rem;
-      }
-    }
-  }
-}
-
 .top-bgc {
   position: fixed;
-  width: 100vw;
+  width: 100%;
   top: 0;
-  z-index: 2;
+  z-index: -5;
+  // overflow: hidden;
 
   .item-box {
     width: 100%;
@@ -389,59 +204,21 @@ export default {
   }
 }
 
-.top-bgc::before {
-  content: "";
-  width: 150vw;
-  height: 300px;
-  border-radius: 50%;
-  position: absolute;
-  left: 0;
-  bottom: -200px;
-  background-color: rgba(255, 255, 255, 0.3);
-  z-index: 15;
-  animation: move1 10s linear infinite;
-}
 
 .top-bgc::after {
   content: "";
   width: 150vw;
-  height: 300px;
+  height: 250px;
   border-radius: 50%;
   position: absolute;
-  left: 75vw;
-  bottom: -200px;
-  background-color: rgba(255, 255, 255, 0.7);
-  z-index: 15;
-  animation: move2 15s linear infinite;
+  left: -75vw;
+  bottom: -10rem;
+  background-color: var(--white-a3);
+  z-index: 2;
+  animation: move1 18s linear infinite;
 }
 
-@keyframes skewBgc {
-  0% {
-    transform: scale(100%);
-  }
 
-  100% {
-    transform: scale(130%);
-  }
-}
-
-@keyframes move1 {
-  0% {
-    transform: translateX(0vw);
-  }
-  100% {
-    transform: translateX(50vw);
-  }
-}
-
-@keyframes move2 {
-  0% {
-    transform: translateX(-50vw);
-  }
-  100% {
-    transform: translateX(100vw);
-  }
-}
 
 .main {
   position: relative;
@@ -449,12 +226,13 @@ export default {
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
-  z-index: 3;
+  z-index: 5;
   padding-top: 3rem;
 
   .model {
     width: 100%;
     background-color: #fff;
+
     .main-box {
       width: 93rem;
       margin: 0 auto;
@@ -467,135 +245,9 @@ export default {
       }
 
       .right-box {
-        // position: fixed;
-        // top: 0rem;
         width: 20rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        & > div {
-          margin-bottom: 1rem;
-        }
-
-        .userInfo {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-
-          .username {
-            font-size: 1.5rem;
-            margin-top: 1rem;
-          }
-        }
-
-        .userImage {
-          width: 9rem;
-          height: 9rem;
-          border-radius: 50%;
-          overflow: hidden;
-          cursor: pointer;
-          position: relative;
-
-          .el-image {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            transition: 0.8s;
-          }
-
-          .person-change {
-            transition: all 0.8s ease-in-out 0s;
-            position: absolute;
-            bottom: -1.5rem;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        }
-
-        .userImage:hover {
-          .el-image {
-            transform: scale(120%) rotate(360deg);
-            filter: blur(5px);
-          }
-
-          .person-change {
-            font-size: 3rem;
-            bottom: 0;
-            color: #fff;
-          }
-        }
-
-        .btn-edit {
-          height: 3rem;
-          width: 10rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          overflow: hidden;
-          border-radius: 1rem;
-
-          .btn-box {
-            width: 100%;
-            height: 100%;
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-
-            button {
-              display: block;
-              width: calc(100% - 4px);
-              height: calc(100% - 4px);
-              background: linear-gradient(
-                90deg,
-                var(--bgc-clr2),
-                var(--bgc-clr1)
-              );
-              z-index: 21;
-              border: none;
-              color: #fff;
-              font-size: 1.2rem;
-              border-radius: 1rem;
-              cursor: pointer;
-              transition: all 0.4s ease-in-out 0s;
-            }
-          }
-        }
-
-        .btn-edit:hover {
-          box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--pink-1);
-          button {
-            background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
-          }
-
-          .btn-box::before {
-            content: "";
-            width: 100%;
-            height: 100%;
-            background: var(--pink-1);
-            position: absolute;
-            top: 50%;
-            left: -50%;
-            z-index: 5;
-            animation: myAnimate 4s linear infinite;
-            transform-origin: top right;
-          }
-
-          .btn-box::after {
-            content: "";
-            width: 100%;
-            height: 100%;
-            background: var(--pink-1);
-            position: absolute;
-            top: -50%;
-            left: 50%;
-            z-index: 5;
-            animation: myAnimate 4s linear infinite;
-            transform-origin: bottom left;
-          }
-        }
       }
+     
     }
   }
 }
@@ -608,30 +260,22 @@ export default {
   position: absolute;
   top: -100px;
   left: -50vw;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: var(--white-a1);
   z-index: -2;
-  animation: move1 15s linear infinite;
+  animation: move1 12s linear infinite;
 }
 
 .main::after {
   content: "";
-  width: 100vw;
-  height: 300px;
+  width: 90vw;
+  height: 280px;
   border-radius: 50%;
   position: absolute;
   top: -100px;
   left: 40vw;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--white-a2);
   z-index: -2;
   animation: move1 15s linear infinite;
 }
 
-@keyframes myAnimate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 </style>

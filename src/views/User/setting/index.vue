@@ -24,6 +24,20 @@
           </el-select>
         </div>
       </div>
+
+      <div class="session-item">
+        <div class="item-title">
+          <span>灰度页面：</span>
+        </div>
+        <div class="item-main">
+          <el-switch
+            v-model="config.grayscale"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </div>
+      </div>
     </div>
 
     <el-divider content-position="left">
@@ -100,9 +114,8 @@
           </el-switch>
         </div>
       </div>
-    </div>
 
-    <div
+      <div
       class="btn-save"
       :style="'visibility: ' + (isChange ? 'visible' : 'hidden')"
       @click="handleSave"
@@ -110,10 +123,14 @@
       <span class="iconfont icon-save-fill"></span>
       <span v-text="'保存'"></span>
     </div>
+    </div>
+
+    
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "settingPage",
   data() {
@@ -125,6 +142,7 @@ export default {
     ];
     return {
       config: {
+        grayscale: false, //灰度
         theme: "", //主题：目前默认有四种
         menu_pos: "0", //个人信息显示位置：0,1
         swiperList: [], //轮播图列表
@@ -137,21 +155,32 @@ export default {
       isChange: false,
     };
   },
-  watch: {
+  watch: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     config: {
       deep: true,
       handler() {
         this.isChange = true;
-        console.log(111);
       },
     },
   },
+  created() {
+    this.config = JSON.parse(sessionStorage.getItem("config")) || {};
+  },
   methods: {
+    ...mapMutations("config", ["UpdateConfig"]),
+
     // 点击保存按钮事件
     handleSave() {
+      this.UpdateConfig(this.config);
+        // this.$forceUpdate()
+      location.reload()
+
       setTimeout(() => {
-        this.$message.success("保存成功！");
-        this.$router.push({ name: "user" });
+        
+        this.$nextTick(() => {
+          this.$message.success("保存成功！");
+          this.$router.push({ name: "user" });
+        })
       }, 500);
     },
 
@@ -221,8 +250,8 @@ export default {
 }
 
 .btn-save {
-  position: fixed;
-  right: 20%;
+  position: absolute;
+  right: -10rem;
   bottom: 10%;
   z-index: 20;
   width: 6rem;
@@ -233,7 +262,7 @@ export default {
   align-items: center;
   justify-content: center;
   border-radius: 1rem;
-  background: linear-gradient(90deg, var(--bgc-clr3), var(--bgc-clr4));
+  background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
   cursor: pointer;
 
   span {
@@ -246,7 +275,6 @@ export default {
 }
 
 .btn-save:hover {
-  background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
   box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--pink-1);
 }
 </style>
