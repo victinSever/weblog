@@ -1,9 +1,13 @@
 <template>
   <div class="root">
     <div class="user-title">
-      <el-image :src="data.userImage" class="title-image" @click="$router.push({name: 'user'})"></el-image>
+      <el-image
+        :src="user.userImage"
+        class="title-image"
+        @click="$router.push({ name: 'user' })"
+      ></el-image>
       <div class="title-box">
-        <span class="title">{{ data.username }}</span>
+        <span class="title">{{ user.username }}</span>
         <p>
           <span>天平：{{ data.tianping }}</span>
           <span class="iconfont icon-arrow-right"></span>
@@ -39,7 +43,7 @@
       </div>
     </div>
     <div class="user-signOut">
-      <span class="setting" v-text="'个人信息'"></span>
+      <span class="setting" v-text="'个人信息'" @click="$router.push({ name: 'change' })"></span>
       <span class="signOut" @click="signOut" v-text="'退出登录'"></span>
     </div>
   </div>
@@ -47,58 +51,57 @@
 
 <script>
 import { mapMutations } from "vuex";
+const menus = [
+  {
+    icon: "icon-person",
+    title: "我的主页",
+    urlname: "user",
+    id: 1,
+    message: 0,
+  },
+  {
+    icon: "icon-activity",
+    title: "我的动态",
+    urlname: "active",
+    id: 2,
+    message: 0,
+  },
+  {
+    icon: "icon-coursera",
+    title: "创作管理",
+    urlname: "essays",
+    id: 3,
+    message: 2,
+  },
+  {
+    icon: "icon-columns",
+    title: "我的专栏",
+    urlname: "column",
+    id: 4,
+    message: 0,
+  },
+  {
+    icon: "icon-3501shuju",
+    title: "成长中心",
+    urlname: "data",
+    id: 5,
+    message: 0,
+  },
+  {
+    icon: "icon-setting",
+    title: "主题配置",
+    urlname: 'setting',
+    id: 6,
+    message: 0,
+  },
+];
+
 export default {
   name: "userBaseInfo",
   data() {
-    const menus = [
-      {
-        icon: "icon-person",
-        title: "我的主页",
-        urlname: 'user',
-        id: 1,
-        message: 0,
-      },
-      {
-        icon: "icon-activity",
-        title: "我的动态",
-        urlname: "active",
-        id: 2,
-        message: 0,
-      },
-      {
-        icon: "icon-coursera",
-        title: "创作管理",
-        urlname: "essays",
-        id: 3,
-        message: 2,
-      },
-      {
-        icon: "icon-columns",
-        title: "我的专栏",
-        urlname: "column",
-        id: 4,
-        message: 0,
-      },
-      {
-        icon: "icon-3501shuju",
-        title: "成长中心",
-        url: "data",
-        id: 5,
-        message: 0,
-      },
-      {
-        icon: "icon-setting",
-        title: "主题配置",
-        id: 6,
-        message: 0,
-      },
-    ];
     return {
       menus,
       data: {
-        userImage:
-          "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-        username: "victin",
         tianping: 0,
         level: 2,
         concern: 0,
@@ -107,6 +110,11 @@ export default {
       },
     };
   },
+  computed: {
+    user() {
+      return JSON.parse(sessionStorage.getItem('userInfo')) || {}
+    }
+  },
   methods: {
     ...mapMutations("user", ["SignOut"]),
 
@@ -114,7 +122,7 @@ export default {
       if (this.$route.path !== item.path) {
         if (item.urlname) {
           this.$router.push({
-            name: item.urlname
+            name: item.urlname,
           });
         }
       }

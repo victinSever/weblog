@@ -11,7 +11,7 @@
             <span>&nbsp;博客大厅</span>
           </div>
           <div class="menu-item iconfont icon-home no-underline">
-            <span @click="gotoUserHome">&nbsp;首页</span>
+            <span @click="goToPage('user')">&nbsp;首页</span>
             <div class="menu-list-children">
               <div
                 class="menu-item iconfont icon-Category"
@@ -106,11 +106,6 @@ export default {
     goToPage(urlName) {
       if (this.$route.name.includes(urlName)) return;
       this.$router.push({ name: urlName });
-    },
-    // 进入主页
-    gotoUserHome() {
-      this.goToPage("user");
-      this.$refs.userMenu.changeMenuByParent("0");
     },
   },
 };

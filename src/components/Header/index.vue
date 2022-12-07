@@ -3,7 +3,7 @@
     <!-- 头部 -->
     <el-row class="header" v-if="isHidden">
       <el-row class="header-top">
-        <el-col :span="18" :offset="3" class="header-top-in">
+        <div class="header-top-in">
           <div class="header-top-left">
             <div class="header-logo">
               <el-image
@@ -65,7 +65,7 @@
               <span>注册</span>
             </el-button>
           </div>
-        </el-col>
+        </div>
       </el-row>
     </el-row>
   </div>
@@ -150,10 +150,8 @@ export default {
 .header {
   width: 100%;
   height: 4rem;
-  position: sticky;
-  top: 0;
-  z-index: 999;
   background-color: #fff;
+  min-width: 700px;
 
   .header-top {
     height: 100%;
@@ -167,6 +165,8 @@ export default {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    width: 70%;
+    margin: 0 auto;
   }
 
   .header-top-left {
@@ -277,45 +277,27 @@ export default {
 }
 
 
-
-@media screen and (max-width: 1500px) {
-  .header .header-top-right .user-create {
-    display: none;
+@media screen and (max-width: 1350px) {
+  .header .header-top-in{
+    width: 90%;
   }
 }
 
-@media screen and (max-width: 1200px) {
-  .header .header-top-left {
-    .header-logo {
-      font-size: 30px;
-      margin-right: 30px;
-    }
-
-    .header-menu {
-      display: none;
-    }
-
-    .header-menus2 {
-      display: inline-block;
-    }
-
-    .user-login-register {
-    }
+@media screen and (max-width: 850px) {
+  .header .header-top-in{
+    width: 95%;
   }
-}
-
-@media screen and (max-width: 750px) {
   .header .header-top-left {
+    /deep/input:focus {
+      animation: none;
+    }
+
     .header-logo {
-      font-size: 20px;
+     margin-right: 1rem;
     }
   }
   .header .header-top-right {
-    .user-input {
-      width: 80%;
-      // height: 25px;
-    }
-
+    .user-create,
     .user-message {
       display: none;
     }

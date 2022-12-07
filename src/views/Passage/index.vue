@@ -342,6 +342,7 @@ https://victinsever.github.io/MIPT/dist/index.html
   top: 0;
   z-index: 200;
   background-color: #fff;
+  min-width: 700px;
 
   .tag-list {
     width: 65%;
@@ -373,6 +374,7 @@ https://victinsever.github.io/MIPT/dist/index.html
   background-color: #f4f5f5;
   padding-top: 20px;
   min-height: calc(100vh - 100px);
+  min-width: 700px;
 
   .main-inner {
     width: 65%;

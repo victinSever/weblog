@@ -150,7 +150,7 @@ export default {
       return this.$route.name === "user";
     },
     showUserInfo() {
-      return this.$route.name !== "setting";
+      return this.$route.name !== "setting" && this.$route.name !== "change";
     },
   },
   methods: {
