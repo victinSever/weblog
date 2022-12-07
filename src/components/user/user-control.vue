@@ -19,7 +19,20 @@
     </div>
 
     <!-- 链接 -->
-    <div class="userLink"></div>
+    <div class="userLink" v-if="linkList && linkList.length !== 0">
+      <div class="link-list">
+        <div class="link-item" v-for="item in linkList" :key="item.id">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="item.url"
+            placement="top-end"
+          >
+            <span :class="'iconfont ' + item.icon" @click="gotoUrl(item.url)"></span>
+          </el-tooltip>
+        </div>
+      </div>
+    </div>
 
     <!-- 创作按钮 -->
     <div class="btn-edit" @click="gotoEdit">
@@ -36,11 +49,32 @@
 <script>
 import UserMenu from "@/components/user/user-menu.vue";
 import { getUUID } from "@/utils/index";
+
+const linkList = [
+  { id: "0", label: "github", url: "https://victinsever.github.io", icon: "icon-github-fill" },
+  { id: "1", label: "gitee", url: "https://victinsever.gitee.io", icon: "icon-gitee-fill-round" },
+  { id: "2", label: "csdn", url: "#", icon: "icon-csdn" },
+  { id: "3", label: "blog", url: "https://victinzhong.asia", icon: "icon-blog" },
+  { id: "4", label: "weibo", url: "#", icon: "icon-weibo1" },
+  { id: "5", label: "QQ", url: "#", icon: "icon-QQ" },
+  { id: "6", label: "wechat", url: "#", icon: "icon-wechat-fill" },
+  { id: "7", label: "gitlab", url: "#", icon: "icon-Gitlab" },
+];
 export default {
   name: "userControlComponent",
   props: ["user"],
+  data() {
+    return {
+      linkList,
+    };
+  },
   components: { UserMenu },
   methods: {
+    // 前往链接
+    gotoUrl(url) {
+      window.open(url, '_blank')
+    },
+
     goToPage(urlName) {
       if (this.$route.name.includes(urlName)) return;
       this.$router.push({ name: urlName });
@@ -65,7 +99,7 @@ export default {
 <style scoped lang='scss'>
 .control {
   // position: fixed;
-  // top: 0rem; 
+  // top: 0rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -119,6 +153,34 @@ export default {
       font-size: 3rem;
       bottom: 0;
       color: #fff;
+    }
+  }
+
+  // 链接
+  .userLink {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .link-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 70%;
+    }
+
+    .link-item {
+      margin: 0.5rem 1rem;
+
+      .iconfont {
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--clr);
+      }
+
+      .iconfont:hover {
+        color: var(--bgc-clr4);
+      }
     }
   }
 
@@ -188,7 +250,4 @@ export default {
     }
   }
 }
-
-
-
 </style>

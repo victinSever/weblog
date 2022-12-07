@@ -15,6 +15,7 @@ export default [
     {
         path: 'content',
         name: 'content',
+        meta: { title: '内容管理' },
         component: () => import('@/views/User/content'),
         redirect: 'content/essays',
         children
@@ -22,16 +23,19 @@ export default [
     {
         path: 'active',
         name: 'active',
+        meta: { title: '动态管理' },
         component: () => import('@/views/User/active')
     },
     {
         path: 'column',
         name: 'column',
+        meta: { title: '专栏管理' },
         component: () => import('@/views/User/column')
     },
     {
         path: 'data',
         name: 'data',
+        meta: { title: '博客数据' },
         component: () => import('@/views/User/data')
     },
     {
