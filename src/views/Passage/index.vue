@@ -333,7 +333,7 @@ https://victinsever.github.io/MIPT/dist/index.html
 <style lang='scss' scoped>
 .header {
   width: 100%;
-  height: 50px;
+  height: 3rem;
   border-bottom: 1px solid #eeecec;
   box-shadow: 1px 1px 1px #ccc;
   font-size: 14px;

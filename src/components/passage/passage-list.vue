@@ -1,7 +1,7 @@
 <template>
-  <div class="passage-list">
+  <div class="passage-list" v-if="passageList && passageList.length !== 0">
     <div
-      v-for="(item) in passageList"
+      v-for="item in passageList"
       :key="item.id"
       class="passage-item"
       @click="gotoPost(item)"
@@ -23,9 +23,9 @@
           <p class="discription" v-html="highlight(item.content)"></p>
         </div>
         <div class="item-bottom">
-          <span class="iconfont icon-view"> {{ " " + item.view }}</span>
-          <span class="iconfont icon-31dianzan"> {{ " " + item.dianzan }}</span>
-          <span class="iconfont icon-pinglun"> {{ " " + item.comment }}</span>
+          <span class="iconfont icon-view"> {{ " " + item.view || 0 }}</span>
+          <span class="iconfont icon-31dianzan"> {{ " " + item.dianzan  || 0}}</span>
+          <span class="iconfont icon-pinglun"> {{ " " + item.comment || 0 }}</span>
         </div>
       </div>
 
@@ -45,12 +45,10 @@ export default {
     passageList: {
       type: Array,
       default: []
-    }
-  },
-  computed: {
-    
-    keyword() {
-      return this.$route.query.query || ''
+    },
+    keyword: {
+      type: String,
+      default: ''
     }
   },
   methods: {

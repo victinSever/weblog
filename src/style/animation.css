@@ -40,21 +40,3 @@
     }
   }
 
-/* 博客主页输入框聚焦扩展 */
-@keyframes inputFocusExtend {
-  0% {
-    width: 18rem;
-  }
-  100% {
-    width: 30rem;
-  }
-}
-
-@keyframes inputBlurExtend {
-  0% {
-    width: 30rem;
-  }
-  100% {
-    width: 18rem;
-  }
-}

@@ -39,6 +39,7 @@
               icon="el-icon-bell"
               circle
               v-if="isLogin"
+              @click="handleClickMessage"
             ></el-button>
 
             <el-popover
@@ -79,7 +80,6 @@ export default {
   components: { Login, BaseInfo },
   data() {
     return {
-      url: "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
       messageNum: 1,
       keyword: "",
       inputOpen: false,
@@ -99,28 +99,17 @@ export default {
     },
   },
   methods: {
+    // 点击消息事件
+    handleClickMessage() {
+      this.$message.success('敬请期待！');
+    },
     // 搜索事件-
-    searchHandler() {
+    handleSearch() {
       const keyword = this.keyword.trim();
       const { query } = this.$route;
-      if (query.query === keyword) return; //节流
+      if (query.key === keyword || !keyword) return; //节流
 
-      if (!keyword) return;
-
-      this.$router.push({
-        path: "/search",
-        query: {
-          query: keyword,
-          type: 0,
-        },
-      });
-    },
-
-        // 搜索文章事件
-    handleSearch() {
-      if(!this.keyword.trim()) return
-      this.$emit('handleSearch', this.keyword)
-      this.keyword = ''
+      this.$router.push(`/search?key=${keyword}`)
     },
 
     gotoEditor: function () {
@@ -175,7 +164,7 @@ export default {
     height: 100%;
 
     .header-logo {
-      margin-right: 60px;
+      margin-right: 2rem;
       font-family: "华文行楷";
       color: var(--bgc-clr2);
       font-size: 40px;
@@ -204,14 +193,6 @@ export default {
       /deep/input {
         border-radius: 1rem;
         padding-left: 3rem;
-      }
-
-      /deep/input:focus {
-        animation: inputFocusExtend 1s ease-in-out;
-      }
-
-       /deep/input:blur {
-        animation: inputFocusExtend 1s ease-in-out;
       }
 
       .icon-search {
@@ -288,10 +269,6 @@ export default {
     width: 95%;
   }
   .header .header-top-left {
-    /deep/input:focus {
-      animation: none;
-    }
-
     .header-logo {
      margin-right: 1rem;
     }
