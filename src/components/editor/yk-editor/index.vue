@@ -55,10 +55,6 @@ export default {
   },
 
   methods: {
-    getContent() {
-      return this.editorData;
-    },
-
     setContent(val) {
       this.editorData = val;
     },

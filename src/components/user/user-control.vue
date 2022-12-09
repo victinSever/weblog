@@ -28,7 +28,7 @@
             :content="item.url"
             placement="top-end"
           >
-            <span :class="'iconfont ' + item.icon" @click="gotoUrl(item.url)"></span>
+            <span :class="'iconfont ' + item.icon" :style="'color: ' + item.color || ''" @click="gotoUrl(item.url)"></span>
           </el-tooltip>
         </div>
       </div>
@@ -51,14 +51,14 @@ import UserMenu from "@/components/user/user-menu.vue";
 import { getUUID } from "@/utils/index";
 
 const linkList = [
-  { id: "0", label: "github", url: "https://victinsever.github.io", icon: "icon-github-fill" },
-  { id: "1", label: "gitee", url: "https://victinsever.gitee.io", icon: "icon-gitee-fill-round" },
-  { id: "2", label: "csdn", url: "#", icon: "icon-csdn" },
+  { id: "0", label: "github", url: "https://github.com/victinSever", icon: "icon-github-fill", color: '#161b22' },
+  { id: "1", label: "gitee", url: "https://gitee.com/victin", icon: "icon-gitee-fill-round", color: '#c71d23' },
+  { id: "2", label: "csdn", url: "https://blog.csdn.net/qq_54353631?spm=1000.2115.3001.5343", icon: "icon-csdn", color: '#fc5531' },
   { id: "3", label: "blog", url: "https://victinzhong.asia", icon: "icon-blog" },
-  { id: "4", label: "weibo", url: "#", icon: "icon-weibo1" },
-  { id: "5", label: "QQ", url: "#", icon: "icon-QQ" },
-  { id: "6", label: "wechat", url: "#", icon: "icon-wechat-fill" },
-  { id: "7", label: "gitlab", url: "#", icon: "icon-Gitlab" },
+  { id: "4", label: "weibo", url: "#", icon: "icon-weibo1", color: '#e32529' },
+  { id: "5", label: "QQ", url: "#", icon: "icon-QQ", color:'#121212' },
+  { id: "6", label: "wechat", url: "#", icon: "icon-wechat-fill" , color: '#00dd69'},
+  { id: "7", label: "gitlab", url: "#", icon: "icon-Gitlab", color: '#ff7231' },
 ];
 export default {
   name: "userControlComponent",
@@ -166,11 +166,11 @@ export default {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      width: 70%;
+      width: 65%;
     }
 
     .link-item {
-      margin: 0.5rem 1rem;
+      margin: 0.5rem 0.75rem;
 
       .iconfont {
         cursor: pointer;

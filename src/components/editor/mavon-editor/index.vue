@@ -1,7 +1,7 @@
 <template>
   <div>
     <mavon-editor
-      v-model="editorContent"
+      v-model="editData"
       @imgAdd="imgAdd"
       @imgDel="imgDel"
       class="mavon-editor"
@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      editorContent: this.content,
+      editData: this.content,
       imgFile: [],
     };
   },
