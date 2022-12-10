@@ -11,7 +11,7 @@
             <span>&nbsp;博客大厅</span>
           </div>
           <div class="menu-item iconfont icon-home no-underline">
-            <span @click="goToPage('user')">&nbsp;首页</span>
+            <span @click="goToPage('user')">&nbsp;个人主页</span>
             <div class="menu-list-children">
               <div
                 class="menu-item iconfont icon-Category"

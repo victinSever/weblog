@@ -7,12 +7,16 @@
         >个人动态</span
       >
     </el-divider>
+    <el-empty></el-empty>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'activePage'
+    name: 'activePage',
+    mounted() {
+      this.$message.warning('敬请期待！')
+    },
 }
 </script>
 

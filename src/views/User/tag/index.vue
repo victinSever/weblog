@@ -8,7 +8,7 @@
       >
     </el-divider>
     <div class="tag-list">
-      <div class="tag-item" v-for="item in 10" :key="item">
+      <div class="tag-item" v-for="item in 10" :key="item" @click="tip">
         <span>标签</span>
       </div>
     </div>
@@ -18,6 +18,11 @@
 <script>
 export default {
   name: "tagPage",
+  methods: {
+    tip() {
+      this.$message.warning('敬请期待！')
+    }
+  }
 };
 </script>
 

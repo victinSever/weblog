@@ -76,7 +76,7 @@ const menus = [
   {
     icon: "icon-columns",
     title: "我的专栏",
-    urlname: "column",
+    urlname: "columns",
     id: 4,
     message: 0,
   },

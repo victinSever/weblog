@@ -21,7 +21,7 @@ export default {
       { id: "0", label: "首页", icon: "icon-home", routername: "user" },
       { id: "1", label: "文章", icon: "icon-coursera", routername: "essays" },
       { id: "2", label: "动态", icon: "icon-activity", routername: "active" },
-      { id: "3", label: "专栏", icon: "icon-columns", routername: "column" },
+      { id: "3", label: "专栏", icon: "icon-columns", routername: "columns" },
       { id: "4", label: "数据", icon: "icon-3501shuju", routername: "data" },
     ];
     return {

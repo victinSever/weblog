@@ -26,13 +26,13 @@
   align-items: center;
   justify-content: center;
 }
-.container .drop:nth-child(1) {
+.container .drop:nth-child(n+1) {
   border-radius: 57% 43% 43% 57% / 43% 43% 57% 57%;
 }
-.container .drop:nth-child(2) {
+.container .drop:nth-child(2n+2) {
   border-radius: 73% 27% 59% 41% / 57% 59% 41% 43%;
 }
-.container .drop:nth-child(3) {
+.container .drop:nth-child(3n+3) {
   border-radius: 35% 65% 31% 69% / 57% 59% 41% 43%;
 }
 .container .drop:hover{
@@ -73,10 +73,9 @@
 }
 .container .drop .content h2{
   position: relative;
-  width: 80px;
-  height: 80px;
   background-color: #eff0f4;
-  border-radius: 50%;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
   box-shadow: inset 2px 5px 10px rgba(0, 0, 0, .1),
   inset -2px -5px 10px rgba(255, 255, 255, 1),
   15px 15px 10px rgba(0, 0, 0, .05),

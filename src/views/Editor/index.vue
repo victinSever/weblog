@@ -15,6 +15,7 @@
               type="primary"
               v-text="'发布'"
               round
+              @click="getContent()"
               slot="reference"
             ></el-button>
             <EditPublish :content="content" :title="title"/>

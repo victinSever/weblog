@@ -37,6 +37,17 @@ const getNumberOfDays = function (date1, date2 = new Date()) {
     }
 }
 
+/**
+ * 获取日期的具体月和日
+ * @param {Date} date 
+ * @returns 
+ */
+const getDate = function(date) {
+    let time = new Date(date)
+    console.log(time);
+    return time.getMonth() + '-' + time.getDay()
+}
+
 export {
-    getUUID, getNumberOfDays
+    getUUID, getNumberOfDays, getDate
 }

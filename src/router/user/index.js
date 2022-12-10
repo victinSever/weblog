@@ -1,15 +1,6 @@
-const children = [
-    {
-        path: 'drafts',
-        name: 'drafts',
-        component: () => import('@/views/User/content/drafts'),
-    },
-    {
-        path: 'essays',
-        name: 'essays',
-        component: () => import('@/views/User/content/essays'),
-    }
-]
+import content from './content'
+import cate from './cate'
+
 
 export default [
     {
@@ -18,7 +9,7 @@ export default [
         meta: { title: '内容管理' },
         component: () => import('@/views/User/content'),
         redirect: 'content/essays',
-        children
+        children: content
     },
     {
         path: 'active',
@@ -27,10 +18,16 @@ export default [
         component: () => import('@/views/User/active')
     },
     {
-        path: 'column',
-        name: 'column',
+        path: 'columns',
+        name: 'columns',
         meta: { title: '专栏管理' },
-        component: () => import('@/views/User/column')
+        component: () => import('@/views/User/columns')
+    },
+    {
+        path: 'column/:id',
+        name: 'column',
+        meta: { title: '专栏详情' },
+        component: () => import('@/views/User/columns/column')
     },
     {
         path: 'data',
@@ -54,7 +51,8 @@ export default [
         path: 'cate',
         name: 'cate',
         meta: { title: '分类' },
-        component: () => import('@/views/User/cate')
+        component: () => import('@/views/User/cate'),
+        children: cate
     },
     {
         path: 'tag',
@@ -62,4 +60,5 @@ export default [
         meta: { title: '标签' },
         component: () => import('@/views/User/tag')
     },
+    
 ]

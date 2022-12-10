@@ -14,7 +14,6 @@ export default {
         },
         UpdateConfig(state, payload) {
             state = payload
-            console.log(payload);
             sessionStorage.setItem('config', JSON.stringify(state))
         }
     },

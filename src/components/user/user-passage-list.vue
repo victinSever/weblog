@@ -36,7 +36,7 @@ export default {
   props: {
     passageList: {
       type: Array,
-      default: [],
+      default: () => [],
     },
     keyword: {
       type: String,

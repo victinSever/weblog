@@ -184,7 +184,7 @@ export default {
     isLegal() {
       // 检验发布内容的合法性
       if (!this.publishForm.category) return this.warnNotice("请选择文章类别");
-      if (!this.publishForm.tag)
+      if (!this.publishForm.tag || this.publishForm.tag.length == 0)
         return this.warnNotice("请选择文章标签，不少于一个");
       if (
         !this.publishForm.discription ||
@@ -193,6 +193,7 @@ export default {
         return this.warnNotice("请输入文章摘要且大于10个字符");
       // 检验文章内容和标题合法性
       if (!this.title) return this.warnNotice("你还没有输入文章标题");
+      console.log(this.content);
       if (this.content.length < 10)
         return this.warnNotice("你的文章字数不足，继续丰富你的内容吧！");
       return true;

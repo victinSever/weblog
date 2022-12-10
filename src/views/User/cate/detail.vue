@@ -1,71 +1,23 @@
 <template>
-  <div id="scroll-lisener">
-    <!-- header -->
-    <Header />
-    <!-- banner -->
-    <el-row class="header">
-      <div class="category-list">
-        <span
-          v-for="item in categoryList"
-          :key="item.label"
-          :class="
-            'category-item' + (categoryActive === item.label ? ' active' : '')
-          "
-          @click="handleChangeCategoryActive(item.label)"
-          >{{ item.label }}</span
-        >
+  <div>
+    <div>
+      <div
+        class="cate-item"
+        v-for="item in categoryList"
+        :key="item.id"
+        @click="handleGotoDetail(item.label)"
+      >
+        <span class="iconfont icon-pointer"></span>
+        <span class="publiushTime" v-text="dateToMonthAndDay(item.publishTime)"></span>
+        <span class="title" v-text="item.title"></span>
       </div>
-    </el-row>
-    <!-- main -->
-    <el-row class="main">
-      <div class="main-inner">
-        <el-col class="message-left">
-          <el-card class="box-card">
-            <div class="order-list">
-              <span
-                v-for="item in orderList"
-                :key="item.label"
-                :class="
-                  'order-item' + (orderActive === item.label ? ' active' : '')
-                "
-                @click="handleChangeOrderActive(item.label)"
-                >{{ item.label }}</span
-              >
-            </div>
-            <div class="passage-list" v-if="passageList.length !== 0">
-              <PassageList :passageList="passageList" />
-            </div>
-            <el-skeleton style="margin-top: 15px" v-else-if="isLoading" />
-            <el-empty v-else></el-empty>
-          </el-card>
-        </el-col>
-        <el-col class="message-right">
-          <!-- <el-card class="box-card"> -->
-          <PassageSignIn />
-          <PassageRecom />
-          <!-- </el-card> -->
-        </el-col>
-      </div>
-    </el-row>
+    </div>
   </div>
 </template>
 
 <script>
-const categoryList = [
-  { id: "0", label: "全部", parentId: "" },
-  { id: "1", label: "前端", parentId: "" },
-  { id: "2", label: "后端", parentId: "" },
-  { id: "3", label: "Andriod", parentId: "" },
-  { id: "4", label: "IOS", parentId: "" },
-  { id: "5", label: "人工智能", parentId: "" },
-  { id: "6", label: "阅读", parentId: "" },
-  { id: "7", label: "杂谈", parentId: "" },
-];
-const orderList = [
-  { label: "推荐", value: 1 },
-  { label: "最新", value: 2 },
-  { label: "热榜", value: 3 },
-];
+import {getDate} from '@/utils'
+// 模拟文章数据
 const passageList = [
   {
     id: "12312",
@@ -275,174 +227,56 @@ https://victinsever.github.io/MIPT/dist/index.html
     isview: false,
   },
 ];
-import Header from "@/components/Header";
-import PassageList from "@/components/passage/passage-list.vue";
-import PassageSignIn from "@/components/passage/passage-signIn.vue";
-import PassageRecom from "@/components/passage/passage-recom.vue";
 export default {
-  name: "passagePage",
-  components: { Header, PassageList, PassageSignIn, PassageRecom },
+  name: "categoryDetailPage",
   data() {
     return {
-      categoryList,
-      orderList,
-      passageList: [],
-      categoryActive: "全部",
-      orderActive: "推荐",
-      loadTimes: 0,
-      isLoading: false,
+      categoryList: [],
     };
   },
   mounted() {
-    const listenr = window.addEventListener("scroll", this.handleScroll, true);
     this.getData();
   },
   methods: {
-    async getData() {
-      this.isLoading = true;
-      this.passageList = [];
-      setTimeout(() => {
-        this.passageList = passageList;
-        this.isLoading = false;
-      }, 500);
+    getData() {
+      let { label } = this.$route.query;
+      // 获取title数据
+      this.categoryList = passageList;
     },
-
-    // 监听鼠标位置，进行数据懒加载
-    handleScroll() {
-      let scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      let rate = Math.floor(scrollTop / screen.height);
-      if (rate > this.loadTimes) {
-        this.loadTimes++;
-        console.log("临界次数+1");
-      }
-    },
-
-    handleChangeCategoryActive(id) {
-      this.categoryActive = id;
-      this.getData();
-    },
-    handleChangeOrderActive(id) {
-      this.orderActive = id;
-      this.getData();
-    },
+    dateToMonthAndDay(date) {
+      return getDate(date)
+    }
   },
 };
 </script>
 
-<style lang='scss' scoped>
-.header {
-  width: 100%;
-  height: 3rem;
-  border-bottom: 1px solid #eeecec;
-  box-shadow: 1px 1px 1px #ccc;
-  font-size: 14px;
-  color: #71777c;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background-color: #fff;
-  min-width: 700px;
+<style scoped lang='scss'>
+.cate-item {
+  margin-bottom: 4rem;
+  cursor: pointer;
 
-  .category-list {
-    width: 65%;
-    margin: 0 auto;
-    height: 100%;
-    display: flex;
-    align-items: center;
+  .iconfont {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 1rem;
+    color: var(--pink-1);
+  }
 
-    .category-item {
-      padding: 0 10px;
-      cursor: pointer;
-    }
+  .publiushTime {
+    font-size: 0.7rem;
+    margin-right: 0.5rem;
+    color: var(--bgc-clr4);
+  }
 
-    .category-item:first-child {
-      padding-left: 0;
-    }
-
-    .category-item:hover {
-      color: #1e80ff;
-    }
+  .title {
+    color: var(--pink-1);
+    font-size: 1.2rem;
   }
 }
 
-.active {
-  color: #1e80ff;
-}
-
-.main {
-  background-color: #f4f5f5;
-  padding-top: 20px;
-  min-height: calc(100vh - 100px);
-  min-width: 700px;
-
-  .main-inner {
-    width: 65%;
-    margin: 0 auto;
-
-    .message-left {
-      width: 75%;
-      background-color: #fff;
-    }
-
-    .message-right {
-      float: right;
-      width: 23%;
-    }
-  }
-}
-
-.order-list {
-  font-size: 14px;
-  color: #71777c;
-
-  .order-item {
-    margin-right: 15px;
-    cursor: pointer;
-  }
-
-  .order-item:hover {
-    color: #1e80ff;
-  }
-}
-
-.passage-list,
-.el-skeleton {
-  padding-top: 5px;
-}
-
-@media screen and (max-width: 1500px) {
-  .main .main-inner {
-    .message-left {
-      width: 100%;
-    }
-    .message-right {
-      display: none;
-    }
-  }
-}
-
-@media screen and (max-width: 1350px) {
-  .header {
-    .category-list {
-      width: 80%;
-    }
-  }
-  .main .main-inner {
-    width: 80%;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-  .header {
-    .category-list {
-      width: 95%;
-    }
-  }
-  .main .main-inner {
-    width: 95%;
+.cate-item:hover {
+  .iconfont {
+    color: var(--bgc-clr2);
   }
 }
 </style>

@@ -24,7 +24,7 @@
           <!-- 首页文章显示 -->
           <div
             class="session"
-            v-show="passageList.length !== 0 && showPassageList"
+            v-if="passageList.length !== 0 && showPassageList"
           >
             <el-divider content-position="center">
               <span
@@ -233,6 +233,7 @@ export default {
       width: calc(100% - 24rem);
       box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
       padding: 0 2rem;
+      min-height: 75vh;
     }
 
     .right-box {

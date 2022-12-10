@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "151154",
+      "name": "pointer",
+      "font_class": "pointer",
+      "unicode": "e934",
+      "unicode_decimal": 59700
+    },
+    {
+      "icon_id": "1080592",
+      "name": "point",
+      "font_class": "point",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
       "icon_id": "4936970",
       "name": "Gitlab",
       "font_class": "Gitlab",

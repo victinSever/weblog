@@ -5,7 +5,7 @@
       class="recom-item"
       v-for="item in recomList"
       :key="item.id"
-      @click="gotoLink(item)"
+      @click="gotoLink(item.id)"
     >
       <el-image v-if="item.userImage" :src="item.userImage"></el-image>
       <el-image
@@ -46,8 +46,13 @@ export default {
     };
   },
   methods: {
-    gotoLink(link) {
-      window.open(link, "_blank");
+    gotoLink(id) {
+      // let routeData = this.$router.resolve({
+      //   name: "editor",
+      //   params: { id },
+      // });
+      // window.open(routeData.href, "_blank");
+      this.$message.warning('暂不支持访问他人博客主页！')
     },
   },
 };
