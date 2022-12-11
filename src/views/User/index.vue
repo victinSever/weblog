@@ -38,6 +38,18 @@
               >
             </el-divider>
             <UserPassageList :passageList="passageList" :keyword="keyword" />
+            
+            <div class="pagination-box">
+              <el-pagination
+              background
+              :page-size="page.pageSize"
+              :current-page="page.pageNum"
+              layout="prev, pager, next"
+              :total="total"
+              @current-change="handleChangePageNum"
+              class="pagination">
+            </el-pagination>
+            </div>
           </div>
 
           <router-view></router-view>
@@ -139,6 +151,13 @@ export default {
       bgcList,
       passageList,
       keyword: "",
+
+      // 文章分页，默认10条
+      page: {
+        pageSize: 10,
+        pageNum: 1
+      },
+      total: 100
     };
   },
   computed: {
@@ -153,6 +172,10 @@ export default {
     },
   },
   methods: {
+    handleChangePageNum(num) {
+      this.page.pageNum = num
+    },
+
     // 搜索文章(此处传值给两个组件)
     handleSearch(keyword) {
       this.keyword = keyword;
@@ -271,6 +294,9 @@ export default {
   z-index: -2;
   animation: move1 15s linear infinite;
 }
+
+
+
 
 @media screen and (max-width: 1500px) {
   .main .main-box {

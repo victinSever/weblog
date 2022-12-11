@@ -34,6 +34,7 @@
             </div>
             <div class="passage-list" v-if="passageList.length !== 0">
               <PassageList :passageList="passageList" />
+              
             </div>
             <el-skeleton style="margin-top: 15px" v-else-if="isLoading" />
             <el-empty v-else></el-empty>
@@ -291,18 +292,30 @@ export default {
       orderActive: "推荐",
       loadTimes: 0,
       isLoading: false,
+
+      
+      // 文章分页，下拉刷新增加一页，固定大小为5条
+      page: {
+        pageSize: 5,
+        pageNum: 1
+      },
     };
   },
   mounted() {
-    const listenr = window.addEventListener("scroll", this.handleScroll, true);
+    window.addEventListener("scroll", this.handleScroll, true);
     this.getData();
   },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll)
+  },
   methods: {
+    // 数据更新
     async getData() {
+      if(this.isLoading) return //节流
+
       this.isLoading = true;
-      this.passageList = [];
       setTimeout(() => {
-        this.passageList = passageList;
+        this.passageList = this.passageList.concat(passageList)
         this.isLoading = false;
       }, 500);
     },
@@ -316,7 +329,8 @@ export default {
       let rate = Math.floor(scrollTop / screen.height);
       if (rate > this.loadTimes) {
         this.loadTimes++;
-        console.log("临界次数+1");
+        this.page.pageNum++
+        this.getData()
       }
     },
 

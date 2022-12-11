@@ -9,13 +9,13 @@ import signup from './signup'
 export default [
     {
         path: '/',
-        meta: { title: 'weblog'},
+        meta: { title: '博客大厅'},
         name: 'passage',
         component: () => import('@/views/Passage'),
     },
     {
         path: '/signup',
-        meta: { title: '用户登录', hiddenHeader: true},
+        meta: { title: '用户登录'},
         component: () => import('@/views/signup'),
         redirect: '/signup/login',
         children: signup
@@ -28,7 +28,7 @@ export default [
     {
         path: '/editor/:id',
         name: 'editor',
-        meta: { title: '创作文章', hiddenHeader: true},
+        meta: { title: '创作文章'},
         component: () => import('@/views/Editor'),
     },
     {
@@ -45,7 +45,7 @@ export default [
     {
         path: '/user',
         name: 'user',
-        meta: { title: '个人中心', hiddenHeader: true},
+        meta: { title: '个人中心'},
         component: () => import('@/views/User'),
         children: user
     },
