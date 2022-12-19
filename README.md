@@ -37,5 +37,5 @@ weblog是一个博客分享交流平台，支持用户通过Web端进行博客�
       ![image](https://tva3.sinaimg.cn/large/008cs7isly8h8oenk6y8tj30t80iagmx.jpg)
 
 ## 部署
-暂无
+[github部署地址](http://victinzhong.asia/weblog/dist)
 

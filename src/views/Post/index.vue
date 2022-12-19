@@ -112,7 +112,7 @@ export default {
         this.blogId = this.$route.params.blogId
         const {data: res} = await this.getPassageInfo({
           blogId: this.blogId,
-          userId: this.user.id
+          userId: this.user.id || 0
         })
         this.data = res.data
         this.map = res.map

@@ -111,7 +111,7 @@ export default {
     async getData(type) {
       try {
         this.isLoading = true;
-        const params = {...this.pageMap, userId: this.user.id}
+        const params = {...this.pageMap, userId: this.user.id || 0}
         let data = {}
         switch(this.orderActive){
           case 1: data = await this.getPassageList(params); break;
