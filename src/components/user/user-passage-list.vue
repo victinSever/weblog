@@ -13,17 +13,17 @@
       <!-- 信息 -->
       <div :class="'publishInfo ' + (item.publishImage ? '' : 'full')">
         <div class="item-top">
-          <span>{{ item.publishTime }}</span>
+          <span>{{ item.createTime }}</span>
         </div>
 
         <div class="item-main">
           <h4 class="title" v-html="highlight(item.title)"></h4>
-          <p class="discription" v-html="highlight(item.content)"></p>
+          <p class="discription" v-html="highlight(item.discription)"></p>
         </div>
         <div class="item-bottom">
-          <span class="iconfont icon-view"> {{ " " + item.view }}</span>
-          <span class="iconfont icon-31dianzan"> {{ " " + item.dianzan }}</span>
-          <span class="iconfont icon-pinglun"> {{ " " + item.comment }}</span>
+          <span class="iconfont icon-view"> {{ " " + (item.readAmount || 0) }}</span>
+          <span class="iconfont icon-31dianzan"> {{ " " + (item.likeAmount || 0) }}</span>
+          <span class="iconfont icon-pinglun"> {{ " " + (item.commentAmount || 0) }}</span>
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@ export default {
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-radius: 1rem;
   box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
 
@@ -114,6 +115,7 @@ export default {
     justify-content: flex-end;
     color: var(--bgc-clr4);
     font-weight: bold;
+    margin-bottom: 1rem;
   }
 
   .item-main {

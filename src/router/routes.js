@@ -5,6 +5,7 @@
 //引入二级路由
 import user from './user'
 import signup from './signup'
+import admin from './admin'
 
 export default [
     {
@@ -12,6 +13,14 @@ export default [
         meta: { title: '博客大厅'},
         name: 'passage',
         component: () => import('@/views/Passage'),
+    },
+    {
+        path: '/admin',
+        meta: { title: '管理员模块'},
+        name: 'admin',
+        component: () => import('@/views/Admin'),
+        redirect: '/admin/welcome',
+        children: admin
     },
     {
         path: '/signup',
@@ -37,7 +46,7 @@ export default [
         component: () => import('@/views/Search'),
     },
     {
-        path: '/post/:id',
+        path: '/post/:blogId',
         name: 'post',
         meta: { title: '文章详情'},
         component: () => import('@/views/Post'),

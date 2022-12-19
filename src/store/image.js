@@ -1,5 +1,4 @@
-import fetch from '@/api/manage/fetch'
-import {imageSeverUrl} from '@/api/manage/config';
+import fetch from '@/api/fetch'
 
 export default {
     namespaced: true,//开启命名空间

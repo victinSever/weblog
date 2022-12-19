@@ -9,18 +9,17 @@
           <!-- 发布信息 -->
           <div class="publishInfo">
             <div class="left-box">
-              <el-image :src="data.userImage" v-if="data.userImage"></el-image>
-              <el-image src="https://tva2.sinaimg.cn/large/008cs7isly8h88i9ec08sj30u00u379u.jpg" v-else></el-image>
+              <el-image :src="data.headshot" v-if="data.headshot"></el-image>
             </div>
             <div class="right-box">
               <!-- 一般信息 -->
               <div class="top">
-                <span v-text="data.username"></span>
+                <span v-text="data.userName || 'weblog游客'"></span>
               </div>
               <div class="bottom">
-                <span class="publishTime" v-text="data.publishTime"></span>
-                <span v-if="data.view" v-text="' · 阅读'"></span>
-                <span class="views" v-if="data.view" v-text="data.view"></span>
+                <span class="publishTime" v-text="data.updateTime"></span>
+                <span v-if="data.readAmount" v-text="' · 阅读'"></span>
+                <span class="views" v-if="data.readAmount" v-text="data.readAmount"></span>
               </div>
             </div>
           </div>
@@ -49,9 +48,9 @@
             ></el-tag>
             <el-tag v-else v-text="'暂无'"></el-tag>
             <span class="article-tags">标签：</span>
-            <span v-if="data.tags">
+            <span v-if="data.tag">
               <el-tag
-                v-for="item in data.tags"
+                v-for="item in stringToArray(data.tag)"
                 :key="item"
                 v-text="item"
               ></el-tag>
@@ -60,7 +59,7 @@
           </div>
         </div>
         <div class="comment card">
-          <PostComment />
+          <PostComment :blog="data" :blogId="blogId"/>
         </div>
       </div>
       <div class="post-right card">
@@ -79,16 +78,48 @@ import PostDir from '@/components/post/post-dir.vue';
 import PostBtns from "@/components/post/post-btns.vue";
 import PostComment from "@/components/post/post-comment.vue";
 import VueMarkdown from "vue-markdown";
+import { mapActions } from 'vuex'
+
 export default {
   name: "postPage",
   components: { PostDir, PostBtns, PostComment, VueMarkdown },
+  data() {
+    return {
+      data: {},
+      map: {},
+      blogId: ''
+    }
+  },
   computed: {
-    data() {
-      return this.$route.params.id ? this.$route.params : {};
+    user() {
+      const user = this.$store.state.user
+      return user.token ? user.userInfo : false
     },
   },
   mounted() {
-    console.log(this.$route.params);
+    this.getData()
+  },
+  methods: {
+    ...mapActions('passage',['getPassageInfo']),
+
+    // 标签转
+    stringToArray(str) {
+      return str.split(' ')
+    },
+
+    async getData(){
+      try{
+        this.blogId = this.$route.params.blogId
+        const {data: res} = await this.getPassageInfo({
+          blogId: this.blogId,
+          userId: this.user.id
+        })
+        this.data = res.data
+        this.map = res.map
+      }catch(e){
+        this.$message.error(e)
+      }
+    }
   }
 };
 </script>

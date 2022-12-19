@@ -4,16 +4,16 @@
       <span
         class="session-title"
         style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
-        >专栏管理</span
+        >专栏管理（{{total || ''}}）</span
       >
     </el-divider>
 
         <div class="container">
-      <div class="drop" :style="'--clr:' + item.color" v-for="item in columnList" :key="item.id">
+      <div class="drop"  v-for="item in columnList" :key="item.id">
         <div class="content">
-          <h2 v-text="item.label"></h2>
+          <h2 v-text="item.column_name"></h2>
           <p v-text="item.discription"></p>
-          <a href="#" @click="gotoColumn(item.id)">Read More</a>
+          <a href="#" @click="gotoColumn(item)">Read More</a>
         </div>
       </div>
     </div>
@@ -21,57 +21,46 @@
 </template>
 
 <script>
-const columnList = [
-  {
-    id: 0,
-    label: "web开发",
-    color: '#ff0f5b',
-    discription: 'web开发的流程化控制过程',
-    publishImage:
-        "https://tva1.sinaimg.cn/large/008cs7isly8h88hfgvz1qj31ao0t6n3x.jpg"
-  },
-  {
-    id: 1,
-    label: "flutter生态",
-    color: '#01b4ff',
-    discription: 'flutter从0构建andrio APP'
-  },
-  {
-    id: 3,
-    label: "中后台应用",
-    color: '#be01fe',
-    discription: '面向企业级的中后台配置方案'
-  },
-  {
-    id: 4,
-    label: "测试1",
-    color: '#777',
-    discription: '面向企业级的中后台配置方案'
-  },
-  {
-    id: 5,
-    label: "测试2",
-    color: '#000',
-    discription: '面向企业级的中后台配置方案'
-  },
-  {
-    id: 6,
-    label: "测试3",
-    color: 'green',
-    discription: '面向企业级的中后台配置方案'
-  },
-];
+import { mapActions } from "vuex";
 export default {
   name: "columnPage",
   data() {
     return {
-      columnList,
+      columnList: [],
+      total: 0
     };
   },
+  mounted() {
+    this.getData();
+  },
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+  },
   methods: {
+    ...mapActions("person", ["selectColumnByUserId"]),
+
+    async getData() {
+      try {
+        const { data: res } = await this.selectColumnByUserId({
+          userId: this.user.id,
+        });
+        if (res.code == 200) {
+          this.columnList = res.data;
+          this.total = res.map.total;
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
     // 跳转到文章详情
-    gotoColumn(id) {
-      this.$router.push(`/user/column/${id}`);
+    gotoColumn(item) {
+      this.$router.push({
+        path: `/user/column/${item.columnId}`,
+        query: item
+      });
     },
   }
 };

@@ -2,14 +2,14 @@
   <div class="root">
     <div class="user-title">
       <el-image
-        :src="user.userImage"
+        :src="user.headshot"
         class="title-image"
         @click="$router.push({ name: 'user' })"
       ></el-image>
       <div class="title-box">
         <span class="title">{{ user.username }}</span>
         <p>
-          <span>天平：{{ data.tianping }}</span>
+          <span>成长等级：{{ user.ranking }}</span>
           <span class="iconfont icon-arrow-right"></span>
         </p>
       </div>
@@ -17,15 +17,15 @@
     <div class="user-level"></div>
     <div class="user-info">
       <span>
-        <span>{{ data.concern }}</span>
+        <span>{{ user.concernAmount || 0 }}</span>
         <span>关注</span>
       </span>
       <span>
-        <span>{{ data.zan }}</span>
+        <span>{{ user.likedAmount || 0 }}</span>
         <span>赞过</span>
       </span>
       <span>
-        <span>{{ data.collect }}</span>
+        <span>{{ user.collectedAmount || 0 }}</span>
         <span>收藏</span>
       </span>
     </div>
@@ -100,19 +100,13 @@ export default {
   name: "userBaseInfo",
   data() {
     return {
-      menus,
-      data: {
-        tianping: 0,
-        level: 2,
-        concern: 0,
-        zan: 2,
-        collect: 0,
-      },
+      menus
     };
   },
   computed: {
     user() {
-      return JSON.parse(sessionStorage.getItem('userInfo')) || {}
+      const user = this.$store.state.user
+      return user.token ? user.userInfo : false
     }
   },
   methods: {
@@ -131,7 +125,7 @@ export default {
     // 退出登录
     signOut() {
       let con = window.confirm(
-        "确认退出吗，每个经典法律案列都是法律者们辛勤讨论的结果~~"
+        "确认退出吗，每个博文都是开发者辛勤劳动的结果~~"
       );
       if (con) {
         this.SignOut();

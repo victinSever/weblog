@@ -5,7 +5,7 @@
       <el-row class="header-top">
         <div class="header-top-in">
           <div class="header-top-left">
-            <div class="header-logo">
+            <div class="header-logo" @click="handleGotoHome">
               <el-image
                 :src="require('@/assets/image/logo_weblog.png')"
                 alt=""
@@ -38,7 +38,7 @@
               class="user-message"
               icon="el-icon-bell"
               circle
-              v-if="isLogin"
+              v-if="user"
               @click="handleClickMessage"
             ></el-button>
 
@@ -46,11 +46,11 @@
               placement="bottom-end"
               width="250"
               trigger="click"
-              v-if="isLogin"
+              v-if="user"
             >
               <BaseInfo />
               <div class="user-img" slot="reference">
-                <img v-if="user.userImage" :src="user.userImage" />
+                <img v-if="user.headshot" :src="user.headshot" />
               </div>
             </el-popover>
             <el-button
@@ -75,6 +75,7 @@
 <script>
 import Login from "@/components/user/user-login.vue";
 import BaseInfo from "@/components/user/user-baseInfo.vue";
+
 export default {
   name: "headerCompontent",
   components: { Login, BaseInfo },
@@ -86,12 +87,9 @@ export default {
     };
   },
   computed: {
-    //是否登录
-    isLogin() {
-      return JSON.parse(sessionStorage.getItem("token")) || false;
-    },
     user() {
-      return JSON.parse(sessionStorage.getItem("userInfo")) || {};
+      const user = this.$store.state.user
+      return user.token ? user.userInfo : false
     },
     // 是否隐藏头部
     isHidden() {
@@ -99,6 +97,12 @@ export default {
     },
   },
   methods: {
+
+    handleGotoHome() {
+      if(this.$route.name == 'passage') return
+      this.$router.push({name: 'passage'})
+    },
+
     // 点击消息事件
     handleClickMessage() {
       this.$message.success('敬请期待！');
@@ -113,11 +117,11 @@ export default {
     },
 
     gotoEditor: function () {
-      if (!this.isLogin) {
+      if (!this.user) {
         this.handleLogin();
         return;
       }
-      this.$router.push({ name: "drafts" });
+      this.$router.push('/user/content/drafts');
     },
     // 点击登录按钮
     handleLogin() {

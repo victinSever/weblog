@@ -6,7 +6,7 @@
           ><span class="breadcrumb-title">全部专栏</span></el-breadcrumb-item
         >
         <el-breadcrumb-item
-          ><span class="breadcrumb-title">web开发</span></el-breadcrumb-item
+          ><span class="breadcrumb-title">{{column.column_name}}</span></el-breadcrumb-item
         >
       </el-breadcrumb>
     </el-divider>
@@ -16,18 +16,18 @@
         <div class="header">
           <div class="header-left">
             <el-image
-              :src="column.publishImage"
+              :src="column.cover"
               alt=""
               style="height: 100%"
             ></el-image>
           </div>
           <div class="header-right">
-            <h2 class="column-title" v-text="column.title"></h2>
-            <p class="column-title" v-text="column.disription"></p>
-            <div class="info">
+            <h2 class="column-title" v-text="column.column_name"></h2>
+            <p class="column-title" v-text="column.discription"></p>
+            <div class="info" v-if="column.createTime">
               <span
                 class="publishTime"
-                v-text="'创建于' + column.publishTime"
+                v-text="'创建于' + column.createTime"
               ></span>
             </div>
           </div>
@@ -37,8 +37,8 @@
           <div class="tip">
             <span class="tip-title" v-text="'收录文章'"></span>
           </div>
-          <div class="column-list" v-if="column.passageList.length !== 0">
-            <UserPassageList :passageList="column.passageList" />
+          <div class="column-list" v-if="passageList.length !== 0">
+            <UserPassageList :passageList="passageList" />
           </div>
           <el-skeleton class="loading" v-else-if="isLoading" />
           <el-empty class="empty" v-else />
@@ -75,24 +75,51 @@ const column = {
     },
   ],
 };
+import { mapActions } from "vuex";
 
 export default {
   name: "columnDetailPage",
   data() {
     return {
       column: {},
+      passageList: [],
+      total: 0,
       isLoading: false,
+      pageMap: {
+        page: 1,
+        size: 5
+      }
     };
   },
   components: { UserPassageList },
-  created() {
+  mounted() {
+    console.log(this.$route.query);
+    this.column = this.$route.query || {}
     this.getData();
-    console.log(this.column);
+  },
+    computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
   },
   methods: {
+    ...mapActions("person", ["selectBlogListByUserIdCategoryId"]),
+
     async getData() {
-      this.isLoading = true;
-      this.column = column;
+      try {
+        const { data: res } = await this.selectBlogListByUserIdCategoryId({
+          userId: this.user.id,
+          columnId: this.$route.params.columnId,
+          ...this.pageMap
+        });
+        if (res.code == 200) {
+          this.passageList = res.data;
+          this.total = res.map.total;
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
     },
   },
 };
@@ -126,6 +153,8 @@ export default {
 
       .el-image {
         border-radius: 0.5rem;
+        width: 100%;
+        height: 100%;
       }
     }
 
@@ -155,7 +184,6 @@ export default {
       padding-left: 2rem;
       border-bottom: 1px solid var(--bgc-clr6);
       color: var(--bgc-clr6);
-
 
       .tip-title {
         height: 100%;

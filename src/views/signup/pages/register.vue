@@ -11,7 +11,7 @@
         type="text"
         v-model="passForm.username"
         autocomplete="off"
-        placeholder="请输入用户名"
+        placeholder="请输入手机号"
         ref="inputUsername"
       ></el-input>
     </el-form-item>

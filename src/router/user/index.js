@@ -24,7 +24,7 @@ export default [
         component: () => import('@/views/User/columns')
     },
     {
-        path: 'column/:id',
+        path: 'column/:columnId',
         name: 'column',
         meta: { title: '专栏详情' },
         component: () => import('@/views/User/columns/column')

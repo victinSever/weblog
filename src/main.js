@@ -43,7 +43,7 @@ Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()
 
 // 绑定图片上传路径
-import {imageSeverUrl} from '@/api/manage/config';
+import {imageSeverUrl} from '@/api/base';
 Vue.prototype.$upload_path = imageSeverUrl
 
 import VueParticles from 'vue-particles'

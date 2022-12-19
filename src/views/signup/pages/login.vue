@@ -8,13 +8,13 @@
       </div>
     </el-form-item>
 
-    <el-form-item prop="username">
+    <el-form-item prop="phone">
       <el-input
         type="text"
-        v-model="passForm.username"
+        v-model="passForm.phone"
         autocomplete="off"
-        placeholder="请输入用户名/手机号"
-        ref="inputUsername"
+        placeholder="请输入手机号 新手机号登录即注册"
+        ref="inputphone"
       ></el-input>
     </el-form-item>
 
@@ -34,23 +34,31 @@
       >
     </el-form-item>
     <el-form-item>
-      <el-link
+      <div class="base">
+        <el-link
         :underline="false"
         type="primary"
         @click="$message.warning('暂未上线该功能！')"
         >手机登录</el-link
       >
+      <!-- <el-link  @click="$router.push({ name: 'admin' })" :underline="false" v-text="'管理员登录'" type="primary"></el-link> -->
       <el-link
         :underline="false"
         type="primary"
-        style="float: right"
         @click="$router.push({ name: 'reback' })"
         >忘记密码</el-link
       >
+      </div>
     </el-form-item>
 
     <el-form-item style="display: flex; justify-content: space-around">
-      <el-button circle type="danger" class="icon iconfont icon-weibo" @click="$message.warning('暂未上线该功能！')"> </el-button>
+      <el-button
+        circle
+        type="danger"
+        class="icon iconfont icon-weibo"
+        @click="$message.warning('暂未上线该功能！')"
+      >
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -62,49 +70,57 @@ export default {
   data() {
     return {
       passForm: {
-        username: "",
-        password: "",
+        phone: "13330245687",
+        password: "12345678",
       },
     };
   },
   methods: {
     ...mapMutations("user", ["UpdateUserInfo", "UpdateToken"]),
+    ...mapActions("user", ["getLoginByPass"]),
 
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     // 请求：账密登录，并处理信息
     async loginByPass() {
-      // this.passForm.ip = this.ip;
-      // const { data: res } = await this.getLoginByPass(this.passForm);
-      // if (res.code === 200) {
-      //   this.$message.success("登录成功！");
-      //   this.UpdateUserInfo(res.data);
-      //   this.UpdateToken(res.data.token);
-      //   this.$emit("closeDialog");
-      //   this.resetForm('passForm')
-      // }
-      // else this.$message.warning(res.msg);
-      this.$message.success("登录成功！");
-      this.UpdateToken("123");
-      this.UpdateUserInfo({
-        userImage:
-          "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-        username: "狂徒张三",
-        phone: "15730363265",
-        email: 'victinzhong@163.com'
-      });
-      this.resetForm("passForm");
-      this.$router.push("/user");
+      try {
+        const { data: res } = await this.getLoginByPass(this.passForm);
+        console.log(res);
+        if (res.code === 200 || res.data) {
+          this.$message.success("登录成功！");
+          this.UpdateUserInfo(res.data.user);
+          this.UpdateToken(res.data.token);
+          this.resetForm("passForm");
+          if(res.data.user.role === 'admin') {
+            this.$router.push({name: 'admin'})
+          } else
+          this.$router.push({name: 'passage'})
+        } else this.$message.warning(res.msg);
+      } catch (e) {
+        this.$message.error("抱歉，服务器跑丢了哦~~");
+      }
+      // this.$message.success("登录成功！");
+      // this.UpdateToken("123");
+      // this.UpdateUserInfo({
+      //   headhot:
+      //     "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
+      //   phone: "狂徒张三",
+      //   userName: "15730363265",
+      //   email: 'victinzhong@163.com',
+      //   role: 'admin'
+      // });
+      // this.resetForm("passForm");
+      // this.$router.push({name: 'admin'})
     },
     submitForm() {
-      if (this.passForm.username === "") {
+      if (this.passForm.phone === "") {
         this.$notify({
           message: "请输入用户名",
           type: "warning",
           duration: 2000,
         });
-        this.$refs.inputUsername.focus();
+        this.$refs.inputphone.focus();
         return;
       }
       if (this.passForm.password === "") {
@@ -123,7 +139,6 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-
 .header {
   display: flex;
   align-items: center;
@@ -157,5 +172,10 @@ export default {
 .icon {
   height: 3rem;
   width: 3rem;
+}
+
+.base{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

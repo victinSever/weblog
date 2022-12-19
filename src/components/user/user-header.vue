@@ -69,10 +69,10 @@ export default {
   },
   mounted() {
     // 添加头部监听和销毁监听
-    this.lister =  window.addEventListener("scroll", this.handleScroll, true);
+    window.addEventListener("scroll", this.handleScroll, true);
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll)
+    window.removeEventListener("scroll", this.handleScroll, true)
   },
   methods: {
     // 监听鼠标事件：用来控制头部的隐藏或显示
@@ -112,9 +112,6 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-
-
-
 .header {
   position: fixed;
   top: 0;

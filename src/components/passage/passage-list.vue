@@ -13,19 +13,19 @@
           <span v-if="item.userImage">
             <el-image :src="item.userImage"></el-image>
           </span>    
-          <span>{{item.username}}</span>
+          <span>{{item.userName || '未命名用户'}}</span>
           <span>|</span>
           <span>{{ passTime(item.publishTime) }}</span>
         </div>
 
         <div class="item-main">
           <h4 class="title" v-html="highlight(item.title)"></h4>
-          <p class="discription" v-html="highlight(item.content)"></p>
+          <p class="discription" v-html="highlight(item.discription)"></p>
         </div>
         <div class="item-bottom">
-          <span class="iconfont icon-view"> {{ " " + item.view || 0 }}</span>
-          <span class="iconfont icon-31dianzan"> {{ " " + item.dianzan  || 0}}</span>
-          <span class="iconfont icon-pinglun"> {{ " " + item.comment || 0 }}</span>
+          <span class="iconfont icon-view"> {{ " " + (item.readAmount || 0) }}</span>
+          <span class="iconfont icon-31dianzan"> {{ " " + (item.likeAmount || 0)  || 0}}</span>
+          <span class="iconfont icon-pinglun"> {{ " " + (item.commentAmount || 0) }}</span>
         </div>
       </div>
 

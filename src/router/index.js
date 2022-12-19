@@ -26,6 +26,9 @@ const router = new Router({
 
 // 拦截器
 router.beforeEach((to, from, next) => {
+
+    
+
     const baseTitle = ' - weblog'
 
     if (to.meta.title) {
@@ -40,8 +43,14 @@ router.beforeEach((to, from, next) => {
     NProgress.start()   // 开启进度条
 
     // 拦截
-    if (to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
-        if (sessionStorage.getItem('token'))
+    // 管理员权限分级
+    if(to.path.includes('admin')) {
+        const {role} = JSON.parse(localStorage.getItem('userInfo'))
+        // if(role === 'admin') next()
+        next()
+    }
+    else if (to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
+        if (localStorage.getItem('token'))
             next() //放行
     } else {
         next()

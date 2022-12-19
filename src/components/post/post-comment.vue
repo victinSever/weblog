@@ -1,12 +1,12 @@
 <template>
   <div class="commentComponent">
     <div class="comment">
-      <div class="input-header header">
+      <div class="input-header header" v-if="showTitle">
         <h3>评论</h3>
       </div>
       <div class="input-box">
         <div class="left-box">
-          <el-image :src="user.userImage" v-if="user.userImage"></el-image>
+          <el-image :src="user.headshot" v-if="user.headshot"></el-image>
           <div class="empty" v-else>
             <span class="iconfont icon-person"></span>
           </div>
@@ -25,6 +25,7 @@
               size="medium"
               round
               type="primary"
+              @click="HandlePublishComment"
               >发表评论</el-button
             >
           </div>
@@ -34,115 +35,128 @@
         </div>
       </div>
     </div>
-    <div class="allComment">
-      <div class="comment-header header">
+    <div class="allComment" v-if="showComment">
+      <div class="comment-header header" v-if="showTitle">
         <h3>全部评论</h3>
       </div>
       <div class="comment-list" v-if="comments.length !== 0">
-        <CommentItem :data="item" v-for="item in comments" :key="item.id" />
+        <PostCommentItem :blog="blog" :data="item" v-for="item in comments" :key="item.id" />
       </div>
       <div class="comment-empty" v-else>
-        <el-empty :image-size="150" description="该文章暂未有评论，快去发表自己的看法吧！"></el-empty>
+        <el-empty
+          :image-size="150"
+          description="该文章暂未有评论，快去发表自己的看法吧！"
+        ></el-empty>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CommentItem from "@/components/post/post-comment-item.vue";
+import PostCommentItem from "@/components/post/post-comment-item.vue";
+import { mapActions } from "vuex";
+import { throttle } from "@/utils";
+
 export default {
   name: "commentComponent",
-  components: { CommentItem },
+  components: { PostCommentItem },
   data() {
-    const comments = [
-      {
-        id: "1",
-        userInfo: {
-          userImage:
-            "https://tva3.sinaimg.cn/large/008cs7isly8h88fjfp7lzj30730730sv.jpg",
-          username: "逐光而行",
-          level: 2,
-        },
-        content: "大佬好强！",
-        dianzan: 0,
-        comment: 0,
-        publishTime: "2022-11-17 20:21:20",
-      },
-      {
-        id: "2",
-        userInfo: {
-          userImage:
-            "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-          username: "user1245632",
-          level: 1,
-        },
-        content: "哈哈！",
-        dianzan: 2,
-        comment: 1,
-        publishTime: "2022-11-12 20:21:20",
-        children: [
-          {
-            id: "2-2",
-            userInfo: {
-              userImage:
-                "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-              username: "逐光而行",
-              level: 2,
-            },
-            content: "可以哈fgdsayh封神榜，。水电费2才对吧士大夫2得分的违法，3121发算法，21被怒重复的时刻！，打撒付会计师客服部vadjsf",
-            dianzan: 2,
-            comment: 0,
-            publishTime: "2022-11-12 20:21:20",
-          },
-          {
-            id: "225",
-            userInfo: {
-              userImage:
-                "https://tva3.sinaimg.cn/large/008cs7isly8h88fjfp7lzj30730730sv.jpg",
-              username: "梦的方向",
-              level: 2,
-            },
-            content: "大佬好强！23333333333333333333333333333333333333333333333",
-            dianzan: 23,
-            comment: 1,
-            publishTime: "2022-11-17 20:21:20",
-            children: [
-              {
-                id: "2-2-2",
-                userInfo: {
-                  userImage:
-                    "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-                  username: "三人行",
-                  level: 2,
-                },
-                content: "有点东西，但不多",
-                dianzan: 2,
-                comment: 0,
-                publishTime: "2022-11-12 20:21:20",
-              },
-            ],
-          },
-        ],
-      },
-    ];
     return {
-      imageUrl:
-        "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
       commentText: "",
-      comments: comments,
+      comments: [],
+      pageMap: {
+        page: 1,
+        size: 10,
+      },
+      isLoading: false
     };
+  },
+  props: {
+    blog: Object,
+    blogId: String,
+    showTitle: {
+      type: Boolean,
+      default: true
+    },
+    showComment: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     user() {
-      return JSON.parse(sessionStorage.getItem('userInfo')) || {};
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
     },
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll, false);
+    this.getData();
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.handleScroll, false);
+  },
   methods: {
+    ...mapActions("passage", ["publishComment", "getCommentList"]),
+
+    async getData() {
+      try {
+        if(this.isLoading) return
+        this.isLoading = true
+        const { data: res } = await this.getCommentList({
+          blogId: this.blogId,
+          userId: this.user.id,
+          ...this.pageMap,
+        });
+        console.log(res);
+        this.isLoading = false
+        if(res.data.length === 0 && this.comments.length !== 0) return this.$message.warning("没有更多数据了！")
+        if (res.code === 200) {
+          this.comments = this.comments.concat(res.data);
+        } else this.$message.warning("评论出错了！");
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
+    addPage() {
+      this.pageMap.page++;
+      this.getData();
+    },
+
+    // 监听鼠标位置，在到达地步150px长度触底，进行数据懒加载
+    handleScroll() {
+      const dis =
+        document.body.offsetHeight - window.pageYOffset - window.innerHeight;
+      if (dis <= 5) {
+        if (this.isLoading) return; //节流
+        let that = this;
+        throttle(that.addPage(), 500); //节流函数，每500ms触发一次
+      }
+    },
+
+    // 发布评论
+    async HandlePublishComment() {
+      try {
+        const { data: res } = await this.publishComment({
+          userId: this.user.id,
+          blogId: this.blog.blogId,
+          content: this.commentText,
+          blogUserId: this.blog.userId,
+        });
+        if (res.code === 200) {
+          this.$message.success(res.msg);
+          this.commentText = "";
+        } else this.$message.warning("评论出错了！");
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
     handleLogin() {
-      console.log(1);
-      this.$bus.$emit('handleLogin', true)
-    }
-  }
+      this.$bus.$emit("handleLogin", true);
+    },
+  },
 };
 </script>
 
@@ -165,24 +179,25 @@ export default {
       .left-box {
         width: 4rem;
 
-        .el-image, .empty{
+        .el-image,
+        .empty {
           height: 3rem;
           width: 3rem;
           border-radius: 1.5rem;
-          
+          cursor: pointer;
         }
 
-         .empty{
+        .empty {
           align-items: center;
           display: flex;
           justify-content: center;
           background-color: #eff0f3;
 
-          span{
+          span {
             font-size: 2.8rem;
             color: #c7c8ca;
           }
-         }
+        }
       }
 
       .right-box {
@@ -217,7 +232,7 @@ export default {
         }
       }
 
-      .right-box-empty{
+      .right-box-empty {
         cursor: pointer;
         background-color: #f2f3f5;
         width: 90%;

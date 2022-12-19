@@ -5,11 +5,8 @@
         <span class="iconfont icon-rili"></span>
         <span class="welcome">{{welcome}}</span>
       </span>
-      <el-button class="btn-sigin" type="primary" plain round v-if="isLogin && !isSignIn"
-      @click="signIn">去签到</el-button>
-      <el-tag  type="primary" v-if="isLogin && isSignIn">签到成功！</el-tag>
     </div>
-    <p class="text">{{isLogin ? '把握每一天~~' : '你还没有登录哦，登录可享更多权益'}}</p>
+    <p class="text">{{user ? '把握每一天~~' : '你还没有登录哦，登录可享更多权益'}}</p>
   </el-card>
 </template>
 
@@ -32,16 +29,11 @@ export default {
         else if(hour >= 18 && hour < 23) return '晚上好!'
         else return ''
       },
-      isLogin() {
-        return JSON.parse(sessionStorage.getItem('token')) || false
+      user() {
+        const user = this.$store.state.user
+        return user.token ? user.userInfo : false
       }
     },
-    methods: {
-      signIn() {
-        this.$message.success('签到成功！天平 +5')
-        this.isSignIn = true
-      }
-    }
 }
 </script>
 

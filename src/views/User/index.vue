@@ -1,7 +1,7 @@
 <template>
   <div class="userPage">
     <!-- 头部 -->
-    <UserHeader :username="user.username" @handleSearch="handleSearch" />
+    <UserHeader :username="user.userName" @handleSearch="handleSearch" />
 
     <!-- 轮播图 -->
     <div class="top-bgc">
@@ -11,7 +11,7 @@
             <el-image :src="item.imageUrl" alt="" fit="cover"></el-image>
           </div>
           <div class="info">
-            <span class="username" v-text="user.username || '☺'"></span>
+            <span class="username" v-text="user.userName || '☺'"></span>
           </div>
         </el-carousel-item>
       </el-carousel>
@@ -38,17 +38,18 @@
               >
             </el-divider>
             <UserPassageList :passageList="passageList" :keyword="keyword" />
-            
+
             <div class="pagination-box">
               <el-pagination
-              background
-              :page-size="page.pageSize"
-              :current-page="page.pageNum"
-              layout="prev, pager, next"
-              :total="total"
-              @current-change="handleChangePageNum"
-              class="pagination">
-            </el-pagination>
+                background
+                :page-size="pageMap.size"
+                :current-page="pageMap.page"
+                layout="prev, pager, next"
+                :total="total"
+                @current-change="handleChangePageNum"
+                class="pagination"
+              >
+              </el-pagination>
             </div>
           </div>
 
@@ -68,6 +69,8 @@
 import UserHeader from "@/components/user/user-header.vue";
 import UserPassageList from "@/components/user/user-passage-list.vue";
 import UserControl from "@/components/user/user-control.vue";
+import { mapActions } from "vuex";
+
 const bgcList = [
   {
     imageUrl: require("@/assets/image/user-bgc/1.png"),
@@ -153,16 +156,17 @@ export default {
       keyword: "",
 
       // 文章分页，默认10条
-      page: {
-        pageSize: 10,
-        pageNum: 1
+      pageMap: {
+        size: 5,
+        page: 1,
       },
-      total: 100
+      total: 100,
     };
   },
   computed: {
     user() {
-      return JSON.parse(sessionStorage.getItem("userInfo")) || {};
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
     },
     showPassageList() {
       return this.$route.name === "user";
@@ -171,9 +175,29 @@ export default {
       return this.$route.name !== "setting" && this.$route.name !== "change";
     },
   },
+  mounted() {
+    this.getData();
+  },
   methods: {
-    handleChangePageNum(num) {
-      this.page.pageNum = num
+    ...mapActions("person", ["selectOwnBlog"]),
+
+    async getData() {
+      try {
+        const { data: res } = await this.selectOwnBlog({
+          userId: this.user.id,
+          ...this.pageMap,
+        });
+        if (res.code == 200) {
+          this.passageList = res.data;
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
+    handleChangePageNum(page) {
+      this.pageMap.page = page;
+      this.getData()
     },
 
     // 搜索文章(此处传值给两个组件)
@@ -294,9 +318,6 @@ export default {
   z-index: -2;
   animation: move1 15s linear infinite;
 }
-
-
-
 
 @media screen and (max-width: 1500px) {
   .main .main-box {

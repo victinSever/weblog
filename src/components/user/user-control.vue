@@ -4,7 +4,7 @@
     <div class="userInfo">
       <!-- 头像 -->
       <div class="userImage" @click="gotoChangeInfo">
-        <el-image v-if="user.userImage" :src="user.userImage" alt=""></el-image>
+        <el-image v-if="user.headhost" :src="user.headhost" alt=""></el-image>
         <el-image
           v-else
           src="https://tva2.sinaimg.cn/large/008cs7isly8h88i9ec08sj30u00u379u.jpg"
@@ -14,7 +14,7 @@
       </div>
 
       <div class="username">
-        <span v-text="user.username || '☺'"></span>
+        <span v-text="user.userName || '☺'"></span>
       </div>
     </div>
 
