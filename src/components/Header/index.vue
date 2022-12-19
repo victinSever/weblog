@@ -7,7 +7,7 @@
           <div class="header-top-left">
             <div class="header-logo" @click="handleGotoHome">
               <el-image
-                :src="require('@/assets/image/logo_weblog.png')"
+                :src="require('@/assets/image/logo_weblog.png') || '#'"
                 alt=""
               ></el-image>
             </div>

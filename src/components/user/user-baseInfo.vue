@@ -2,7 +2,7 @@
   <div class="root">
     <div class="user-title">
       <el-image
-        :src="user.headshot"
+        :src="user.headshot || '#'"
         class="title-image"
         @click="$router.push({ name: 'user' })"
       ></el-image>

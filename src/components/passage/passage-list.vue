@@ -31,7 +31,7 @@
 
       <!-- 封面 -->
       <div class="publishImage" v-if="item.publishImage">
-        <el-image :src="item.publishImage" alt=""></el-image>
+        <el-image :src="item.publishImage || '#'" alt=""></el-image>
       </div>
     </div>
   </div>

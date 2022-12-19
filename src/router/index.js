@@ -46,8 +46,7 @@ router.beforeEach((to, from, next) => {
     // 管理员权限分级
     if(to.path.includes('admin')) {
         const {role} = JSON.parse(localStorage.getItem('userInfo'))
-        // if(role === 'admin') next()
-        next()
+        if(role === 'admin') next()
     }
     else if (to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
         if (localStorage.getItem('token'))

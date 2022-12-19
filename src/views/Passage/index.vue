@@ -120,7 +120,8 @@ export default {
           default: this.$message.error("出错了");
         }
         this.isLoading = false
-        if (data.data.code !== 200) return this.$message.warning("没有更多数据了");
+        if (data.data.code !== 200 || data.data.data.length === 0)
+          return this.$message.warning("没有更多数据了");
         this.passageList = type ? this.passageList.concat(data.data.data) : data.data.data;
       } catch (e) {
         this.$message.error("不好意思，服务器跑丢了~~");
