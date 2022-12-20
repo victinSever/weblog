@@ -87,7 +87,7 @@ export default {
       isLoading: false,
       pageMap: {
         page: 1,
-        size: 5
+        size: 100
       }
     };
   },
@@ -104,11 +104,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions("person", ["selectBlogListByUserIdCategoryId"]),
+    ...mapActions("person", ["selectBlogListByColumnId"]),
 
     async getData() {
       try {
-        const { data: res } = await this.selectBlogListByUserIdCategoryId({
+        const { data: res } = await this.selectBlogListByColumnId({
           userId: this.user.id,
           columnId: this.$route.params.columnId,
           ...this.pageMap

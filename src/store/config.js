@@ -1,35 +1,29 @@
 /**
  * 个性化配置参数
  */
+ import fetch from '@/api/fetch'
 
 export default {
     namespaced: true,//开启命名空间
     state: {
-        grayscale: false
+        isGrey: false,
+        config: JSON.parse(sessionStorage.getItem('config'))
     },
     mutations: {
-        UpdateGrayScale(state, payload) {
-            state.grayscale = payload
-            sessionStorage.setItem('config', JSON.stringify(state))
-        },
         UpdateConfig(state, payload) {
             state = payload
             sessionStorage.setItem('config', JSON.stringify(state))
         }
     },
     actions: {
-        // 获取个性化配置信息
+        // 获取个性化配置信息并更新
         async getConfig(context, payload) {
-            const config = {
-                grayscale: false, //灰度
-                theme: "", //主题：目前默认有四种
-                menu_pos: "0", //个人信息显示位置：0,1
-                swiperList: [], //轮播图列表
-                userImageAnimation: true, //头像动画
-                waveAnimation: true, //波浪动画
-            }
-            // 模拟的数据
-            context.commit('UpdateConfig', config)
+            const {data: res} = await fetch('/user/getTheme', 'get', {userId: payload})
+            context.commit('UpdateConfig', res.data)
+        },
+        //修改自定义设计
+        async setUserTheme(context, payload) {
+            return await fetch('/user/setUserTheme', 'put', payload)
         },
     }
 }

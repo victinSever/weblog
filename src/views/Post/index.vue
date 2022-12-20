@@ -58,8 +58,8 @@
             <el-tag v-else v-text="'暂无'"></el-tag>
           </div>
         </div>
-        <div class="comment card">
-          <PostComment :blog="data" :blogId="blogId"/>
+        <div class="comment card" id="comment-box">
+          <PostComment :blog="data" :blogId="blogId" v-if="blog.blogId"/>
         </div>
       </div>
       <div class="post-right card">
@@ -67,7 +67,7 @@
       </div>
 
       <div class="article-suspended-panel">
-        <PostBtns />
+        <PostBtns v-if="blog.blogId" :blog="blog" @HandleGotoComment="HandleGotoComment"/>
       </div>
     </div>
   </div>
@@ -95,6 +95,9 @@ export default {
       const user = this.$store.state.user
       return user.token ? user.userInfo : false
     },
+    blog() {
+      return this.data
+    }
   },
   mounted() {
     this.getData()
@@ -119,6 +122,11 @@ export default {
       }catch(e){
         this.$message.error(e)
       }
+    },
+
+    HandleGotoComment() {
+      console.log(window.location.hash);
+      window.location.hash = "#comment-box"
     }
   }
 };

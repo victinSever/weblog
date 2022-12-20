@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    :class=" (config.grayscale ? 'grayscale' : '')"
+    :class=" (config.isGrey ? 'grayscale' : '')"
   >
     <router-view></router-view>
   </div>
@@ -13,12 +13,15 @@ export default {
   name: "App",
   computed: {
     config() {
-      return JSON.parse(sessionStorage.getItem("config")) || {};
+      return this.$store.state.config.config;
     },
+    user() {
+      return this.$store.state.user.userInfo
+    }
   },
   mounted() {
     // 获取配置信息并更新
-    this.getConfig();
+    this.getConfig(this.user.id);
   },
   methods: {
     ...mapActions("config", ["getConfig"]),

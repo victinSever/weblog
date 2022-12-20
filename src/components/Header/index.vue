@@ -50,7 +50,7 @@
             >
               <BaseInfo />
               <div class="user-img" slot="reference">
-                <img v-if="user.headshot" :src="user.headshot" />
+                <img v-if="user.headshot" :src="user.headshot || '#'" />
               </div>
             </el-popover>
             <el-button

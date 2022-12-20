@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {baseUrl} from './base'
+import {baseUrl, adminUrl} from './base'
 
 import nprogress from 'nprogress'
 
@@ -30,7 +30,7 @@ export default async (
     header = {}, 
     ) => {
 
-    url = baseUrl + url
+    url = (url.includes('admin') ? adminUrl : baseUrl) + url
 
 
     type = type.toUpperCase()

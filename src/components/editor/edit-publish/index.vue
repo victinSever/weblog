@@ -14,7 +14,10 @@
             v-for="item in categoryList"
             :key="item.label"
             v-text="item.label"
-            :class="'category-item' + (publishForm.category == item.label ? ' active' : '')"
+            :class="
+              'category-item' +
+              (publishForm.category == item.label ? ' active' : '')
+            "
             @click="handleChangeCategory(item.label)"
           ></span>
         </div>
@@ -44,11 +47,22 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="收录专栏" prop="column">
-        <el-input
+        <el-select
           v-model="publishForm.column"
-          type="text"
+          multiple
+          filterable
+          allow-create
+          default-first-option
           placeholder="输入专栏名称，未同名自动创建专栏"
-        ></el-input>
+        >
+          <el-option
+            v-for="item in columnList"
+            :key="item.id"
+            :label="item.column_name"
+            :value="item.column_name"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="编辑摘要" prop="discription">
         <el-input
@@ -93,21 +107,17 @@ const rules = {
   category: [{ required: true, message: "请选择文章种类", trigger: "change" }],
   tag: [{ required: true, message: "请选择文章标签", trigger: "blur" }],
   discription: [{ required: true, message: "请输入文章摘要", trigger: "blur" }],
+  column: [{ required: true, message: "请选择专栏", trigger: "blur" }],
 };
 
+import { mapActions } from "vuex";
 export default {
   name: "editPublishComponent",
   props: {
     // 内容正文
-    content: {
-      type: String,
-      default: "",
-    },
+    content: String,
     // 文章标题
-    title: {
-      type: String,
-      default: "",
-    },
+    title: String,
   },
   data() {
     return {
@@ -123,50 +133,89 @@ export default {
       categoryList,
       tagList,
       imageUrl: "",
+      columnList: [],
+      blogId: "",
     };
   },
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+  },
+  mounted() {
+    this.blogId = this.$route.params.blogId;
+    this.getColumn();
+  },
   methods: {
+    ...mapActions("passage", ["publishBlog", "updateBlogByBlogId"]),
+    ...mapActions("person", ["selectColumnByUserId"]),
+
+    async getColumn() {
+      try {
+        const { data: res } = await this.selectColumnByUserId({
+          userId: this.user.id,
+        });
+        if (res.code == 200) {
+          this.columnList = res.data;
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
+    //发布
+    async handlePublish() {
+      if (!this.isLegal()) return;
+
+      console.log(this.publishForm);
+
+      try {
+        const params = {
+          userId: this.user.id,
+          blogId: this.blogId.includes("new") ? "" : this.blogId,
+          title: this.title,
+          publishImage: this.publishForm.publishImage,
+          discription: this.publishForm.discription,
+          content: this.content,
+          tag: this.publishForm.tag.join(" "),
+          ableLook: 1,
+          status: 2,
+          columnIdList: this.publishForm.column,
+        };
+        console.log(params);
+        const { data: res } = await this.publishBlog(params);
+        console.log(res);
+        if (res.code == 200) {
+          this.$message.success("发布成功！文章正在审核中...");
+          this.$router.push({ name: "essays" });
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
+
+      setTimeout(() => {}, 1000);
+    },
+
     // 点击类别标签事件
     handleChangeCategory(label) {
-        this.publishForm.category = label
+      this.publishForm.category = label;
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
+      console.log(this.imageUrl);
     },
     handleAvatarError(err, file, fileList) {
       this.$message.error("文件上传失败！");
     },
     beforeAvatarUpload(file) {
       console.log(file);
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
+      const isLt5M = file.size / 1024 / 1024 < 5;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!isLt5M) {
+        this.$message.error("上传封面图片大小不能超过 5MB!");
       }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
-
-    //发布
-    handlePublish() {
-      if (!this.isLegal()) return;
-
-      this.$message.success("发布成功！文章正在审核中...");
-      this.$nprogress.start();
-      setTimeout(() => {
-        this.$nprogress.done();
-        this.$router.push({
-          name: "essays",
-          params: {
-            title: this.title,
-            content: this.content,
-            publishTime: new Date().toLocaleDateString(),
-          },
-        });
-      }, 1000);
+      return isLt5M;
     },
 
     // 二次封装notice，警告
@@ -231,8 +280,8 @@ export default {
     }
 
     .active {
-        color: var(--bgc-clr2);
-        background-color: var(--bgc-clr7);
+      color: var(--bgc-clr2);
+      background-color: var(--bgc-clr7);
     }
   }
 }

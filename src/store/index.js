@@ -6,7 +6,7 @@ import image from './image.js'
 import config from './config.js'
 import passage from './passage.js'
 import person from './person.js'
-import admin from './person.js'
+import admin from './admin.js'
 
 Vue.use(Vuex)
 

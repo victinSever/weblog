@@ -43,8 +43,8 @@ const getNumberOfDays = function (date1, date2 = new Date()) {
  * @returns 
  */
 const getDate = function(date) {
+    if(!date) return
     let time = new Date(date)
-    console.log(time);
     return time.getMonth() + '-' + time.getDay()
 }
 

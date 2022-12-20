@@ -4,7 +4,7 @@
       <span
         class="session-title"
         style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
-        >专栏管理（{{total || ''}}）</span
+        >专栏管理（{{total || '0'}}）</span
       >
     </el-divider>
 

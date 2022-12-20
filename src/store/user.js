@@ -30,6 +30,19 @@ export default {
         async getLoginByPass(context, payload) {
             return await fetch('/user/login', 'post', payload)
         },
+
+        // 个人修改
+        async updateUserInfo(context, payload) {
+            return await fetch('/user/updateUserInfo', 'put', payload)
+        },
+        // 获取用户信息
+        async getUserInfo(context, payload) {
+            return await fetch('/user/getUserInfo', 'get', payload)
+        },
+        //修改密码
+        async updatePassword(context, payload) {
+            return await fetch('/user/updatePassword', 'put', payload)
+        },
         
     }
 }

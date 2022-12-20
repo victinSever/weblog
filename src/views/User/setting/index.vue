@@ -12,7 +12,7 @@
           <span>页面主题：</span>
         </div>
         <div class="item-main">
-          <el-select v-model="config.theme" filterable placeholder="请选择">
+          <el-select v-model="config.color" filterable placeholder="请选择">
             <el-option
               v-for="item in themes"
               :key="item.value"
@@ -31,7 +31,7 @@
         </div>
         <div class="item-main">
           <el-switch
-            v-model="config.grayscale"
+            v-model="config.isGrey"
             active-color="#13ce66"
             inactive-color="#ff4949"
           >
@@ -77,8 +77,8 @@
           <span>菜单布局：</span>
         </div>
         <div class="item-main">
-          <el-radio v-model="config.menu_pos" label="0">左侧</el-radio>
-          <el-radio v-model="config.menu_pos" label="1">右侧</el-radio>
+          <el-radio v-model="config.menuPlace" label="0">左侧</el-radio>
+          <el-radio v-model="config.menuPlace" label="1">右侧</el-radio>
         </div>
       </div>
     </div>
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
   name: "settingPage",
   data() {
@@ -142,10 +142,10 @@ export default {
     ];
     return {
       config: {
-        grayscale: false, //灰度
-        theme: "", //主题：目前默认有四种
-        menu_pos: "0", //个人信息显示位置：0,1
-        swiperList: [], //轮播图列表
+        isGrey: false, //灰度
+        color: "123", //主题：目前默认有四种
+        menuPlace: "0", //个人信息显示位置：0,1
+        backgroundImageList: ['3123'], //轮播图列表
         userImageAnimation: true, //头像动画
         waveAnimation: true, //波浪动画
       },
@@ -163,25 +163,36 @@ export default {
       },
     },
   },
-  created() {
-    this.config = JSON.parse(sessionStorage.getItem("config")) || {};
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+  },
+  mounted() {
+    this.getConfig(this.user.id)
+    this.config = this.$store.state.config.config
   },
   methods: {
     ...mapMutations("config", ["UpdateConfig"]),
+    ...mapActions("config", ["setUserTheme",'getConfig']),
 
     // 点击保存按钮事件
-    handleSave() {
-      this.UpdateConfig(this.config);
-        // this.$forceUpdate()
-      location.reload()
-
-      setTimeout(() => {
-        
-        this.$nextTick(() => {
-          this.$message.success("保存成功！");
-          this.$router.push({ name: "user" });
+    async handleSave() {
+      try {
+        const {data: res} = await this.setUserTheme({
+          userId: this.user.id || 0,
+          ...this.config
         })
-      }, 500);
+        console.log(res);
+        if(res.code === 200) {
+          this.getConfig(this.user.id);
+          this.$message.success("保存成功！")
+        }
+      }catch(e) {
+        this.$message.error(e)
+      }
+      
     },
 
     handleRemove(file, fileList) {
@@ -196,16 +207,11 @@ export default {
       console.log("handleSuccess", response, file, fileList);
     },
     handleBeforeUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
       const isLt8M = file.size / 1024 / 1024 < 8;
-      if (!isJPG && !isPNG) {
-        this.$message.error("上传头像图片只能是 JPG 或者 PNG 格式!");
-      }
       if (!isLt8M) {
         this.$message.error("上传头像图片大小不能超过 8MB!");
       }
-      return isJPG && isLt8M;
+      return isLt8M;
     },
   },
 };

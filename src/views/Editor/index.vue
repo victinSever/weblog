@@ -6,11 +6,15 @@
       </div>
       <div class="right">
         <div class="session">
-          <el-popover
-            placement="bottom-start"
-            trigger="click"
-            :offset="-450"
-          >
+          <el-button
+            type="primary"
+            v-text="'保存'"
+            round
+            @click="handleSave()"
+          ></el-button>
+        </div>
+        <div class="session">
+          <el-popover placement="bottom-start" trigger="click" :offset="-450">
             <el-button
               type="primary"
               v-text="'发布'"
@@ -18,7 +22,7 @@
               @click="getContent()"
               slot="reference"
             ></el-button>
-            <EditPublish :content="content" :title="title"/>
+            <EditPublish :content="content" :title="title" />
           </el-popover>
         </div>
         <div class="session">
@@ -34,20 +38,16 @@
             ></span>
           </el-tooltip>
         </div>
-        <div class="session userImage">
-          <el-image
-            :src="user.userImage"
-            title="个人中心"
-            @click="handleGotoPerson"
-          ></el-image>
+        <div class="session userImage" @click="$router.push('/user')">
+          <el-image :src="user.headshot || '#'" title="个人中心"></el-image>
         </div>
       </div>
     </div>
 
     <!-- 编辑器 -->
     <div class="main">
-      <MavonEditor v-if="isMDEditor"  :content="content" ref="md" />
-      <YkEditor v-else :content="content" ref="yk" />
+      <MavonEditor v-if="isMDEditor" :content="content" ref="md" />
+      <YkEditor v-else-if="!isMDEditor" :content="content" ref="yk" />
     </div>
   </div>
 </template>
@@ -56,7 +56,8 @@
 import YkEditor from "@/components/editor/yk-editor";
 import MavonEditor from "@/components/editor/mavon-editor";
 import EditPublish from "@/components/editor/edit-publish";
-// import Upload from '@/components/upload/singleUpload';
+import { mapActions } from "vuex";
+
 export default {
   name: "editorPassage",
   components: { YkEditor, MavonEditor, EditPublish },
@@ -65,17 +66,50 @@ export default {
       isMDEditor: true,
       content: "",
       title: "",
+      blogId: "",
+      data: {},
     };
   },
   computed: {
     user() {
-      return JSON.parse(sessionStorage.getItem("userInfo")) || false;
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+    waiting() {
+      return !this.blogId.includes("new");
     },
   },
+  mounted() {
+    this.blogId = this.$route.params.blogId;
+    if (this.waiting) this.getData();
+  },
   methods: {
-    // 进入个人页
-    handleGotoPerson() {
-      this.$router.push("/user");
+    ...mapActions("passage", ["getPassageInfo"]),
+    ...mapActions("passage", ["publishBlog"]),
+
+    async handleSave() {
+      this.getContent();
+      if (!this.title && this.title.length < 2)
+        return this.$message.warning("需要输入标题");
+      if (!this.content && this.title.length < 10)
+        return this.$message.warning("需要输入10词以上内容");
+      const params = {
+        userId: this.user.id,
+        blogId: "",
+        title: this.title,
+        publishImage: "",
+        discription: "",
+        content: this.content,
+        tag: "",
+        ableLook: 1,
+        status: 3,
+        columnIdList: [],
+      };
+      const { data: res } = await this.publishBlog(params);
+      if (res.code == 200) {
+        this.$message.success("保存成功！");
+        this.$router.push({ name: "drafts" });
+      }
     },
 
     // 切换编辑器
@@ -86,7 +120,7 @@ export default {
         }编辑器吗~~`
       );
       if (con) {
-        this.getContent() 
+        this.getContent();
         this.isMDEditor = !this.isMDEditor;
       }
     },
@@ -95,6 +129,21 @@ export default {
     getContent() {
       if (this.isMDEditor) this.content = this.$refs.md.editData;
       else this.content = this.$refs.yk.editorData;
+    },
+
+    async getData() {
+      try {
+        const { data: res } = await this.getPassageInfo({
+          blogId: this.blogId,
+          userId: this.user.id || 0,
+        });
+        console.log(res.data);
+        this.data = res.data;
+        this.content = res.data.content;
+        this.title = res.data.title;
+      } catch (e) {
+        this.$message.error(e);
+      }
     },
   },
 };

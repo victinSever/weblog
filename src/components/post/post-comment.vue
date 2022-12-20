@@ -6,7 +6,7 @@
       </div>
       <div class="input-box">
         <div class="left-box">
-          <el-image :src="user.headshot" v-if="user.headshot"></el-image>
+          <el-image :src="user.headshot || '#'" v-if="user.headshot"></el-image>
           <div class="empty" v-else>
             <span class="iconfont icon-person"></span>
           </div>
@@ -37,7 +37,7 @@
     </div>
     <div class="allComment" v-if="showComment">
       <div class="comment-header header" v-if="showTitle">
-        <h3>全部评论</h3>
+        <h3>全部评论 {{total? `(${total})`: ''}}</h3>
       </div>
       <div class="comment-list" v-if="comments.length !== 0">
         <PostCommentItem :blog="blog" :data="item" v-for="item in comments" :key="item.id" />
@@ -68,6 +68,7 @@ export default {
         page: 1,
         size: 10,
       },
+      total: 0,
       isLoading: false
     };
   },
@@ -99,7 +100,7 @@ export default {
   methods: {
     ...mapActions("passage", ["publishComment", "getCommentList"]),
 
-    async getData() {
+    async getData(type) {
       try {
         if(this.isLoading) return
         this.isLoading = true
@@ -108,11 +109,11 @@ export default {
           userId: this.user.id,
           ...this.pageMap,
         });
-        console.log(res);
         this.isLoading = false
         if(res.data.length === 0 && this.comments.length !== 0) return this.$message.warning("没有更多数据了！")
         if (res.code === 200) {
-          this.comments = this.comments.concat(res.data);
+          this.comments = type ? res.data : this.comments.concat(res.data);
+          this.total = res.map.total
         } else this.$message.warning("评论出错了！");
       } catch (e) {
         this.$message.error(e);
@@ -128,7 +129,7 @@ export default {
     handleScroll() {
       const dis =
         document.body.offsetHeight - window.pageYOffset - window.innerHeight;
-      if (dis <= 5) {
+      if (dis <= 2) {
         if (this.isLoading) return; //节流
         let that = this;
         throttle(that.addPage(), 500); //节流函数，每500ms触发一次
@@ -147,6 +148,7 @@ export default {
         if (res.code === 200) {
           this.$message.success(res.msg);
           this.commentText = "";
+          this.getData(true)
         } else this.$message.warning("评论出错了！");
       } catch (e) {
         this.$message.error(e);
@@ -244,5 +246,9 @@ export default {
       }
     }
   }
+}
+
+.allComment{
+  padding-bottom: 2rem;
 }
 </style>

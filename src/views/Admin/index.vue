@@ -8,10 +8,10 @@
           </h1>
         </div>
         <div class="home-header-Info">
-          <div class="user_avatar_search user_avatar_i"  @click="$router.push('/products')">
+          <div class="user_avatar_search user_avatar_i"  @click="tip">
             <i class="el-icon-search"></i>
           </div>
-          <div class="user_avatar_bell user_avatar_i"  @click="$router.push('/logs')">
+          <div class="user_avatar_bell user_avatar_i"  @click="tip">
             <el-tooltip
               class="item"
               effect="light"
@@ -30,7 +30,7 @@
               </el-badge>
             </el-tooltip>
           </div>
-          <div class="user_avatar_message user_avatar_i" @click="$router.push('/loginLog')">
+          <div class="user_avatar_message user_avatar_i" @click="tip">
             <el-tooltip
               class="item"
               effect="light"
@@ -51,7 +51,7 @@
           </div>
           <el-dropdown>
             <el-avatar class="user_avatar_img" style="cursor: pointer">
-              <el-image :src="user.headhot" alt="" />
+              <el-image :src="user.headshot || '#'"  alt="" />
             </el-avatar>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
@@ -156,6 +156,18 @@ export default {
               type: 0,
               children: [],
             },
+            {
+              id: 13,
+              parentId: 1,
+              menuName: "审核记录",
+              url: "/admin/check-list",
+              icon: "el-icon-user",
+              orderNum: 2,
+              open: 0,
+              disabled: false,
+              type: 0,
+              children: [],
+            },
           ],
         },
       ], //菜单栏数据
@@ -183,6 +195,10 @@ export default {
     handleGotoWeclome() {
       if(this.$route.name.includes('welcome')) return
       this.$router.push({name: 'welcome'})
+    },
+
+    tip() {
+      this.$message.warning('功能未开放')
     },
 
     toggleCollapse() {

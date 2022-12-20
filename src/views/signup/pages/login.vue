@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       passForm: {
-        phone: "13330245687",
+        phone: "17815369295",
         password: "12345678",
       },
     };
@@ -103,15 +103,16 @@ export default {
       // this.$message.success("登录成功！");
       // this.UpdateToken("123");
       // this.UpdateUserInfo({
-      //   headhot:
+      //   headshot:
       //     "https://tva3.sinaimg.cn/large/008cs7isly8h7u5on9iu5j30u00u0q5i.jpg",
-      //   phone: "狂徒张三",
-      //   userName: "15730363265",
+      //   userName: "狂徒张三",
+      //   phone: "15730363265",
       //   email: 'victinzhong@163.com',
-      //   role: 'admin'
+      //   role: 'user',
+      //   id: '1'
       // });
       // this.resetForm("passForm");
-      // this.$router.push({name: 'admin'})
+      // this.$router.push({name: 'passage'})
     },
     submitForm() {
       if (this.passForm.phone === "") {

@@ -64,19 +64,19 @@
           align="center"
           ><template slot-scope="scope">
             <div>
-              <el-tag type="warning" size="mini" v-if="scope.row.status === 1"
+              <el-tag type="warning" size="mini" v-if="scope.row.status === 2"
                 >审核中</el-tag
               >
               <el-tag
                 type="success"
                 size="mini"
-                v-else-if="scope.row.status === 2"
+                v-else-if="scope.row.status === 1"
                 >已通过</el-tag
               >
               <el-tag
                 type="danger"
                 size="mini"
-                v-else-if="scope.row.status === 3"
+                v-else-if="scope.row.status === 0"
                 >未通过</el-tag
               >
             </div>
@@ -119,8 +119,8 @@
         </el-table-column>
 
         <el-table-column
-          prop="phone"
-          label="账户/手机号"
+          prop="userId"
+          label="用户ID"
           width="120"
           align="center"
         >
@@ -154,13 +154,13 @@
                 <el-button
                   type="primary"
                   size="mini"
-                  @click="sendAuditResult(true, scope.$index)"
+                  @click="sendAuditResult(true, scope.$index, scope.row)"
                   >Pass</el-button
                 >
                 <el-button
                   type="danger"
                   size="mini"
-                  @click="sendAuditResult(false, scope.$index)"
+                  @click="sendAuditResult(false, scope.$index, scope.row)"
                   >Faile</el-button
                 >
               </div>
@@ -169,28 +169,10 @@
                 size="mini"
                 class="el-icon-edit"
                 slot="reference"
-                v-if="scope.row.status < 2"
+                v-if="scope.row.status === 2"
                 >审核</el-button
               >
             </el-popover>
-
-            <el-popconfirm
-              confirm-button-text="确认"
-              cancel-button-text="取消"
-              icon="el-icon-info"
-              icon-color="red"
-              title="确认删除该条博客？"
-              v-if="scope.row.status >= 2"
-              @confirm="handelDelete(scope.$index, scope.row)"
-            >
-              <el-button
-                type="danger"
-                size="mini"
-                class="el-icon-delete"
-                slot="reference"
-                >删除</el-button
-              >
-            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -221,7 +203,7 @@
         v-model="ps"
       ></el-input>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="sendAuditResultFaile"
+        <el-button type="primary" @click="sendAuditResultFalse"
           >确 定</el-button
         >
       </div>
@@ -232,14 +214,14 @@
       :visible.sync="dialogVisible"
       :before-close="handleClose"
     >
-      <CheckDetail :blogId="blog.blogId" :userId="user.id" />
+      <CheckDetail :blog="blog" />
     </el-dialog>
   </div>
 </template>
 
 <script>
 import CheckDetail from "@/components/check/detail.vue";
-import {mapActions} from 'vuex';
+import { mapActions } from "vuex";
 export default {
   name: "checkPage",
   components: { CheckDetail },
@@ -253,7 +235,7 @@ export default {
 
       pageMap: {
         size: 10,
-        pageNum: 1,
+        page: 1,
       },
       total: 20,
 
@@ -261,18 +243,7 @@ export default {
       multipleSelection: [],
 
       // 数据
-      tableData: [
-        {
-          blogId: "1",
-          id: "1",
-          phone: "19122518451",
-          userName: "李华",
-          publishImage: "",
-          status: 0, //是否未注销
-          createTime: "2022-7-23 18:30:55",
-          title: "吃饭睡觉打豆豆",
-        },
-      ],
+      tableData: [],
 
       ps: "",
 
@@ -285,18 +256,22 @@ export default {
       return user.token ? user.userInfo : false;
     },
   },
+  mounted() {
+    this.getData();
+    console.log(this.user);
+  },
   methods: {
-    ...mapActions("admin", ["getCheckList"]),
+    ...mapActions("admin", ["getAuditBlogs", "auditBlog"]),
 
     async getData() {
       try {
-        const { data: res } = await getCheckList({
-            userId: this.user.id,
-            ...this.pageMap
+        const { data: res } = await this.getAuditBlogs({
+          ...this.pageMap,
         });
-        console.log(res);
+        this.tableData = res.data;
+        this.total = res.map.total;
       } catch (e) {
-        this.$message.success(e);
+        this.$message.error(e);
       }
     },
 
@@ -304,23 +279,44 @@ export default {
       this.dialogVisible2 = false;
     },
 
+    async sendCheckBlog(status) {
+      try {
+        const { data: res } = await this.auditBlog({
+          userId: this.user.id,
+          blogId: this.blog.blogId,
+          status,
+          ps: this.ps,
+        });
+        if(res.code !== 200) return this.$message.warning(res.msg)
+        if (status == 1) {
+          this.tableData[this.index].status = 1;
+          this.$message.success("审核通过！");
+        } else {
+          this.tableData[this.index].status = 0;
+          this.$message.error("审核未通过！原因：" + this.ps);
+          this.ps = "";
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
     // 发送审核结果
-    sendAuditResult(judge, index) {
+    sendAuditResult(judge, index, blog) {
+      this.blog = blog;
       this.index = index;
       if (judge) {
-        this.tableData[index].status = 2;
-        this.$message.success("审核通过！");
+        this.sendCheckBlog(1);
       } else {
         this.dialogVisible2 = true;
       }
     },
 
     // 审核失败
-    sendAuditResultFaile() {
+    sendAuditResultFalse() {
       if (this.ps) {
+        this.sendCheckBlog(0);
         this.dialogVisible2 = false;
-        this.tableData[this.index].status = 3;
-        this.$message.error("审核未通过！原因：" + this.ps);
       } else {
         this.$message.error("请填写原因");
       }
@@ -364,12 +360,12 @@ export default {
     // 改变页大小
     handleSizeChange(val) {
       this.pageMap.size = val;
-      this.getData()
+      this.getData();
     },
     // 改变页码
     handleCurrentChange(val) {
       this.pageMap.page = val;
-      this.getData()
+      this.getData();
     },
   },
 };

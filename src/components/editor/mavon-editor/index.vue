@@ -6,6 +6,7 @@
       @imgDel="imgDel"
       class="mavon-editor"
       :placeholder="placeholder"
+      ref="md"
     />
   </div>
 </template>
@@ -29,6 +30,9 @@ export default {
       imgFile: [],
     };
   },
+  mounted() {
+    console.log(this.editData);
+  },
   methods: {
     ...mapActions("image", ["getImageUrl"]),
 
@@ -36,16 +40,11 @@ export default {
     async imgAdd(pos, $file) {
       // 第一步.将图片上传到服务器.
       var formdata = new FormData();
-      formdata.append("image", $file);
+      formdata.append("file", $file);
       this.imgFile[pos] = $file;
       try {
-        const res = await this.getImageUrl(formdata);
-        console.log(res);
-        // .then((res) => {
-        //   let _res = res.data;
-        //   // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
-        //   this.$refs.md.$img2Url(pos, _res.url);
-        // });
+        const {data:res} = await this.getImageUrl(formdata);
+        this.$refs.md.$img2Url(pos, res.data.minIoUrl)
       } catch (err) {
         this.$message.error(err);
       }

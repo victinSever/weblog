@@ -1,13 +1,21 @@
 <template>
   <div class="drafts">
     <div class="drafts-list" v-if="draftsList.length !== 0">
-      <div class="drafts-item" v-for="item in draftsList" :key="item.id" @click="handleGotoEditor(item)">
+      <div
+        class="drafts-item"
+        v-for="item in draftsList"
+        :key="item.id"
+        @click="handleGotoEditor(item)"
+      >
         <div class="left">
           <h2 class="title" v-text="item.title"></h2>
-          <p class="publishTime" v-text="item.publishTime"></p>
+          <p class="publishTime" v-text="item.createTime"></p>
         </div>
         <div class="right">
-          <span class="iconfont icon-shanchu" @click="handleDelete(item)"></span>
+          <span
+            class="iconfont icon-shanchu"
+            @click.stop="handleDelete(item)"
+          ></span>
         </div>
       </div>
     </div>
@@ -21,46 +29,90 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "draftsPage",
   data() {
     return {
       draftsList: [],
-      isLoading: false
+      total: 0,
+      pageMap: {
+        page: 1,
+        size: 100,
+      },
+      isLoading: false,
     };
   },
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+  },
   mounted() {
-    this.getData()
+    this.getData();
   },
   methods: {
-    // 点击进入指定编辑文章
+    ...mapActions("person", ["selectOwnDraftFailBlog"]),
+    ...mapActions("passage", ["deleteBlogByBlogId"]),
+
+    async getData() {
+      try {
+        this.isLoading = true;
+        const { data: res } = await this.selectOwnDraftFailBlog({
+          ...this.pageMap,
+          userId: this.user.id,
+        });
+        this.isLoading = false;
+        this.draftsList = res.data;
+        this.total = res.map.total;
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
+    // 点击进入指定编辑文章-
     handleGotoEditor(obj) {
-      if(this.$route.path === '/editor') return
+      if (this.$route.path === "/editor") return;
       let routeData = this.$router.resolve({
         name: "editor",
-        params: {id: obj.id}
+        params: obj,
       });
-      window.open(routeData.href, '_blank');
+      window.open(routeData.href, "_blank");
     },
 
     // 删除草稿
     handleDelete(obj) {
-      this.draftsList = this.draftsList.filter(item => {
-        return item.id != obj.id
+      this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
-      this.$message.success('删除成功！')
+        .then(() => {
+          this.deleteDrafts(obj);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
 
-    // 获取数据
-    getData() {
-      this.isLoading = true
-      setTimeout(() => {
-        this.isLoading = false
-        this.draftsList = [
-          { id: "1", title: "123", publishTime: "2022-11-20 16:52:01" },
-        ];
-      }, 500)
-     
+    async deleteDrafts(obj) {
+      try {
+        const { data: res } = await this.deleteBlogByBlogId({
+          userId: this.user.id,
+          blogId: obj.blogId,
+          id: obj.id,
+        });
+        if (res.code === 200) {
+          this.getData();
+          this.$message.success(res.msg);
+        }
+      } catch (e) {
+        this.$message.error(e);
+      }
     },
   },
 };
@@ -68,8 +120,8 @@ export default {
 
 <style scoped lang='scss'>
 .drafts {
-  .drafts-list{
-    .drafts-item{
+  .drafts-list {
+    .drafts-item {
       height: 4rem;
       display: flex;
       justify-content: space-between;
@@ -89,7 +141,7 @@ export default {
         font-size: 1.2rem;
       }
 
-      .publishTime{
+      .publishTime {
         color: #777;
       }
     }

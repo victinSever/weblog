@@ -1,86 +1,130 @@
 <template>
   <div class="root">
-    
-
-<!-- 基础信息修改 -->
+    <!-- 基础信息修改 -->
     <div class="session base-info">
       <el-divider content-position="left">
-      <span class="session-title">基础信息</span>
-    </el-divider>
+        <span class="session-title">基础信息</span>
+      </el-divider>
 
       <div class="session-content">
-        <el-form class="userForm" ref="userForm" :model="userForm" label-width="6rem">
-      <el-form-item prop="username" label="用户名">
-        <span v-text="user.username" v-if="!isEdit"></span>
-        <el-input v-else type="text" v-model="userForm.username" placeholder="输入用户名" style="wdith: 5rem"></el-input>
-      </el-form-item>
-      <el-form-item prop="userImage" label="用户头像">
-        <el-image :src="user.userImage" alt="" class="userImage" v-if="!isEdit"></el-image>
-        <el-upload
-          class="avatar-uploader"
-          :action="$upload_path"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :on-error="handleAvatarError"
-          :before-upload="beforeAvatarUpload"
-          v-else
+        <el-form
+          class="userForm"
+          ref="userForm"
+          :model="userForm"
+          label-width="6rem"
         >
-          <el-image v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-form-item>
-      <el-form-item prop="phone" label="手机号">
-        <span v-text="user.phone" v-if="!isEdit"></span>
-        <el-input v-else type="text" v-model="userForm.phone" placeholder="更改手机号绑定" style="wdith: 5rem"></el-input>
-      </el-form-item>
-      <el-form-item prop="email" label="邮箱">
-        <span v-text="user.email" v-if="!isEdit"></span>
-        <el-input v-else type="text" v-model="userForm.email" placeholder="更改邮箱绑定" style="wdith: 5rem"></el-input>
-      </el-form-item>
-      <el-form-item >
-        <el-button v-text="isEdit ? '修改' : '编辑'" type="primary" @click="handleChange"></el-button>
-      </el-form-item>
-    </el-form>
+          <el-form-item prop="userName" label="用户名">
+            <span v-text="user.userName" v-if="!isEdit"></span>
+            <el-input
+              v-else
+              type="text"
+              v-model="userForm.userName"
+              placeholder="输入用户名"
+              style="wdith: 5rem"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="headshot" label="用户头像">
+            <el-image
+              :src="user.headshot || '#'"
+              alt=""
+              class="userImage"
+              v-if="!isEdit"
+            ></el-image>
+            <el-upload
+              class="avatar-uploader"
+              :action="$upload_path"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :on-error="handleAvatarError"
+              :before-upload="beforeAvatarUpload"
+              v-else
+            >
+              <el-image v-if="imageUrl" :src="imageUrl || '#'" class="avatar" />
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-form-item>
+          <el-form-item prop="phone" label="手机号">
+            <span v-text="user.phone" v-if="!isEdit"></span>
+            <el-input
+              v-else
+              type="text"
+              v-model="userForm.phone"
+              placeholder="更改手机号绑定"
+              style="wdith: 5rem"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="email" label="邮箱">
+            <span v-text="user.email" v-if="!isEdit"></span>
+            <el-input
+              v-else
+              type="text"
+              v-model="userForm.email"
+              placeholder="更改邮箱绑定"
+              style="wdith: 5rem"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              v-text="isEdit ? '修改' : '编辑'"
+              type="primary"
+              @click="handleChange"
+            ></el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
 
     <div class="session base-info">
       <el-divider content-position="left">
-      <span class="session-title">修改密码</span>
-    </el-divider>
+        <span class="session-title">修改密码</span>
+      </el-divider>
 
       <div class="session-content">
-        <el-form class="userForm" ref="userForm" :model="passwordForm" label-width="6rem">
-      <el-form-item prop="username" label="原密码">
-        <el-input type="text" v-model="passwordForm.password" placeholder="输入新密码" style="wdith: 5rem"></el-input>
-      </el-form-item>
-      <el-form-item prop="username" label="新密码">
-        <el-input type="text" v-model="passwordForm.newPassword" placeholder="输入新密码" style="wdith: 5rem"></el-input>
-      </el-form-item>
-      <el-form-item >
-        <el-button v-text="'修改'" type="primary" @click="handleChangePassword"></el-button>
-      </el-form-item>
-    </el-form>
+        <el-form
+          class="userForm"
+          ref="userForm"
+          :model="passwordForm"
+          label-width="6rem"
+        >
+          <el-form-item prop="prePassword" label="原密码">
+            <el-input
+              type="text"
+              v-model="passwordForm.prePassword"
+              placeholder="输入新密码"
+              style="wdith: 5rem"
+            ></el-input>
+          </el-form-item>
+          <el-form-item prop="newPassword" label="新密码">
+            <el-input
+              type="text"
+              v-model="passwordForm.newPassword"
+              placeholder="输入新密码"
+              style="wdith: 5rem"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              v-text="'修改'"
+              type="primary"
+              @click="handleChangePassword"
+            ></el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import { mapMutations, mapActions } from "vuex";
 export default {
   name: "changePage",
   data() {
     return {
-      userForm: {
-        username: "狂徒张三",
-        userImage: "",
-        phone: "",
-        email: "",
-      },
+      userForm: {},
       passwordForm: {
-        password: '',
-        newPassword: ''
+        prePassword: "",
+        newPassword: "",
       },
       isEdit: false,
       isChangePassword: false,
@@ -88,32 +132,61 @@ export default {
     };
   },
   mounted() {
-    this.userForm = JSON.parse(sessionStorage.getItem('userInfo')) || {}
+    this.userForm = this.user;
   },
   computed: {
     user() {
-      return JSON.parse(sessionStorage.getItem('userInfo')) || {}
-    }
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
   },
   methods: {
-    ...mapMutations('user', ['UpdateUserInfo']),
+    ...mapMutations("user", ["UpdateUserInfo"]),
+    ...mapActions("user", ["updateUserInfo", "getUserInfo", 'updatePassword']),
 
     // 修改密码
-    handleChangePassword() {
-      if(true) 
-      this.$message.success('密码修改成功！')
+    async handleChangePassword() {
+      try {
+          const { data: res } = await this.updatePassword({
+            userId: this.user.id,
+            ...this.passwordForm,
+          });
+          if (res.code === 200) {
+            this.$message.success(res.msg);
+          } else {
+            this.$message.error(res.msg)
+          }
+        } catch (e) {
+          this.$message.error(e);
+        }
     },
 
-//修改基础信息
-    handleChange() {
-      if(this.isEdit) {
-        this.$message.success('信息修改成功！')
-        this.UpdateUserInfo(this.userForm)
-        // this.$forceUpdate()
-        location.reload()
-      } 
-      this.isEdit = !this.isEdit
+    //修改基础信息
+    async handleChange() {
+      if (this.isEdit) {
+        try {
+          const { data: res } = await this.updateUserInfo({
+            userId: this.user.id,
+            ...this.userForm,
+          });
+          if (res.code === 200) {
+            this.$message.success("信息修改成功！");
+
+            const { data: res2 } = await this.getUserInfo({
+              userId: this.user.id,
+            });
+            console.log(res2);
+            if (res2.code === 200) {
+              this.UpdateUserInfo(res2.data);
+            }
+          }
+        } catch (e) {
+          this.$message.error(e);
+        }
+      }
+      this.isEdit = !this.isEdit;
     },
+
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
@@ -133,7 +206,7 @@ export default {
       }
       return isJPG && isLt2M;
     },
-  }
+  },
 };
 </script>
 
@@ -153,16 +226,16 @@ export default {
   font-weight: bold;
 }
 
- .base-info {
+.base-info {
   width: 50%;
- }
+}
 
 .session-content {
   margin: 3rem 0 7rem 0;
 }
 .userImage {
-    width: 10rem;
-  }
+  width: 10rem;
+}
 
 .avatar-uploader {
   .el-upload {

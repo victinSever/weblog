@@ -35,7 +35,7 @@ export default [
         component: () => import('@/views/UserAgreement'),
     },
     {
-        path: '/editor/:id',
+        path: '/editor/:blogId',
         name: 'editor',
         meta: { title: '创作文章'},
         component: () => import('@/views/Editor'),

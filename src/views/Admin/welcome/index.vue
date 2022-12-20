@@ -11,7 +11,7 @@
       <el-col :span="13">
         <el-card class="userInfo">
           <div class="userInfo-top">
-            <span>用户信息</span>
+            <span>管理员信息</span>
             <el-button
               type="primary"
               class="el-icon-s-custom"
@@ -33,25 +33,25 @@
           <div class="userInfo-bottom">
             <el-image
               style="width: 80px; height: 80px"
-              :src="user.headhost"
+              :src="user.headshot || '#'"
             ></el-image>
             <el-table
-              :data="user"
+              :data="tableInfo"
+              align="center"              
               border
-              :fit="true"
-              :header-cell-style="{ 'text-align': 'center' }"
-              :cell-style="{ 'text-align': 'center' }"
-              style="width: 400px"
             >
               <el-table-column
                 prop="phone"
+                align="center"
                 label="管理员账号"
+                
               ></el-table-column>
               <el-table-column
                 prop="userName"
+                align="center"
                 label="管理员昵称"
               ></el-table-column>
-              <el-table-column prop="role" label="管理员等级"></el-table-column>
+              <el-table-column prop="role" align="center" label="管理员等级"></el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -86,12 +86,13 @@ export default {
       rili: new Date()
     };
   },
-    computed: {
+  computed: {
     user() {
-        const user = this.$store.state.user
-        console.log(user.userInfo);
-      return user.token ? user.userInfo : false
+      return this.$store.state.user.token ? this.$store.state.user.userInfo : false
     }
+  },
+  mounted() {
+    this.tableInfo.push(this.user)
   },
   methods: {
     

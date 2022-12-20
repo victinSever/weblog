@@ -50,14 +50,13 @@
 
 <script>
 const categoryList = [
-  { id: 1, label: "全部", parentId: "" },
-  { id: 2, label: "前端", parentId: "" },
-  { id: 3, label: "后端", parentId: "" },
-  { id: 4, label: "Andriod", parentId: "" },
-  { id: 5, label: "IOS", parentId: "" },
-  { id: 6, label: "人工智能", parentId: "" },
-  { id: 7, label: "阅读", parentId: "" },
-  { id: 8, label: "杂谈", parentId: "" },
+  { id: 1, label: "前端", parentId: "" },
+  { id: 2, label: "后端", parentId: "" },
+  { id: 3, label: "Andriod", parentId: "" },
+  { id: 4, label: "IOS", parentId: "" },
+  { id: 5, label: "人工智能", parentId: "" },
+  { id: 6, label: "阅读", parentId: "" },
+  { id: 7, label: "杂谈", parentId: "" },
 ];
 const orderList = [
   { label: "推荐", value: 1 },
@@ -79,7 +78,7 @@ export default {
       categoryList,
       orderList,
       passageList: [],
-      categoryActive: 1,
+      categoryActive: 0,
       orderActive: 1,
       loadTimes: 0,
       isLoading: false,
@@ -105,7 +104,7 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, false);
   },
   methods: {
-    ...mapActions("passage", ["getPassageList",'getPassageLatestList','getPassageHotList']),
+    ...mapActions("passage", ["getPassageList",'getPassageLatestList','getPassageHotList','selectBlogListByCategoryId']),
 
     // 数据更新
     async getData(type) {
@@ -123,6 +122,20 @@ export default {
         if (data.data.code !== 200 || data.data.data.length === 0)
           return this.$message.warning("没有更多数据了");
         this.passageList = type ? this.passageList.concat(data.data.data) : data.data.data;
+      } catch (e) {
+        this.$message.error("不好意思，服务器跑丢了~~");
+      }
+    },
+
+    async getCategory(type) {
+      try {
+        this.isLoading = true;
+        const params = {page: 1, size: 50, userId: this.user.id || 0, categoryId: this.categoryActive}
+        const {data: res} = await this.selectBlogListByCategoryId(params)
+        this.isLoading = false
+        if (res.code !== 200 || res.data.length === 0)
+          return this.$message.warning("该分类暂无数据");
+        this.passageList = type ? this.passageList.concat(res.data) : res.data;
       } catch (e) {
         this.$message.error("不好意思，服务器跑丢了~~");
       }
@@ -146,7 +159,7 @@ export default {
 
     handleChangeCategoryActive(id) {
       this.categoryActive = id;
-      this.getData();
+      this.getCategory();
     },
     handleChangeOrderActive(id) {
       this.orderActive = id;

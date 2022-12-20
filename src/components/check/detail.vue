@@ -83,40 +83,26 @@
 
 <script>
 import VueMarkdown from "vue-markdown";
-import { mapActions } from "vuex";
 export default {
   props: {
-    blogId: String,
-    userId: String,
+    blog: Object,
   },
   components: { VueMarkdown },
   name: "checkBlogDetail",
-  mounted() {
-    this.getData();
-  },
   data() {
     return {
       data: {},
       map: {}
     }
   },
+  mounted() {
+    console.log(this.blog);
+    this.data = this.blog
+  },
   methods: {
-    ...mapActions("passage", ["getPassageInfo"]),
+    
     stringToArray(str) {
       return str.split(" ");
-    },
-    async getData() {
-      try {
-        this.blogId = this.$route.params.blogId;
-        const { data: res } = await this.getPassageInfo({
-          blogId: this.blogId,
-          userId: this.userId,
-        });
-        this.data = res.data;
-        this.map = res.map;
-      } catch (e) {
-        this.$message.error(e);
-      }
     },
   },
 };

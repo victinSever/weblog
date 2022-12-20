@@ -10,31 +10,31 @@
           <div class="session-list">
             <div class="session-item">
               <span class="label" v-text="'总访问量'"></span>
-              <span class="count" v-text="data.viewedAmount"></span>
+              <span class="count" v-text="user.viewedAmount || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'文章总数'"></span>
-              <span class="count" v-text="data.blogAmount"></span>
+              <span class="count" v-text="user.blogAmount || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'热度排名'"></span>
-              <span class="count" v-text="data.ranking"></span>
+              <span class="count" v-text="user.ranking || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'粉丝数'"></span>
-              <span class="count" v-text="data.fans"></span>
+              <span class="count" v-text="user.fansAmount || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'总访问量'"></span>
-              <span class="count" v-text="data.likedAmount"></span>
+              <span class="count" v-text="user.likedAmount || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'总评论数'"></span>
-              <span class="count" v-text="data.commmentAmount"></span>
+              <span class="count" v-text="user.commentAmount || 0"></span>
             </div>
             <div class="session-item">
               <span class="label" v-text="'总收藏数'"></span>
-              <span class="count" v-text="data.collectedAmount"></span>
+              <span class="count" v-text="user.collectedAmount || 0"></span>
             </div>
           </div>
         </div>
@@ -56,19 +56,11 @@
 <script>
 export default {
   name: "dataPage",
-  data() {
-    return {
-      data: {
-        viewedAmount: 32131,
-        blogAmount: 2,
-        ranking: 1760000,
-        fans: 0,
-        concerAmount: 0,
-        likedAmount: 25,
-        commmentAmount: 8,
-        collectedAmount: 17,
-      },
-    };
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    }
   },
   methods: {},
 };

@@ -9,7 +9,7 @@
             @click="handleChangeMenu(item.id)"
           >
             <span v-text="item.label"></span>
-            <span v-text="'(' + item.num + ')'"></span>
+            <!-- <span v-text="'(' + item.num + ')'"></span> -->
           </el-link>
         </div>
       </div>
@@ -26,7 +26,7 @@
           <div class="left">
             <h2 class="title" v-text="item.title"></h2>
             <p class="info">
-              <span class="publishTime" v-text="item.publishTime"></span>
+              <span class="publishTime" v-text="item.createTime"></span>
               <span class="view" v-text="item.view || 0 + '浏览'"></span>
               <span class="comment" v-text="item.comment || 0 + '评论'"></span>
               <span class="dianzan" v-text="item.dianzan || 0 + '点赞'"></span>
@@ -36,7 +36,7 @@
           <div class="right">
             <span
               class="iconfont icon-shanchu"
-              @click.stop="handleDelete(item.id)"
+              @click.stop="handleDelete(item)"
             ></span>
           </div>
         </div>
@@ -53,47 +53,100 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "essaysPage",
   data() {
     const menu = [
-      { label: "全部", id: 0, num: 0 },
       { label: "已发布", id: 1, num: 0 },
       { label: "审核中", id: 2, num: 0 },
       { label: "未通过", id: 3, num: 0 },
     ];
     return {
       menu,
-      activeManu: 0,
+      activeManu: 1,
 
       isLoading: false,
       passageList: [],
+      pageMap: {
+        page: 1,
+        size: 100,
+      },
+      total: 0,
     };
   },
-  mounted() {
-    let { title, content, publishTime } = this.$route.params;
-    if (!title) return;
-    this.passageList.push({
-      id: 1,
-      title,
-      content,
-      publishTime,
-    });
+  computed: {
+    user() {
+      const user = this.$store.state.user;
+      return user.token ? user.userInfo : false;
+    },
+  },
+  watch: {
+    activeManu: {
+      handler() {
+        this.getData();
+      },
+      immediate: true,
+    },
   },
   methods: {
+    ...mapActions("person", [
+      "selectOwnBlog",
+      "selectOwnFailBlog",
+      "selectOwnNotAuditFailBlog",
+    ]),
+    ...mapActions("passage", ["deleteBlogByBlogId"]),
+
+    async getData() {
+      try {
+        let data = {},
+          params = { ...this.pageMap, userId: this.user.id };
+        this.isLoading = true;
+        switch (this.activeManu) {
+          case 1:
+            data = await this.selectOwnBlog(params);
+            break;
+          case 2:
+            data = await this.selectOwnNotAuditFailBlog(params);
+            break;
+          case 3:
+            data = await this.selectOwnFailBlog(params);
+            break;
+        }
+        this.isLoading = false;
+        this.passageList = data.data.data;
+        this.total = data.data.map.total;
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
+    async deletePassage(obj) {
+      try {
+        const { data: res } = await this.deleteBlogByBlogId({
+          userId: this.user.id,
+          blogId: obj.blogId,
+          id: obj.id,
+        });
+        if (res.code === 200) {
+          this.getData()
+          this.$message.success(res.msg);
+        }
+        console.log(res);
+      } catch (e) {
+        this.$message.error(e);
+      }
+    },
+
     //删除文章
-    handleDelete(id) {
+    handleDelete(blog) {
       this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          this.passageList.splice(id, 1);
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+          this.deletePassage(blog);
         })
         .catch(() => {
           this.$message({
@@ -109,26 +162,6 @@ export default {
         name: "post",
         params: { ...item },
       });
-    },
-
-    // 获取数据
-    async getData() {
-      this.isLoading = true;
-      this.passageList = [];
-      setTimeout(() => {
-        this.isLoading = false;
-        this.passageList = [
-          {
-            id: 2,
-            title: "人之初，性本善",
-            publishTime: "2022-11-21 20:08:26",
-            view: 0,
-            comment: 0,
-            dianzan: 0,
-            colloct: 0,
-          },
-        ];
-      }, 500);
     },
 
     // 改变菜单

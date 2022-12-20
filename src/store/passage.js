@@ -17,7 +17,12 @@ export default {
         // 获取最热文章列表
         async getPassageHotList(context, payload) {
             return await fetch('/public/selectHotBlog', 'get', payload)
+        },      
+        // 首页 分类博文
+        async selectBlogListByCategoryId(context, payload) {
+            return await fetch('/public/selectBlogListByCategoryId', 'get', payload)
         },
+
         // 根据id获取文章信息
         async getPassageInfo(context, payload) {
             return await fetch('/blog/selectOneBlog', 'get', payload)
@@ -43,6 +48,14 @@ export default {
         async likeComment(context, payload) {
             return await fetch('/comment/likeComment', 'post', payload)
         },
+        // (取消）点赞博文
+        async likeBlog(context, payload) {
+            return await fetch('/blog/likeBlog', 'post', payload)
+        },
+        // (取消）点赞博文
+        async likeReply(context, payload) {
+            return await fetch('/comment/likeReply', 'post', payload)
+        },
 
         /**
          * 查询
@@ -59,5 +72,22 @@ export default {
         },
 
 
+        //发表博文
+        async publishBlog(context, payload) {
+            return await fetch('/blog/publishBlog', 'post', {}, payload)
+        },
+        //修改博文
+        async updateBlogByBlogId(context, payload) {
+            return await fetch('/blog/updateBlogByBlogId', 'post', {}, payload)
+        },
+        //删除博文
+        async deleteBlogByBlogId(context, payload) {
+            return await fetch('/blog/deleteBlogByBlogId', 'delete', payload)
+        },
+        //分类博文
+        async searchLatestBlog(context, payload) {
+            return await fetch('/blog/selectBlogListByUserIdCategoryId', 'get', payload)
+        },
+        
     }
 }

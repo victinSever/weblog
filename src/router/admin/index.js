@@ -11,4 +11,10 @@ export default [
         meta: { title: '管理员 - 审核'},
         component: () => import('@/views/Admin/check'),
     },
+    {
+        path: 'check-list',
+        name: 'check-list',
+        meta: { title: '管理员 - 审核记录'},
+        component: () => import('@/views/Admin/checkList'),
+    },
 ]
