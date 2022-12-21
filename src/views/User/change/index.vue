@@ -193,17 +193,11 @@ export default {
       this.$message.error("文件上传失败！");
     },
     beforeAvatarUpload(file) {
-      console.log(file);
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      const isLt5M = file.size / 1024 / 1024 < 5;
+      if (!isLt5M) {
+        this.$message.error("上传头像图片大小不能超过 5MB!");
       }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
+      return isLt5M;
     },
   },
 };

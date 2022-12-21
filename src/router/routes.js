@@ -30,11 +30,6 @@ export default [
         children: signup
     },
     {
-        path: '/userAgreement',
-        meta: { title: '用户协议'},
-        component: () => import('@/views/UserAgreement'),
-    },
-    {
         path: '/editor/:blogId',
         name: 'editor',
         meta: { title: '创作文章'},

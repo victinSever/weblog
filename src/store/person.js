@@ -14,8 +14,16 @@ export default {
         // 根据专栏查询博文
         async selectBlogListByColumnId(context, payload) {
             return await fetch('/blog/selectBlogListByColumnId', 'get', payload)
+        },     
+        // 新建专栏
+        async insertColumn(context, payload) {
+            return await fetch('/blog/insertColumn', 'post', payload)
         },
-        
+        // 新建标签
+        async insertTag(context, payload) {
+            return await fetch('/blog/insertTag', 'post', payload)
+        },
+
         // 查询自己的审核通过的博文（分页查询，按时间降序
         async selectOwnBlog(context, payload) {
             return await fetch('/blog/selectOwnBlog', 'get', payload)
