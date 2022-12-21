@@ -100,19 +100,29 @@ export default {
     }
   },
   mounted() {
+    this.blogId = this.$route.params.blogId
     this.getData()
+    this.addReadAmount()
   },
   methods: {
-    ...mapActions('passage',['getPassageInfo']),
+    ...mapActions('passage',['getPassageInfo', 'blogReadAmountAddOne']),
 
     // 标签转
     stringToArray(str) {
       return str.split(' ')
     },
 
+    async addReadAmount() {
+      try{       
+        const {data: res} = await this.blogReadAmountAddOne({blogId: this.blogId})
+        if(res.code === 200) {}       
+      }catch(e){
+        this.$message.error(e)
+      }
+    },
+
     async getData(){
       try{
-        this.blogId = this.$route.params.blogId
         const {data: res} = await this.getPassageInfo({
           blogId: this.blogId,
           userId: this.user.id || 0
@@ -235,7 +245,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 1180px) {
+@media screen and (max-width: 1350px) {
   .post .post-innerbox {
     width: 95%;
 

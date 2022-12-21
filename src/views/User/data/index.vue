@@ -25,7 +25,7 @@
               <span class="count" v-text="user.fansAmount || 0"></span>
             </div>
             <div class="session-item">
-              <span class="label" v-text="'总访问量'"></span>
+              <span class="label" v-text="'点赞量'"></span>
               <span class="count" v-text="user.likedAmount || 0"></span>
             </div>
             <div class="session-item">
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import {mapActions,mapMutations} from 'vuex';
 export default {
   name: "dataPage",
   computed: {
@@ -62,7 +63,22 @@ export default {
       return user.token ? user.userInfo : false;
     }
   },
-  methods: {},
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    ...mapActions("user", ["getUserInfo"]),
+    ...mapMutations("user", ["UpdateUserInfo"]),
+
+    async getData() {
+      const { data: res } = await this.getUserInfo({
+        userId: this.user.id,
+      });
+      if (res.code === 200) {
+        this.UpdateUserInfo(res.data);
+      }
+    }
+  },
 };
 </script>
 

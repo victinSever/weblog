@@ -110,11 +110,11 @@ export default {
           ...this.pageMap,
         });
         this.isLoading = false
-        if(res.data.length === 0 && this.comments.length !== 0) return this.$message.warning("没有更多数据了！")
+        if(res.data.length === 0 && this.comments.length !== 0) return this.$message.info("没有更多数据了！")
         if (res.code === 200) {
-          this.comments = type ? res.data : this.comments.concat(res.data);
+          this.comments = type ? this.comments.concat(res.data) : res.data;
           this.total = res.map.total
-        } else this.$message.warning("评论出错了！");
+        } else this.$message.warning(res.msg);
       } catch (e) {
         this.$message.error(e);
       }
@@ -122,14 +122,14 @@ export default {
 
     addPage() {
       this.pageMap.page++;
-      this.getData();
+      this.getData(true);
     },
 
     // 监听鼠标位置，在到达地步150px长度触底，进行数据懒加载
     handleScroll() {
       const dis =
         document.body.offsetHeight - window.pageYOffset - window.innerHeight;
-      if (dis <= 2) {
+      if (dis <= 1) {
         if (this.isLoading) return; //节流
         let that = this;
         throttle(that.addPage(), 500); //节流函数，每500ms触发一次
@@ -148,8 +148,8 @@ export default {
         if (res.code === 200) {
           this.$message.success(res.msg);
           this.commentText = "";
-          this.getData(true)
-        } else this.$message.warning("评论出错了！");
+          this.getData()
+        } else this.$message.warning(res.msg);
       } catch (e) {
         this.$message.error(e);
       }

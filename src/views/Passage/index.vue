@@ -41,7 +41,7 @@
         </el-col>
         <el-col class="message-right">
           <PassageSignIn />
-          <PassageRecom />
+          <!-- <PassageRecom /> -->
         </el-col>
       </div>
     </el-row>
@@ -83,6 +83,8 @@ export default {
       loadTimes: 0,
       isLoading: false,
 
+      isCategory: false,
+
       // 文章分页，下拉刷新增加一页，固定大小为5条
       pageMap: {
         size: 5,
@@ -90,7 +92,17 @@ export default {
       },
     };
   },
-    computed: {
+  watch: {
+    orderActive() {
+      this.isCategory = false
+      this.pageMap.page = 1
+    },
+    categoryActive() {
+      this.isCategory = true
+      this.pageMap.page = 1
+    },
+  },
+  computed: {
     user() {
       const user = this.$store.state.user;
       return user.token ? user.userInfo : false;
@@ -104,24 +116,38 @@ export default {
     window.removeEventListener("scroll", this.handleScroll, false);
   },
   methods: {
-    ...mapActions("passage", ["getPassageList",'getPassageLatestList','getPassageHotList','selectBlogListByCategoryId']),
+    ...mapActions("passage", [
+      "getPassageList",
+      "getPassageLatestList",
+      "getPassageHotList",
+      "selectBlogListByCategoryId",
+    ]),
 
     // 数据更新
     async getData(type) {
       try {
         this.isLoading = true;
-        const params = {...this.pageMap, userId: this.user.id || 0}
-        let data = {}
-        switch(this.orderActive){
-          case 1: data = await this.getPassageList(params); break;
-          case 2: data = await this.getPassageLatestList(params); break;
-          case 3: data = await this.getPassageHotList(params); break;
-          default: this.$message.error("出错了");
+        const params = { ...this.pageMap, userId: this.user.id || 0 };
+        let data = {};
+        switch (this.orderActive) {
+          case 1:
+            data = await this.getPassageList(params);
+            break;
+          case 2:
+            data = await this.getPassageLatestList(params);
+            break;
+          case 3:
+            data = await this.getPassageHotList(params);
+            break;
+          default:
+            this.$message.error("出错了");
         }
-        this.isLoading = false
+        this.isLoading = false;
         if (data.data.code !== 200 || data.data.data.length === 0)
           return this.$message.warning("没有更多数据了");
-        this.passageList = type ? this.passageList.concat(data.data.data) : data.data.data;
+        this.passageList = type
+          ? this.passageList.concat(data.data.data)
+          : data.data.data;
       } catch (e) {
         this.$message.error("不好意思，服务器跑丢了~~");
       }
@@ -130,11 +156,15 @@ export default {
     async getCategory(type) {
       try {
         this.isLoading = true;
-        const params = {page: 1, size: 50, userId: this.user.id || 0, categoryId: this.categoryActive}
-        const {data: res} = await this.selectBlogListByCategoryId(params)
-        this.isLoading = false
+        const params = {
+          ...this.pageMap,
+          userId: this.user.id || 0,
+          categoryId: this.categoryActive,
+        };
+        const { data: res } = await this.selectBlogListByCategoryId(params);
+        this.isLoading = false;
         if (res.code !== 200 || res.data.length === 0)
-          return this.$message.warning("该分类暂无数据");
+          return this.$message.info("没有更多数据了");
         this.passageList = type ? this.passageList.concat(res.data) : res.data;
       } catch (e) {
         this.$message.error("不好意思，服务器跑丢了~~");
@@ -143,14 +173,14 @@ export default {
 
     addPage() {
       this.pageMap.page++;
-      this.getData(true);
+      !this.isCategory ? this.getData(true) : this.getCategory(true)
     },
 
     // 监听鼠标位置，在到达地步150px长度触底，进行数据懒加载
     handleScroll() {
       const dis =
         document.body.offsetHeight - window.pageYOffset - window.innerHeight;
-      if (dis <= 5) {
+      if (dis <= 1) {
         if (this.isLoading) return; //节流
         let that = this;
         throttle(that.addPage(), 500); //节流函数，每500ms触发一次
@@ -200,13 +230,13 @@ export default {
     }
 
     .category-item:hover {
-      color: #1e80ff;
+      color: var(--bgc-clr2);
     }
   }
 }
 
 .active {
-  color: #1e80ff;
+  color: var(--bgc-clr2);
 }
 
 .main {
@@ -220,10 +250,10 @@ export default {
     margin: 0 auto;
 
     .message-left {
-      width: 75%;    
+      width: 75%;
       padding-bottom: 5rem;
 
-      .box-card{
+      .box-card {
         min-height: 90vh;
       }
     }

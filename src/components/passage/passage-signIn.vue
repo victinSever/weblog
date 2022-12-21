@@ -65,9 +65,9 @@ export default {
 }
 
 .text{
+  margin-top: 1rem;
   text-align: center;
-  margin-top: 5px;
   color: silver;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 </style>

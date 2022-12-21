@@ -2,7 +2,7 @@
   <div class="passage-list" v-if="passageList && passageList.length !== 0">
     <div
       v-for="item in passageList"
-      :key="item.id"
+      :key="item.blogId"
       class="passage-item"
       @click="gotoPost(item)"
     >

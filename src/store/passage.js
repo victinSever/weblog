@@ -52,7 +52,7 @@ export default {
         async likeBlog(context, payload) {
             return await fetch('/blog/likeBlog', 'post', payload)
         },
-        // (取消）点赞博文
+        //(取消）点赞回复
         async likeReply(context, payload) {
             return await fetch('/comment/likeReply', 'post', payload)
         },
@@ -85,8 +85,14 @@ export default {
             return await fetch('/blog/deleteBlogByBlogId', 'delete', payload)
         },
         //分类博文
-        async searchLatestBlog(context, payload) {
+        async selectBlogListByUserIdCategoryId(context, payload) {
             return await fetch('/blog/selectBlogListByUserIdCategoryId', 'get', payload)
+        },
+
+
+        //博文增加浏览量
+        async blogReadAmountAddOne(context, payload) {
+            return await fetch('/blog/blogReadAmountAddOne', 'put', payload)
         },
         
     }

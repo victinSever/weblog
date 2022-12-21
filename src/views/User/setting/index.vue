@@ -156,8 +156,8 @@ export default {
   name: "settingPage",
   data() {
     const themes = [
-      { id: "0", label: "默认", value: "#ec8c69" },
-      { id: "1", label: "蔚蓝", value: "#1e80ff" },
+      { id: "0", label: "默认", value: "#1e80ff" },
+      { id: "1", label: "棕黄", value: "#ec8c69" },
       { id: "2", label: "浅绿", value: "lightgreen" },
       { id: "3", label: "浅紫", value: "rgb(183, 140, 247)" },
       { id: "3", label: "粉色", value: "#ed6ea0" },
@@ -213,14 +213,12 @@ export default {
       // this.UpdateConfig(this.config);
       // this.$message.success("保存成功！");
       try {
-        console.log({
+        const params = {
           userId: this.user.id || 0,
           ...this.config,
-        });
-        const { data: res } = await this.setUserTheme({
-          userId: this.user.id || 0,
-          ...this.config,
-        });
+        }
+        params.isGrey = params.isGrey ? 1 : 0
+        const { data: res } = await this.setUserTheme(params);
         console.log(res);
         if (res.code === 200) {
           this.UpdateConfig(this.config);

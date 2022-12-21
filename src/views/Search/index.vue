@@ -92,7 +92,7 @@ export default {
       "searchLatestBlog",
     ]),
 
-    async getData() {
+    async getData(type) {
       try {
         this.isLoading = true;
         const params = {
@@ -106,18 +106,19 @@ export default {
             data = await this.searchAdviceBlog(params);
             break;
           case 2:
-            data = await this.searchHotBlog(params);
+            console.log(params);
+            data = await this.searchLatestBlog(params);
             break;
           case 3:
-            data = await this.searchLatestBlog(params);
+            data = await this.searchHotBlog(params);
             break;
           default:
             this.$message.error("出错了");
         }
         this.isLoading = false;
         if (data.data.code !== 200 || data.data.data.length === 0)
-          return this.$message.warning("没有更多数据了");
-        this.passageList = this.passageList.concat(data.data.data)
+          return this.$message.info("没有更多数据了");
+        this.passageList = type ? this.passageList.concat(data.data.data) : data.data.data
       } catch (e) {
         this.$message.error(e);
       }
@@ -125,7 +126,7 @@ export default {
 
     addPage() {
       this.pageMap.page++;
-      this.getData();
+      this.getData(true);
     },
 
     // 监听鼠标位置，在到达地步150px长度触底，进行数据懒加载
@@ -135,13 +136,12 @@ export default {
       if (dis <= 5) {
         if (this.isLoading) return; //节流
         let that = this;
-        throttle(that.addPage(), 500); //节流函数，每500ms触发一次
+        throttle(that.addPage(), 1000); //节流函数，每1000ms触发一次
       }
     },
 
     handleChangeOrderActive(id) {
       this.orderActive = id;
-      this.passageList = [];
       this.getData()
     },
   },
@@ -158,18 +158,24 @@ export default {
   margin-top: 20px;
 
   .main-inner {
-    width: 65%;
+    width: 70rem;
     margin: 0 auto;
 
     .message-left {
       width: 75%;
       background-color: #fff;
 
+      .box-card{
+        min-height: 95vh;
+      }
+      
+
       .order-list {
         margin-bottom: 2rem;
       }
 
       .passage-list {
+        
       }
     }
 

@@ -26,9 +26,6 @@ const router = new Router({
 
 // 拦截器
 router.beforeEach((to, from, next) => {
-
-    
-
     const baseTitle = ' - weblog'
 
     if (to.meta.title) {

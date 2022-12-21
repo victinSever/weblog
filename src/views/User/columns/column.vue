@@ -16,7 +16,8 @@
         <div class="header">
           <div class="header-left">
             <el-image
-              :src="column.cover"
+            v-if="column.cover"
+              :src="column.cover || '#'"
               alt=""
               style="height: 100%"
             ></el-image>

@@ -74,76 +74,18 @@ import UserPassageList from "@/components/user/user-passage-list.vue";
 import UserControl from "@/components/user/user-control.vue";
 import { mapActions } from "vuex";
 
-const passageList = [
-  {
-    id: "12",
-    username: "暴徒张三",
-    userImage: "",
-    publishImage: require("@/assets/image/user-bgc/1.png"),
-    publishTime: "2022-11-12 20:20:20",
-    title: "测试标题",
-    content:
-      "测试内容dfuikghdfsugn  uds tios ofyuosdh ld utiaseru gbdxhgh  fsfhdfhsd bfb sfd hfdfb hgbug fbffuy gfuiagfparo goghjdf.g hdfgefdgdf jgdf jdf  ibguef gfdgfghuijfdgu gbfdigbrdfgbfgh byugygy er gbbgyre yugbyrege",
-    view: 12,
-    dianzan: 52,
-    comment: 20,
-  },
-  {
-    id: "212",
-    username: "暴徒张三",
-    userImage: "",
-    publishImage: require("@/assets/image/user-bgc/1.png"),
-    publishTime: "2022-11-12 20:20:20",
-    title: "测试标题",
-    content: "测试内容",
-    view: 12,
-    dianzan: 52,
-    comment: 20,
-  },
-  {
-    id: "21654632",
-    username: "暴徒张三",
-    userImage: "",
-    // publishImage: require("@/assets/image/user-bgc/1.png"),
-    publishTime: "2022-11-12 20:20:20",
-    title: "测试标题",
-    content:
-      "测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，测试内容信息很长放不下怎么办，",
-    view: 12,
-    dianzan: 52,
-    comment: 20,
-  },
-  {
-    id: "123214",
-    username: "暴徒张三",
-    userImage: "",
-    publishImage: require("@/assets/image/user-bgc/1.png"),
-    publishTime: "2022-11-12 20:20:20",
-    title: "测试标题",
-    content: "测试内容",
-    view: 12,
-    dianzan: 52,
-    comment: 20,
-  },
-  {
-    id: "5345",
-    username: "暴徒张三",
-    userImage: "",
-    publishImage: require("@/assets/image/user-bgc/1.png"),
-    publishTime: "2022-11-12 20:20:20",
-    title: "测试标题",
-    content: "测试内容",
-    view: 12,
-    dianzan: 52,
-    comment: 20,
-  },
-];
+const bgcList = [
+  require('@/assets/image/user-bgc/1.png'),
+  require('@/assets/image/user-bgc/2.png'),
+  require('@/assets/image/user-bgc/3.png'),
+  require('@/assets/image/user-bgc/4.png'),
+]
 export default {
   name: "userPage",
   components: { UserHeader, UserPassageList, UserControl },
   data() {
     return {
-      passageList,
+      passageList: [],
       keyword: "",
 
       // 文章分页，默认10条
@@ -151,7 +93,7 @@ export default {
         size: 5,
         page: 1,
       },
-      total: 100,
+      total: 0,
     };
   },
   computed: {
@@ -168,8 +110,9 @@ export default {
     menuPlace(){
       return this.$store.state.config.config.menuPlace
     },
-    bgcList(){
-      return this.$store.state.config.config.backgroundImageList
+    bgcList(){     
+      const bgc = this.$store.state.config.config.backgroundImageList
+      return bgc && bgc.length !== 0 ? bgc : bgcList
     }
   },
   mounted() {
@@ -186,6 +129,7 @@ export default {
         });
         if (res.code == 200) {
           this.passageList = res.data;
+          this.total = res.map.total
         }
       } catch (e) {
         this.$message.error(e);

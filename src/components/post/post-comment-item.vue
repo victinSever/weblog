@@ -1,5 +1,5 @@
 <template>
-  <div class="commentItem">
+  <div class="commentItem" v-if="data">
     <div class="left-box">
       <el-image :src="obj.headshot || '#'" alt=""></el-image>
     </div>
@@ -17,10 +17,10 @@
           :style="obj.haveLiked ? 'color: var(--bgc-clr2)' : ''"
           @click="handleLikeComment"
           >{{
-            " " + (obj.commentLikeAmount ? obj.commentLikeAmount : "点赞")
+            " " + (showCommentBtn ? (obj.commentLikeAmount ? obj.commentLikeAmount : "点赞") : (obj.likeAmount ? obj.likeAmount : '点赞')) 
           }}</span
         >
-        <span class="iconfont icon-pinglun" @click="handleReplyList">{{
+        <span class="iconfont icon-pinglun" @click="handleReplyList" v-if="showCommentBtn">{{
           " " + (obj.commentReplyAmount ? obj.commentReplyAmount : "回复")
         }}</span>
       </div>
@@ -29,7 +29,7 @@
       <div
         class="reply-list"
         :style="'backgroundColor: ' + (bgcColor ? '#fff' : '#f9fafb')"
-        v-if="obj.children || showChidren"
+        v-if="showChidren"
       >
         <el-input
           placeholder="输入回复 Enter发布"
@@ -41,6 +41,7 @@
           <PostCommentItem
             :data="item"
             :bgcColor="!bgcColor"
+            :showCommentBtn="false"
             v-for="item in obj.children"
             :key="item.id"
           />
@@ -65,6 +66,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showCommentBtn: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     user() {
@@ -83,11 +88,11 @@ export default {
       reply: "",
     };
   },
-  mounted() {
+  mounted() {  
     this.obj = this.data;
   },
   methods: {
-    ...mapActions("passage", ["likeComment", "getReplyList", "publishReply"]),
+    ...mapActions("passage", ["likeComment", "getReplyList", "publishReply",'likeReply']),
 
     // 回复评论
     async handlePublishReply() {
@@ -101,6 +106,7 @@ export default {
           blogUserId: this.blog.userId,
         });
         if (res.code === 200) {
+          this.reply = ''
           this.$message.success(res.msg)
           this.handleReplyList()
         }
@@ -112,7 +118,8 @@ export default {
     // 查询回复列表
     async handleReplyList() {
       if (!this.user) return this.$bus.$emit("handleLogin", true);
-      this.showChidren = true;
+      this.showChidren = !this.showChidren;
+      if(!this.showChidren) return
 
       try {
         const { data: res } = await this.getReplyList({
@@ -133,13 +140,15 @@ export default {
       if (!this.user) return this.$bus.$emit("handleLogin", true);
 
       try {
+        console.log(this.obj);
         const { data: res } = await this.likeComment({
           userId: this.user.id,
-          commentId: this.obj.commentId,
+          commentId: this.showCommentBtn ? this.obj.commentId : this.obj.replyId,
+          p: this.showCommentBtn ? 1 : 2
         });
         if (res.code == 200) {
-          if (this.obj.haveLiked) this.obj.commentLikeAmount--;
-          else this.obj.commentLikeAmount++;
+          if (this.obj.haveLiked) this.showCommentBtn ? this.obj.commentLikeAmount-- : this.obj.likeAmount--
+          else this.showCommentBtn ? this.obj.commentLikeAmount++ : this.obj.likeAmount++
           this.obj.haveLiked = !this.obj.haveLiked;
           this.$message.success(res.msg);
         }

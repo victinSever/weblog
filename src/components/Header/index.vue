@@ -221,7 +221,10 @@ export default {
 
     .user-create,
     .user-message {
-      margin-right: 20px;
+      margin-right: 20px;           
+    }
+
+    .user-create {
       background-color: var(--bgc-clr2);
       border: none;
     }
@@ -257,6 +260,8 @@ export default {
     .user-login-register {
       display: flex;
       align-items: center;
+      background-color: var(--bgc-clr2);
+      
       span:nth-child(2) {
         margin: 5px;
       }
