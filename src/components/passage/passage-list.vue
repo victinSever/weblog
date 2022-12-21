@@ -15,7 +15,7 @@
           </span>    
           <span>{{item.userName || '未命名用户'}}</span>
           <span>|</span>
-          <span>{{ passTime(item.publishTime) }}</span>
+          <span>{{ passTime(item.updateTime) }}</span>
         </div>
 
         <div class="item-main">

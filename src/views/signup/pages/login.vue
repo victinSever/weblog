@@ -70,8 +70,8 @@ export default {
   data() {
     return {
       passForm: {
-        phone: "17815369295",
-        password: "12345678",
+        phone: "",
+        password: "",
       },
     };
   },
