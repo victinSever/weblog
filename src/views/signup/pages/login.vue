@@ -163,6 +163,10 @@ export default {
     height: 100%;
     border-radius: 0.5rem;
   }
+
+  input::placeholder{
+    font-size: 1rem;
+  }
 }
 
 .el-button {

@@ -142,7 +142,6 @@ export default {
           default:
             this.$message.error("出错了");
         }
-        console.log(data.data.data);
         this.isLoading = false;
         if (data.data.code !== 200 || data.data.data.length === 0)
           return this.$message.warning("没有更多数据了");
