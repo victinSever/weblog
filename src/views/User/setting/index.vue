@@ -157,10 +157,11 @@ export default {
   data() {
     const themes = [
       { id: "0", label: "默认", value: "#1e80ff" },
-      { id: "1", label: "棕黄", value: "#ec8c69" },
-      { id: "2", label: "浅绿", value: "lightgreen" },
-      { id: "3", label: "浅紫", value: "rgb(183, 140, 247)" },
-      { id: "3", label: "粉色", value: "#ed6ea0" },
+      { id: "1", label: "暗色", value: "dark" },
+      { id: "2", label: "棕黄", value: "#ec8c69" },
+      { id: "3", label: "浅绿", value: "lightgreen" },
+      { id: "4", label: "浅紫", value: "rgb(183, 140, 247)" },
+      { id: "5", label: "粉色", value: "#ed6ea0" },
     ];
     return {
       config: {
