@@ -106,7 +106,7 @@ export default {
         this.isLoading = true
         const { data: res } = await this.getCommentList({
           blogId: this.blogId,
-          userId: this.user.id,
+          userId: this.user.id || 0,
           ...this.pageMap,
         });
         this.isLoading = false
@@ -141,7 +141,7 @@ export default {
       try {
         const { data: res } = await this.publishComment({
           userId: this.user.id,
-          blogId: this.blog.blogId,
+          blogId: this.blog.blogId || 0,
           content: this.commentText,
           blogUserId: this.blog.userId,
         });

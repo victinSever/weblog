@@ -1,7 +1,7 @@
 /**
  * 个性化配置参数
  */
- import fetch from '@/api/fetch'
+import fetch from '@/api/fetch'
 
 export default {
     namespaced: true,//开启命名空间
@@ -17,7 +17,7 @@ export default {
     actions: {
         // 获取个性化配置信息并更新
         async getConfig(context, payload) {
-            const {data: res} = await fetch('/user/getTheme', 'get', {userId: payload})
+            const { data: res } = await fetch('/user/getTheme', 'get', { userId: payload || 0 })
             context.commit('UpdateConfig', res.data)
         },
         //修改自定义设计
