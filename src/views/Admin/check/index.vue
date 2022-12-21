@@ -94,13 +94,13 @@
         <el-table-column
           prop="publishImage"
           label="博客封面"
-          width="300"
+          width="120"
           align="center"
         >
           <template slot-scope="scope">
             <el-avatar
               shape="square"
-              :size="30"
+              :size="50"
               :src="scope.row.publishImage"
               style="margin: 0 5px"
             ></el-avatar>
