@@ -7,6 +7,7 @@
       <!-- 一般信息 -->
       <div class="top">
         <span v-text="obj.userName"></span>
+        <span class="createTime" v-text="obj.createTime"></span>
       </div>
       <div class="main">
         <p v-text="obj.content"></p>
@@ -164,7 +165,7 @@ export default {
 .commentItem {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 
   .left-box {
     width: 3rem;
@@ -186,6 +187,12 @@ export default {
       height: 2.2rem;
       font-size: 1rem;
       color: #252933;
+
+      .createTime{
+        margin-left: 2rem;
+        color: var(--bgc-clr4);
+        font-size: 0.8rem;
+      }
     }
 
     .main {

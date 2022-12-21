@@ -39,7 +39,7 @@
               :before-upload="beforeAvatarUpload"
               v-else
             >
-              <el-image v-if="imageUrl" :src="imageUrl || '#'" class="avatar" />
+              <el-image v-if="user.headshot" :src="user.headshot || '#'" class="avatar" />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-form-item>
@@ -175,7 +175,6 @@ export default {
             const { data: res2 } = await this.getUserInfo({
               userId: this.user.id,
             });
-            console.log(res2);
             if (res2.code === 200) {
               this.UpdateUserInfo(res2.data);
             }
@@ -188,7 +187,7 @@ export default {
     },
 
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.userForm.headshot = res.data.minIoUrl;
     },
     handleAvatarError(err, file, fileList) {
       this.$message.error("文件上传失败！");

@@ -97,7 +97,6 @@ export default {
     },
   },
   methods: {
-
     handleGotoHome() {
       if(this.$route.name == 'passage') return
       this.$router.push({name: 'passage'})
@@ -125,10 +124,7 @@ export default {
     },
     // 点击登录按钮
     handleLogin() {
-      let routeData = this.$router.resolve({
-        name: "login",
-      });
-      window.open(routeData.href, "_blank");
+      window.open(this.$router.resolve({name: "login"}).href, "_blank");
     },
 
     //改变登录方式时，调整dialog的高度

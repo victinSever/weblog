@@ -45,9 +45,12 @@ export default {
   methods: {
     ...mapActions("passage", ["likeBlog"]),
 
-    // 点赞评论
-    async handleLikeBlog(obj) {
-      if (!this.user) return this.$bus.$emit("handleLogin", true);
+    // 点赞文章
+    async handleLikeBlog() {
+      if (!this.user) {
+        this.$message.info('该功能需要登录后操作')
+        return window.open(this.$router.resolve({name: "login"}).href, "_blank")
+      } 
 
       try {
         const { data: res } = await this.likeBlog({

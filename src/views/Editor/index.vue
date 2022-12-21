@@ -183,12 +183,15 @@ export default {
 
       .userImage {
         width: 3rem;
+        height: 3rem;
         overflow: hidden;
-        border-radius: 50%;
+        border-radius: 1.5rem;
 
         .el-image {
+          height: 100%;
+          width: 100%;
           transition: 0.4s;
-          border-radius: 50%;
+          border-radius: 1.5rem;
         }
       }
 

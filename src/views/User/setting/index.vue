@@ -195,23 +195,21 @@ export default {
   mounted() {
     this.getConfig(this.user.id);
     this.config = this.$store.state.config.config;
+    console.log(this.config);
   },
   methods: {
     ...mapMutations("config", ["UpdateConfig"]),
     ...mapActions("config", ["setUserTheme", "getConfig"]),
 
-    handleQvxiao(obj, index) {
-      this.config.backgroundImageList = this.config.backgroundImageList.filter(
-        (item, index1) => {
-          return !(obj === item && index === index1);
+    handleQvxiao(obj) {
+      this.config.backgroundImageList = this.config.backgroundImageList.filter(item => {
+          return !(obj === item);
         }
       );
     },
 
     // 点击保存按钮事件
     async handleSave() {
-      // this.UpdateConfig(this.config);
-      // this.$message.success("保存成功！");
       try {
         const params = {
           userId: this.user.id || 0,
@@ -230,6 +228,7 @@ export default {
     },
 
     handleRemove(file, fileList) {
+      this.handleQvxiao(file.response.data.minIoUrl)
       console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
@@ -238,6 +237,8 @@ export default {
       console.log("handlePictureCardPreview", file);
     },
     handleSuccess(response, file, fileList) {
+      if(this.config.backgroundImageList.length >= 6) return this.$message.warning('背景图限制6张哦！')
+      this.config.backgroundImageList.push(response.data.minIoUrl)
       console.log("handleSuccess", response, file, fileList);
     },
     handleBeforeUpload(file) {
@@ -269,6 +270,7 @@ export default {
 
 .bgc-list {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 
   .bgc-item {
@@ -278,6 +280,7 @@ export default {
     height: 10rem;
     width: 15rem;
     position: relative;
+    margin-bottom: 1rem;
 
     .el-image {
       width: 100%;
@@ -326,6 +329,7 @@ export default {
     margin-bottom: 2rem;
 
     .item-title {
+      min-width: 5rem;
       margin-right: 2rem;
       font-size: 1.2rem;
       span {

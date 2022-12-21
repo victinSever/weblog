@@ -42,7 +42,7 @@
           :on-error="handleAvatarError"
           :before-upload="beforeAvatarUpload"
         >
-          <el-image v-if="imageUrl" :src="imageUrl" class="avatar" />
+          <el-image v-if="publishForm.publishImage" :src="publishForm.publishImage" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
       </el-form-item>
@@ -202,18 +202,17 @@ export default {
       this.publishForm.category = label;
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-      console.log(this.imageUrl);
+      this.publishForm.publishImage = res.data.minIoUrl;
     },
     handleAvatarError(err, file, fileList) {
-      this.$message.error("文件上传失败！");
+      this.$message.error(err);
     },
     beforeAvatarUpload(file) {
       console.log(file);
-      const isLt5M = file.size / 1024 / 1024 < 5;
+      const isLt5M = file.size / 1024 / 1024 < 7;
 
       if (!isLt5M) {
-        this.$message.error("上传封面图片大小不能超过 5MB!");
+        this.$message.warning("上传封面图片大小不能超过 7MB!");
       }
       return isLt5M;
     },

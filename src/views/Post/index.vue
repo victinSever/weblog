@@ -29,6 +29,7 @@
             <el-image
               :src="data.publishImage"
               style="max-height: 30rem"
+              fit="fill"
             ></el-image>
           </div>
 
@@ -212,6 +213,12 @@ export default {
 
         .article-image {
           margin-bottom: 1rem;
+          
+
+          .el-image{
+            height: 100%;
+            width: 100%;
+          }
         }
 
         .article-sort {
