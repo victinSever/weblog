@@ -4,7 +4,7 @@
       <div class="post-left">
         <div class="article card">
           <!-- 文章标题 -->
-          <h1 v-text="data.title"></h1>
+          <h1 class="title" v-text="data.title"></h1>
 
           <!-- 发布信息 -->
           <div class="publishInfo">
@@ -63,8 +63,9 @@
           <PostComment :blog="data" :blogId="blogId" v-if="blog.blogId"/>
         </div>
       </div>
-      <div class="post-right card">
-        <PostDir :article="data.content"/>
+      <div class="post-right">
+        <!-- <PostDir :article="data.content"/> -->
+        <div class="card"></div>
       </div>
 
       <div class="article-suspended-panel">
@@ -146,10 +147,11 @@ export default {
 <style lang='scss' scoped>
 .post {
   width: 100%;
+  background-color: var(--bgc-1);
 
   .post-innerbox {
     margin: 0 auto;
-    margin-top: 1.5rem;
+    padding-top: 1.5rem;
     width: 1100px;
     display: flex;
     justify-content: space-between;
@@ -157,7 +159,7 @@ export default {
 
     .card {
       border-radius: 0.5rem;
-      background-color: #fff;
+      background-color: var(--bgc-2);
     }
 
     .post-left {
@@ -167,6 +169,10 @@ export default {
 
       .article {
         padding: 2.67rem;
+
+        .title{
+          color: var(--bgc-7);
+        }
 
         .publishInfo {
           display: flex;
@@ -186,12 +192,11 @@ export default {
           .right-box {
             width: 92%;
             font-size: 0.9rem;
-            color: #8a919f;
+            color: var(--bgc-7);
 
             .top {
               height: 1.2rem;
               font-size: 1rem;
-              color: #252933;
             }
 
             .bottom {

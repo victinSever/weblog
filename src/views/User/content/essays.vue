@@ -4,7 +4,7 @@
       <div class="header-menu">
         <div class="menu-item" v-for="item in menu" :key="item.id">
           <el-link
-            :type="activeManu === item.id ? 'primary' : ''"
+            :class="activeManu === item.id ? 'active' : ''"
             :underline="false"
             @click="handleChangeMenu(item.id)"
           >
@@ -182,7 +182,15 @@ export default {
 
   .menu-item {
     padding: 0 1rem;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid var(--bgc-3);
+
+    .el-link{
+      color: var(--bgc-7);
+    }
+
+    .active{
+      color: var(--bgc-clr2)
+    }
   }
 
   .menu-item:last-child {
@@ -190,7 +198,7 @@ export default {
   }
 
   .menu-item:hover .el-link {
-    color: skyblue;
+    color: var(--bgc-clr2);
   }
 }
 
@@ -215,17 +223,18 @@ export default {
       .title {
         font-weight: normal;
         font-size: 1.2rem;
+        color: var(--bgc-7);
       }
 
       .info {
-        color: #777;
+        color: var(--bgc-7);
 
         span {
           padding-right: 1rem;
         }
 
         .publishTime {
-          border-right: 1px solid #ccc;
+          border-right: 1px solid var(--bgc-3);
         }
 
         .view {
@@ -240,7 +249,7 @@ export default {
   }
 
   .passage-item:hover {
-    background-color: #fcfcfc;
+    background-color: var(--bgc-2);
   }
 }
 </style>

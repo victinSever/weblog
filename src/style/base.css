@@ -24,7 +24,7 @@ button {
     opacity: .2 !important;
 }
 
-:root {
+:root {   
     --grey-1-a1: rgba(0, 0, 0, 0.1);
     --grey-1-a2: rgba(0, 0, 0, 0.2);
     --grey-1-a6: rgba(0, 0, 0, 0.6);
@@ -39,6 +39,22 @@ button {
 
     /* 主题颜色 */
     --bgc-clr2: #1e80ff; 
+
+    --bgc-1: #000;
+    --bgc-2: #112434;
+    --bgc-3: #c1c1c1;
+    --bgc-4: rgba(0, 0, 0, 0.1);
+    --bgc-5: rgba(0, 0, 0, 0.3);
+    --bgc-6: rgba(0, 0, 0, 0.7);
+    --bgc-7: #f7f8fa;
+
+    /* --bgc-1: #ffffff;
+    --bgc-2: #f7f8fa;
+    --bgc-3: #cccccc;   
+    --bgc-4: rgba(255, 255, 255, 0.1);
+    --bgc-5: rgba(255, 255, 255, 0.3);
+    --bgc-6: rgba(255, 255, 255, 0.7);
+    --bgc-7: var(--clr); */
 
 
     --bgc-clr3: #c2c8d1;

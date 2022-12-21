@@ -156,7 +156,7 @@ export default {
         }
 
         .menu-item:hover {
-          border-bottom: 1px solid #fff;
+          border-bottom: 1px solid var(--bgc-1);
 
           .menu-list-children {
             visibility: visible;
@@ -172,7 +172,7 @@ export default {
           top: 4rem;
           visibility: hidden;
           transition: 0.4s ease-in;
-          background-color: var(--grey-1-a6);
+          background-color: var(--bgc-6);
           border-top-left-radius: 1.5rem;
           border-bottom-right-radius: 1.5rem;
           transform: translateX(-1rem);

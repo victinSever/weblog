@@ -167,7 +167,7 @@ export default {
   .item-box {
     width: 100%;
     height: 100%;
-    background-color: #ccc;
+    background-color: var(--bgc-2);
     overflow: hidden;
 
     .el-image {
@@ -183,7 +183,7 @@ export default {
     left: 50%;
     transform: translateX(-8vw);
     top: 300px;
-    color: #fff;
+    color: var(--bgc-2);
     font-size: 4rem;
   }
 }
@@ -196,9 +196,35 @@ export default {
   position: absolute;
   left: -75vw;
   bottom: -10rem;
-  background-color: var(--white-a3);
+  background-color: var(--bgc-2);
   z-index: 2;
   animation: move1 18s linear infinite;
+}
+
+.main::before {
+  content: "";
+  width: 130vw;
+  height: 300px;
+  border-radius: 50%;
+  position: absolute;
+  top: -100px;
+  left: -50vw;
+  background-color: var(--bgc-1);
+  z-index: -2;
+  animation: move1 12s linear infinite;
+}
+
+.main::after {
+  content: "";
+  width: 90vw;
+  height: 280px;
+  border-radius: 50%;
+  position: absolute;
+  top: -100px;
+  left: 40vw;
+  background-color: var(--bgc-6);
+  z-index: -2;
+  animation: move1 15s linear infinite;
 }
 
 .main {
@@ -206,8 +232,8 @@ export default {
   margin-top: calc(600px - 4rem);
   width: 100%;
   min-height: 100vh;
-  background-color: #fff;
-  z-index: 5;
+  background-color: var(--bgc-1);
+  z-index: 20;
   padding-top: 3rem;
 
   .main-box {
@@ -239,31 +265,7 @@ export default {
   }
 }
 
-.main::before {
-  content: "";
-  width: 130vw;
-  height: 300px;
-  border-radius: 50%;
-  position: absolute;
-  top: -100px;
-  left: -50vw;
-  background-color: var(--white-a1);
-  z-index: -2;
-  animation: move1 12s linear infinite;
-}
 
-.main::after {
-  content: "";
-  width: 90vw;
-  height: 280px;
-  border-radius: 50%;
-  position: absolute;
-  top: -100px;
-  left: 40vw;
-  background-color: var(--white-a2);
-  z-index: -2;
-  animation: move1 15s linear infinite;
-}
 
 @media screen and (max-width: 1500px) {
   .main .main-box {

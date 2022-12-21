@@ -44,11 +44,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions("passage", ["searchLatestBlog"]),
+    ...mapActions("passage", ["selectBlogListByCategoryId"]),
 
     async getData() {
       try {
-        const { data: res } = await this.searchLatestBlog({
+        const { data: res } = await this.selectBlogListByCategoryId({
           userId: this.user.id,
           categoryId: this.$route.query.categoryId || '',
           ...this.pageMap

@@ -139,14 +139,14 @@ export default {
 .header {
   width: 100%;
   height: 4rem;
-  background-color: #fff;
+  background-color: var(--bgc-2);
   min-width: 700px;
 
   .header-top {
     height: 100%;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #eeecec;
+    border-bottom: 1px solid var(--bgc-1);
   }
 
   .header-top-in {
@@ -245,7 +245,7 @@ export default {
         transition: 0.8s;
       }
 
-      border: 1px solid #efefef;
+      border: 1px solid var(--bgc-clr5);
       cursor: pointer;
     }
 
@@ -257,7 +257,7 @@ export default {
       display: flex;
       align-items: center;
       background-color: var(--bgc-clr2);
-      color: #fff;
+      color: var(--bgc-1);
       
       span:nth-child(2) {
         margin: 5px;

@@ -2,8 +2,7 @@
   <div>
     <el-divider content-position="left">
       <span
-        class="session-title"
-        style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
+        class="session-title divider-title"
         >文章分类</span
       >
     </el-divider>
@@ -68,6 +67,7 @@ export default {
 .cate-item {
   margin-bottom: 4rem;
   cursor: pointer;
+  color: var(--bgc-7);
 
   .iconfont {
     font-size: 1.5rem;

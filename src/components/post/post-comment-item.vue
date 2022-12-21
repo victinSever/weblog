@@ -186,7 +186,7 @@ export default {
     .top {
       height: 2.2rem;
       font-size: 1rem;
-      color: #252933;
+      color: var(--bgc-7);
 
       .createTime{
         margin-left: 2rem;

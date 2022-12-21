@@ -303,7 +303,7 @@ export default {
 
     .iconfont:hover {
       background-color: var(--pink-1);
-      color: #fff;
+      color: var(--bgc-1);
     }
   }
 

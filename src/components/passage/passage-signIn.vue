@@ -41,6 +41,8 @@ export default {
 .pass-signIn{
   height: 100px;
   margin-bottom: 10px;
+  background-color: var(--bgc-1);
+  color: var(--bgc-7);
 
   .sigin-top{
     display: flex;

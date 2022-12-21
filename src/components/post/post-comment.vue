@@ -168,7 +168,7 @@ export default {
     margin-bottom: 2rem;
 
     h3 {
-      color: #252933;
+      color: var(--bgc-7);
     }
   }
 
@@ -193,7 +193,7 @@ export default {
           align-items: center;
           display: flex;
           justify-content: center;
-          background-color: #eff0f3;
+          background-color: var(--bgc-3);
 
           span {
             font-size: 2.8rem;

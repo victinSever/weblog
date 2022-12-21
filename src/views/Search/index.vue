@@ -155,18 +155,20 @@ export default {
 }
 
 .main {
-  margin-top: 20px;
+  padding-top: 20px;
+  background-color: var(--bgc-1);
 
   .main-inner {
     width: 70rem;
     margin: 0 auto;
+    background-color: var(--bgc-2);
 
     .message-left {
       width: 75%;
-      background-color: #fff;
 
       .box-card{
         min-height: 95vh;
+        background-color: var(--bgc-1)
       }
       
 

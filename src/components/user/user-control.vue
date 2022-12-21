@@ -64,7 +64,7 @@ export default {
   props: ["user"],
   data() {
     return {
-      linkList,
+      linkList: [],
     };
   },
   components: { UserMenu },

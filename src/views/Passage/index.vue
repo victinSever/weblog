@@ -203,14 +203,14 @@ export default {
 .header {
   width: 100%;
   height: 3rem;
-  border-bottom: 1px solid #eeecec;
-  box-shadow: 1px 1px 1px #ccc;
+  border-bottom: 1px solid var(--bgc-3);
+  box-shadow: 1px 1px 1px var(--bgc-2);
   font-size: 14px;
   color: #71777c;
   position: sticky;
   top: 0;
   z-index: 200;
-  background-color: #fff;
+  background-color: var(--bgc-2);
   min-width: 700px;
 
   .category-list {
@@ -240,7 +240,7 @@ export default {
 }
 
 .main {
-  background-color: #f4f5f5;
+  background-color: var(--bgc-2);
   padding-top: 20px;
   min-height: calc(100vh - 100px);
   min-width: 700px;
@@ -255,6 +255,7 @@ export default {
 
       .box-card {
         min-height: 90vh;
+        background-color: var(--bgc-1);
       }
     }
 
@@ -282,6 +283,7 @@ export default {
 .passage-list,
 .el-skeleton {
   padding-top: 5px;
+
 }
 
 @media screen and (max-width: 1500px) {

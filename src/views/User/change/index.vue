@@ -225,6 +225,10 @@ export default {
 
 .session-content {
   margin: 3rem 0 7rem 0;
+
+  span{
+    color: var(--bgc-7);
+  }
 }
 .userImage {
   width: 10rem;

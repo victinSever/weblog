@@ -154,7 +154,7 @@ export default {
   }
 
   .item-bottom {
-    color: #2f3133;
+    color: var(--bgc-7);
     display: flex;
     align-items: flex-end;
 

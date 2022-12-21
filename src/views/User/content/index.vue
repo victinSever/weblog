@@ -2,8 +2,7 @@
   <div>
     <el-divider content-position="center">
       <span
-        class="session-title"
-        style="color: var(--bgc-clr6); font-size: 2em; font-weight: bold"
+        class="session-title divider-title"
         >文章管理</span
       >
     </el-divider>
@@ -79,7 +78,7 @@ export default {
       box-sizing: border-box;
       cursor: pointer;
       font-size: 1.2rem;
-      color: #777;
+      color: var(--bgc-7);
       border-bottom: 3px solid transparent;
     }
 

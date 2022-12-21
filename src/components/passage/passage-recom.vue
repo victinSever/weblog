@@ -63,7 +63,7 @@ $bgc: blue;
 
 .recom-list {
   margin: 1rem 0;
-  background-color: #fff;
+  background-color: var(--bgc-1);
   padding: 1rem;
 
   .recom-title {
