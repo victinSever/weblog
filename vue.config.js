@@ -35,30 +35,6 @@ module.exports = {
 
   devServer: {
     proxy: {
-      // 第三方ip地址
-      '/ip': {
-        target: 'http://pv.sohu.com',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/ip': ''
-        }
-      },
-      // 文件服务器地址
-      '/imageSever': {
-        // http://flpt-file.oss-cn-chengdu.aliyuncs.com
-        target: 'http://222.177.66.230:9898',
-        // target: 'http://flpt-file.oss-cn-chengdu.aliyuncs.com',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/imageSever': ''
-        }
-      },
-      '/sever': {
-        target: 'https://53r23232p6.goho.co',
-        ws: true,
-      },
     }
   }
 }

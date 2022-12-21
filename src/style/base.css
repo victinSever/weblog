@@ -36,7 +36,11 @@ button {
     --pink-2: #ec8c69;
     --clr: #112434;
     --bgc-clr1: skyblue;
-    --bgc-clr2: #1e80ff;
+
+    /* 主题颜色 */
+    --bgc-clr2: #1e80ff; 
+
+
     --bgc-clr3: #c2c8d1;
     --bgc-clr4: #999999;
     --bgc-clr5: #eeeeee;

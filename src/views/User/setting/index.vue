@@ -50,6 +50,19 @@
           <span>轮播图：</span>
         </div>
         <div class="item-main">
+          <div class="bgc-list">
+            <div
+              class="bgc-item"
+              v-for="(item, index) in config.backgroundImageList"
+              :key="item + index"
+            >
+              <el-image class="image" :src="item || '#'" alt=""></el-image>
+              <span
+                class="iconfont icon-quxiao"
+                @click="handleQvxiao(item, index)"
+              ></span>
+            </div>
+          </div>
           <el-upload
             :action="$upload_path"
             list-type="picture-card"
@@ -61,7 +74,7 @@
             <i class="el-icon-plus"></i>
           </el-upload>
           <el-dialog :visible.sync="dialogVisible">
-            <el-image width="100%" :src="dialogImageUrl" alt="" />
+            <el-image width="100%" :src="dialogImageUrl || '#'" alt="" />
           </el-dialog>
         </div>
       </div>
@@ -77,10 +90,18 @@
           <span>菜单布局：</span>
         </div>
         <div class="item-main">
-          <el-radio v-model="config.menuPlace" label="0">左侧</el-radio>
-          <el-radio v-model="config.menuPlace" label="1">右侧</el-radio>
+          <el-radio v-model="config.menuPlace" label="left">左侧</el-radio>
+          <el-radio v-model="config.menuPlace" label="right">右侧</el-radio>
         </div>
       </div>
+    </div>
+
+    <el-divider content-position="left">
+      <span class="session-title">个人链接设置</span>
+    </el-divider>
+
+    <div class="session">
+      敬请期待
     </div>
 
     <el-divider content-position="left">
@@ -88,7 +109,8 @@
     </el-divider>
 
     <div class="session">
-      <div class="session-item">
+      敬请期待
+      <!-- <div class="session-item">
         <div class="item-title">
           <span>头像动画：</span>
         </div>
@@ -113,19 +135,18 @@
           >
           </el-switch>
         </div>
-      </div>
-
+      </div> -->
+    </div>
+    <div class="session">
       <div
-      class="btn-save"
-      :style="'visibility: ' + (isChange ? 'visible' : 'hidden')"
-      @click="handleSave"
-    >
-      <span class="iconfont icon-save-fill"></span>
-      <span v-text="'保存'"></span>
+        class=" btn-save"
+        :style="'visibility: ' + (isChange ? 'visible' : 'hidden')"
+        @click="handleSave"
+      >
+        <span class="iconfont icon-save-fill"></span>
+        <span v-text="'保存'"></span>
+      </div>
     </div>
-    </div>
-
-    
   </div>
 </template>
 
@@ -139,15 +160,16 @@ export default {
       { id: "1", label: "蔚蓝", value: "#1e80ff" },
       { id: "2", label: "浅绿", value: "lightgreen" },
       { id: "3", label: "浅紫", value: "rgb(183, 140, 247)" },
+      { id: "3", label: "粉色", value: "#ed6ea0" },
     ];
     return {
       config: {
-        isGrey: false, //灰度
-        color: "123", //主题：目前默认有四种
-        menuPlace: "0", //个人信息显示位置：0,1
-        backgroundImageList: ['3123'], //轮播图列表
-        userImageAnimation: true, //头像动画
-        waveAnimation: true, //波浪动画
+        isGrey: 0, //灰度
+        color: "blue", //主题：目前默认有四种
+        menuPlace: "left", //个人信息显示位置：left,right
+        backgroundImageList: [], //轮播图列表
+        // userImageAnimation: true, //头像动画
+        // waveAnimation: true, //波浪动画
       },
       dialogImageUrl: "",
       dialogVisible: false,
@@ -155,10 +177,11 @@ export default {
       isChange: false,
     };
   },
-  watch: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+  watch: {
     config: {
       deep: true,
       handler() {
+        console.log(this.config);
         this.isChange = true;
       },
     },
@@ -170,29 +193,42 @@ export default {
     },
   },
   mounted() {
-    this.getConfig(this.user.id)
-    this.config = this.$store.state.config.config
+    this.getConfig(this.user.id);
+    this.config = this.$store.state.config.config;
   },
   methods: {
     ...mapMutations("config", ["UpdateConfig"]),
-    ...mapActions("config", ["setUserTheme",'getConfig']),
+    ...mapActions("config", ["setUserTheme", "getConfig"]),
+
+    handleQvxiao(obj, index) {
+      this.config.backgroundImageList = this.config.backgroundImageList.filter(
+        (item, index1) => {
+          return !(obj === item && index === index1);
+        }
+      );
+    },
 
     // 点击保存按钮事件
     async handleSave() {
+      // this.UpdateConfig(this.config);
+      // this.$message.success("保存成功！");
       try {
-        const {data: res} = await this.setUserTheme({
+        console.log({
           userId: this.user.id || 0,
-          ...this.config
-        })
+          ...this.config,
+        });
+        const { data: res } = await this.setUserTheme({
+          userId: this.user.id || 0,
+          ...this.config,
+        });
         console.log(res);
-        if(res.code === 200) {
-          this.getConfig(this.user.id);
-          this.$message.success("保存成功！")
-        }
-      }catch(e) {
-        this.$message.error(e)
+        if (res.code === 200) {
+          this.UpdateConfig(this.config);
+          this.$message.success("保存成功！");
+        } else this.$message.warning(res.msg)
+      } catch (e) {
+        this.$message.error(e);
       }
-      
     },
 
     handleRemove(file, fileList) {
@@ -233,6 +269,55 @@ export default {
   }
 }
 
+.bgc-list {
+  display: flex;
+  margin-bottom: 1rem;
+
+  .bgc-item {
+    margin-right: 1rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    height: 10rem;
+    width: 15rem;
+    position: relative;
+
+    .el-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+      transition: 0.4s;
+    }
+
+    .iconfont {
+      position: absolute;
+      transition: 0.4s;
+      font-size: 1.2rem;
+      color: #000;
+      z-index: 2;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+    }
+
+    .iconfont:hover {
+      background-color: var(--pink-1);
+      color: #fff;
+    }
+  }
+
+  .bgc-item:hover {
+    .el-image {
+      transform: scale(110%) rotate(5deg);
+    }
+
+    .iconfont {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+}
+
 .session {
   padding-left: 3rem;
   padding-bottom: 1rem;
@@ -256,10 +341,8 @@ export default {
 }
 
 .btn-save {
-  position: absolute;
-  right: -10rem;
-  bottom: 10%;
-  z-index: 20;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
   width: 6rem;
   height: 3rem;
   transition: 2s;

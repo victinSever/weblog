@@ -221,6 +221,8 @@ export default {
     .user-create,
     .user-message {
       margin-right: 20px;
+      background-color: var(--bgc-clr2);
+      border: none;
     }
 
     .user-message {

@@ -6,13 +6,12 @@
 export default {
     namespaced: true,//开启命名空间
     state: {
-        isGrey: false,
         config: JSON.parse(sessionStorage.getItem('config'))
     },
     mutations: {
         UpdateConfig(state, payload) {
-            state = payload
-            sessionStorage.setItem('config', JSON.stringify(state))
+            state.config = payload
+            sessionStorage.setItem('config', JSON.stringify(payload))
         }
     },
     actions: {
@@ -23,7 +22,7 @@ export default {
         },
         //修改自定义设计
         async setUserTheme(context, payload) {
-            return await fetch('/user/setUserTheme', 'put', payload)
+            return await fetch('/user/setUserTheme', 'put', {}, payload)
         },
-    }
+    },
 }

@@ -249,6 +249,6 @@ export default {
 }
 
 .allComment{
-  padding-bottom: 2rem;
+  padding-bottom: 10rem;
 }
 </style>

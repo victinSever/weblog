@@ -8,7 +8,7 @@
       <el-carousel height="600px" :autoplay="true" :interval="8000">
         <el-carousel-item v-for="(item, index) in bgcList" :key="index">
           <div class="item-box">
-            <el-image :src="item.imageUrl" alt="" fit="cover"></el-image>
+            <el-image :src="item" alt="" fit="cover"></el-image>
           </div>
           <div class="info">
             <span class="username" v-text="user.userName || '☺'"></span>
@@ -18,13 +18,13 @@
     </div>
 
     <div class="main">
-      <div class="main-box">
+      <div :class="'main-box' + (menuPlace == 'right' ? ' reverse' : '')">
         <!-- 左侧内容区 -->
         <div class="left-box">
           <!-- 首页文章显示 -->
           <div
             class="session"
-            v-if="passageList.length !== 0 && showPassageList"
+            v-if="showPassageList"
           >
             <el-divider content-position="center">
               <span
@@ -37,7 +37,7 @@
                 >文章列表</span
               >
             </el-divider>
-            <UserPassageList :passageList="passageList" :keyword="keyword" />
+            <UserPassageList :passageList="passageList" :keyword="keyword" v-if="passageList.length !== 0"/>
 
             <div class="pagination-box">
               <el-pagination
@@ -71,17 +71,6 @@ import UserPassageList from "@/components/user/user-passage-list.vue";
 import UserControl from "@/components/user/user-control.vue";
 import { mapActions } from "vuex";
 
-const bgcList = [
-  {
-    imageUrl: require("@/assets/image/user-bgc/1.png"),
-  },
-  {
-    imageUrl: require("@/assets/image/user-bgc/2.png"),
-  },
-  {
-    imageUrl: require("@/assets/image/user-bgc/3.png"),
-  },
-];
 const passageList = [
   {
     id: "12",
@@ -151,7 +140,6 @@ export default {
   components: { UserHeader, UserPassageList, UserControl },
   data() {
     return {
-      bgcList,
       passageList,
       keyword: "",
 
@@ -174,6 +162,12 @@ export default {
     showUserInfo() {
       return this.$route.name !== "setting" && this.$route.name !== "change";
     },
+    menuPlace(){
+      return this.$store.state.config.config.menuPlace
+    },
+    bgcList(){
+      return this.$store.state.config.config.backgroundImageList
+    }
   },
   mounted() {
     this.getData();
@@ -274,9 +268,11 @@ export default {
     margin: 0 auto;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
 
     .left-box {
-      float: left;
+
       width: calc(100% - 24rem);
       box-shadow: 0 0.625rem 1.875rem -0.9375rem var(--box-bg-shadow);
       padding: 0 2rem;
@@ -284,12 +280,15 @@ export default {
     }
 
     .right-box {
-      float: right;
       position: sticky;
       top: 0rem;
       width: 20rem;
       z-index: 30;
     }
+  }
+
+  .reverse{
+    flex-direction: row-reverse;
   }
 }
 
