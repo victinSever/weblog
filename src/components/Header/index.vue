@@ -261,6 +261,7 @@ export default {
       display: flex;
       align-items: center;
       background-color: var(--bgc-clr2);
+      color: #fff;
       
       span:nth-child(2) {
         margin: 5px;
