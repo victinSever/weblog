@@ -13,10 +13,10 @@ export default {
   name: "App",
   computed: {
     config() {
-      return this.$store.state.config.config;
+      return this.$store.state.config.config || {};
     },
     user() {
-      return this.$store.state.user.userInfo
+      return this.$store.state.user.userInfo || {}
     }
   },
   watch: {

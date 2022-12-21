@@ -179,6 +179,7 @@ export default {
 
       .el-image {
         height: 3rem;
+        width: 8rem;
       }
     }
 

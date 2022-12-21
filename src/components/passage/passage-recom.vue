@@ -79,9 +79,10 @@ $bgc: blue;
     color: $color;
 
     .el-image {
-      height: 100%;
+      height: 2rem;
       border-radius: 50%;
       margin-right: 1rem;
+      width: 2rem;
     }
   }
 

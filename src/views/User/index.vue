@@ -37,9 +37,12 @@
                 >文章列表</span
               >
             </el-divider>
-            <UserPassageList :passageList="passageList" :keyword="keyword" v-if="passageList.length !== 0"/>
+            <div>
+              <UserPassageList :passageList="passageList" :keyword="keyword" v-if="passageList.length !== 0"/>
+              <el-empty v-else description="你还没有发布文章哦，快去发布吧"></el-empty>
+            </div>
 
-            <div class="pagination-box">
+            <div class="pagination-box" v-if="passageList.length !== 0">
               <el-pagination
                 background
                 :page-size="pageMap.size"
