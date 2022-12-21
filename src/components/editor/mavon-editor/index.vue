@@ -7,6 +7,7 @@
       class="mavon-editor"
       :placeholder="placeholder"
       ref="md"
+      v-if="content"
     />
   </div>
 </template>
@@ -22,16 +23,21 @@ export default {
     placeholder: {
       type: String,
       default: "请输入内容..",
-    },
+    }
   },
   data() {
     return {
-      editData: this.content,
+      editData: '',
       imgFile: [],
     };
   },
-  mounted() {
-    console.log(this.editData);
+  watch: {
+    content: {
+      handler(val) {
+        this.editData = val
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapActions("image", ["getImageUrl"]),

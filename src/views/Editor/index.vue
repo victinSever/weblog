@@ -75,13 +75,13 @@ export default {
       const user = this.$store.state.user;
       return user.token ? user.userInfo : false;
     },
-    waiting() {
-      return !this.blogId.includes("new");
+    isNew() {
+      return this.blogId.includes("new");
     },
   },
   mounted() {
     this.blogId = this.$route.params.blogId;
-    if (this.waiting) this.getData();
+    if (!this.isNew) this.getData();
   },
   methods: {
     ...mapActions("passage", ["getPassageInfo"]),

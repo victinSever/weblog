@@ -95,7 +95,7 @@ export default {
           if(res.data.user.role === 'admin') {
             this.$router.push({name: 'admin'})
           } else
-          this.$router.push({name: 'passage'})
+          this.$router.push({name: 'user'})
         } else this.$message.warning(res.msg);
       } catch (e) {
         this.$message.error("抱歉，服务器跑丢了哦~~");

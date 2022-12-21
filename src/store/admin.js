@@ -15,5 +15,9 @@ export default {
         async auditBlog(context, payload) {
             return await fetch('/admin/auditBlog', 'post', payload)
         },
+        //获取用户列表
+        async getAllUser(context, payload) {
+            return await fetch('/admin/getAllUser', 'get', payload)
+        },
     }
 }

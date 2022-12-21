@@ -168,8 +168,21 @@ export default {
               type: 0,
               children: [],
             },
+            
           ],
         },
+        {
+              id: 12313,
+              parentId: 1,
+              menuName: "用户信息",
+              url: "/admin/user-list",
+              icon: "el-icon-user",
+              orderNum: 2,
+              open: 0,
+              disabled: false,
+              type: 0,
+              children: [],
+            },
       ], //菜单栏数据
       activepath: "", //点击二级菜单获取的下标
       messageNum: 0, //消息数量
