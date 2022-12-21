@@ -24,18 +24,62 @@ weblog是一个博客分享交流平台，支持用户通过Web端进行博客�
 	私有化服务：提供基础的文章编辑，发布，消息通知
 	
 	
-## 📗产品概述
-- 2.1 产品定位
+## 📗需求概述
+- 产品定位
 
   一款博客分享的平台。
 
-- 2.2 服务对象
-
-  暂无
-
-- 2.3 产品逻辑
+- 业务需求
       ![image](https://tva3.sinaimg.cn/large/008cs7isly8h8oenk6y8tj30t80iagmx.jpg)
+
+## 技术架构
+前端技术架构主要为Vue2项目，具体技术栈如下：
+
+- Vue2（框架）
+- Vuex（状态管理）
+- Vue-router（路由管理）
+- ElementUI（组件库）
+- Sass（CSS语法扩展）
+- Axios（ajax请求封装库）
+- Echarts（图表）
+
+优化技术：
+
+- NProgress（微进度条）
+- iconfont(阿里矢量图标库)
+- mavon-editor（markdown编辑器）
+- vue-markdown（markdown渲染器）
+- github-markdown-css（markdown样式依赖）
+- highlight.js（代码高亮依赖，提供vue自定义命令的代码高亮依赖）
+
+工具：
+
+- VScode
+- [新浪图床](https://pic.gimhoy.com/)
+
+## 项目搭建
+
+- 依赖安装
+
+  ```bash 依赖安装
+  npm install
+  ```
+
+- 启动服务
+
+  ```bash 启动服务
+  npm run serve
+  ```
+
+- 项目打包
+
+  ```bash 项目打包
+  npm run build
+  ```
 
 ## 部署
 [github部署地址](http://victinzhong.asia/weblog/dist)
+
+## 项目文档
+[语雀](https://www.yuque.com/victin/qgouio)
 
