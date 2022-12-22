@@ -138,6 +138,8 @@ export default {
 
     // 发布评论
     async HandlePublishComment() {
+      if (!this.user) return this.$message.info('该功能需要登录后操作')
+
       try {
         const { data: res } = await this.publishComment({
           userId: this.user.id,
@@ -156,7 +158,7 @@ export default {
     },
 
     handleLogin() {
-      this.$bus.$emit("handleLogin", true);
+      this.$router.push({name: 'login'})
     },
   },
 };

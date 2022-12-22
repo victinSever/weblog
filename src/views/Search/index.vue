@@ -96,7 +96,7 @@ export default {
       try {
         this.isLoading = true;
         const params = {
-          userId: this.user.id,
+          userId: this.user.id || 0,
           keyword: this.keyword,
           ...this.pageMap,
         };

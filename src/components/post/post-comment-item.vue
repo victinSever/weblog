@@ -97,6 +97,7 @@ export default {
 
     // 回复评论
     async handlePublishReply() {
+      if (!this.user) return this.$message.info('该功能需要登录后操作')
       try {
         const { data: res } = await this.publishReply({
           blogId: this.obj.blogId,
@@ -118,7 +119,8 @@ export default {
 
     // 查询回复列表
     async handleReplyList() {
-      if (!this.user) return this.$bus.$emit("handleLogin", true);
+      if (!this.user) return this.$message.info('该功能需要登录后操作')
+      
       this.showChidren = !this.showChidren;
       if(!this.showChidren) return
 
@@ -138,7 +140,7 @@ export default {
 
     // 点赞评论
     async handleLikeComment() {
-      if (!this.user) return this.$bus.$emit("handleLogin", true);
+      if (!this.user) return this.$message.info('该功能需要登录后操作')
 
       try {
         console.log(this.obj);
