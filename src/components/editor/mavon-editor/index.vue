@@ -7,7 +7,7 @@
       class="mavon-editor"
       :placeholder="placeholder"
       ref="md"
-      v-if="content"
+      v-if="isNew || content && !isNew"
     />
   </div>
 </template>
@@ -23,6 +23,10 @@ export default {
     placeholder: {
       type: String,
       default: "请输入内容..",
+    },
+    isNew: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

@@ -24,7 +24,7 @@ const router = new Router({
     routes: routes
 })
 
-// 拦截器
+// 前置拦截器
 router.beforeEach((to, from, next) => {
     const baseTitle = ' - weblog'
 
@@ -39,13 +39,12 @@ router.beforeEach((to, from, next) => {
 
     NProgress.start()   // 开启进度条
 
-    // 拦截
-    // 管理员权限分级
+    // 拦截判断放行原则：管理员权限分级
     if(to.path.includes('admin')) {
         const {role} = JSON.parse(localStorage.getItem('userInfo'))
         if(role === 'admin') next()
     }
-    else if (to.path.includes('creator') || to.path.includes('editor') || to.path.includes('user')) {
+    else if (to.path.includes('editor') || to.path.includes('user')) {
         if (localStorage.getItem('token'))
             next() //放行
     } else {

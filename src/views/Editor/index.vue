@@ -46,7 +46,7 @@
 
     <!-- 编辑器 -->
     <div class="main">
-      <MavonEditor v-if="isMDEditor" :content="content" ref="md" />
+      <MavonEditor v-if="isMDEditor" :content="content" :isNew="isNew" ref="md" />
       <YkEditor v-else-if="!isMDEditor" :content="content" ref="yk" />
     </div>
   </div>
