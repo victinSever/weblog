@@ -47,10 +47,7 @@ export default {
 
     // 点赞文章
     async handleLikeBlog() {
-      if (!this.user) {
-        this.$message.info('该功能需要登录后操作')
-        return window.open(this.$router.resolve({name: "login"}).href, "_blank")
-      } 
+      if (!this.user) return this.$message.info('该功能需要登录后操作')
 
       try {
         const { data: res } = await this.likeBlog({
