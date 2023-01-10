@@ -37,7 +37,5 @@ export default async (
 
     return await axios({
         method: type, url, params, data, header
-    })
-
-   
+    })   
 }
